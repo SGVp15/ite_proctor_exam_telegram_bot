@@ -1,5 +1,7 @@
 # import menus
 # import utils
+import handlers
+
 from aiogram.utils import executor
 
 from loader import dp

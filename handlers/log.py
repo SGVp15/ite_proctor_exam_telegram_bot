@@ -18,7 +18,7 @@ async def send_id(message: types.Message):
 
 
 @dp.callback_query_handler(
-    lambda c: c.data in [call_back.get_log, call_back.get_log_program],
+    lambda c: c.data in [call_back.get_log, call_back.get_log_program, call_back.get_template_file_xlsx],
     user_id=[*ADMIN_ID, *USERS_ID])
 async def get_file(callback_query: types.callback_query):
     query = callback_query.data
@@ -27,6 +27,8 @@ async def get_file(callback_query: types.callback_query):
         file = TEMPLATE_FILE_XLSX
     elif query == call_back.get_log:
         file = LOG_FILE
+    elif query == call_back.get_template_file_xlsx:
+        file = TEMPLATE_FILE_XLSX
 
     try:
         if is_empty_file(file):
