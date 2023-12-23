@@ -1,7 +1,7 @@
 from aiogram import types
 
 from Config.config import ADMIN_ID
-from keybords.inline import inline_kb_admin, inline_kb_main
+from Telegram.keybords.inline import inline_kb_admin, inline_kb_main
 from loader import dp, bot
 
 

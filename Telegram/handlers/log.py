@@ -1,7 +1,7 @@
 from aiogram import types
 
-from Config.config import USERS_ID, ADMIN_ID, QUEUE, LOG_FILE, TEMPLATE_FILE_XLSX
-from keybords.inline import inline_kb_main
+from Config.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX
+from Telegram.keybords.inline import inline_kb_main
 from loader import dp, bot
 from Call_Back_Data import CallBackData as call_back
 

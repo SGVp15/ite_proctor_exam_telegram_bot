@@ -1,7 +1,6 @@
 # import menus
 # import utils
-import handlers
-
+import Telegram
 from aiogram.utils import executor
 
 from loader import dp

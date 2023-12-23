@@ -1,6 +1,3 @@
-import re
-
-
 class User:
     def __init__(self, first_name_ru: str, last_name_ru: str, first_name_en: str, last_name_en: str, email: str,
                  password: str = ''):
