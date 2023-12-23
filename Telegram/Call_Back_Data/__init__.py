@@ -12,4 +12,4 @@ class CallBackData:
     clear_log = 'clear_log'
     clear_course = 'clear_course'
     send_test_email = 'send_test_email'
-    get_template_file_xlsx ='get_template_file_xlsx'
+    get_template_file_xlsx = 'get_template_file_xlsx'
