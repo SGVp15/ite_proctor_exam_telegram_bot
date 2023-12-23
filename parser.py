@@ -69,7 +69,7 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         user = Contact()
 
         user.lastName = clean_export_excel(read_excel(file_excel, column=LastName_column, row=i)).capitalize().strip()
-        if user.lastName == "":
+        if user.lastName == '':
             continue
         user.firstName = clean_export_excel(read_excel(file_excel, column=FirstName_column, row=i)).capitalize().strip()
         user.email = clean_export_excel(read_excel(file_excel, column=Email_column, row=i)).lower().strip()

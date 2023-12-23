@@ -1,5 +1,3 @@
-# import menus
-# import utils
 import Telegram
 from aiogram.utils import executor
 
