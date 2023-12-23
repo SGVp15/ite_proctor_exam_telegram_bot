@@ -1,0 +1,25 @@
+Добрый день, {{ user.lastName }} {{ user.firstName }}!
+Вы зарегистрированы на экзамен {{ user.exam }}, который пройдет онлайн {{ user.dateExam }}.
+Для подготовки к проведению экзамена просьба подключиться {{ user.dateExamConnect }}.
+
+Ссылка для входа в среду проведения экзамена:
+{{ user.url_proctor }}
+
+Логин:  {{ user.username }}
+Пароль: {{ user.password }}
+
+
+Перед началом экзамена выполните следующие действия:
+1. Установите расширение. https://chrome.google.com/webstore/detail/ignore-x-frame-headers/gleekbfjekiniecknbkamfmkohkpodhe
+2. Пройдите проверку правильной работы расширения. https://webbrowsertools.com/test-x-frame-options/
+3. Пройдите проверку оборудования. https://proctoredu.ru/check
+
+Вся необходимая информация и инструкции доступны по ссылке. https://www.itexpert.ru/rus/about/instruction/
+Дополнительно вы можете посмотреть короткий видеоролик о прохождении экзамена. https://files.proctoring.online/rules/video-ru/v4/
+
+В случае возникновения сложностей вы можете обратиться к нам по адресу exam_support@itexpert.ru моб.+79269680854
+Просим Вас подтвердить участие ответом на это письмо.
+
+
+С уважением,
+IT Expert
