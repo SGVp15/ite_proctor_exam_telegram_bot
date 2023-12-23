@@ -9,7 +9,7 @@ from loader import dp
 @dp.message_handler(commands=['start', 'help'], user_id=[*ADMIN_ID, ])
 async def send_welcome_admin(message: types.Message, state: FSMContext):
     text = f'Здравствуйте , {message.from_user.first_name}! \n'
-    text += f'Этот бот работает с ZOOM.'
+    text += f'Этот бот работает с ProctorEDU.'
     text += f'\n ❓/id - узнать ваш id'
     await message.answer(text=text, reply_markup=inline.inline_kb_main)
 
