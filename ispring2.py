@@ -13,9 +13,9 @@ class IspringApi:
     def __init__(self):
         self.url_base = 'https://api-learn.ispringlearn.ru'
         self.headers = CaseInsensitiveDict()
-        self.headers = {'X-Auth-Email': f'{LOGIN_ISPRING}',
-                        'X-Auth-Password': f'{PASSWORD_ISPRING}',
-                        'X-Auth-Account-Url': f'{DOMAIN_ISPRING}',
+        self.headers = {'X-Auth-Email': LOGIN_ISPRING,
+                        'X-Auth-Password': PASSWORD_ISPRING,
+                        'X-Auth-Account-Url': DOMAIN_ISPRING,
                         'Content-Type': 'application/xml'}
 
     def get_user(self):
@@ -26,7 +26,7 @@ class IspringApi:
     def create_user(self, user: Contact, department_id='2745eb28-449c-11ed-8def-3ea1876893eb', role='learner',
                     send_login_email='false',
                     invitation_message='Используйте следующие данные, чтобы войти в Академию iSpring:'):
-
+        url = '/'.join([self.url_base, 'user'])
         xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
               f'<request>' \
               f'    <departmentId>{department_id}</departmentId>' \
@@ -42,7 +42,6 @@ class IspringApi:
               f'    <invitationMessage>{invitation_message}</invitationMessage>' \
               f'</request>'
 
-        url = '/'.join([self.url_base, 'user'])
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         userid = re.findall(r'<response>(.*)</response>', response.text)[0]
         print(f'{__name__} - ok')
