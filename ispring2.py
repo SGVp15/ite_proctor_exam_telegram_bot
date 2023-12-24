@@ -64,7 +64,7 @@ class ApiIspringRequest:
         return response.text
 
     def create_enrollment(self, learner_id: str, course_id: str, access_date: datetime,
-                          due_date_type='due_period') -> None:
+                          due_date_type='due_period') -> bool:
         """
         :param learner_id:
         :param course_id:
@@ -83,7 +83,7 @@ class ApiIspringRequest:
               f'    </learnerIds>' \
               f'    <accessDate>{access_date}</accessDate>' \
               f'    <dueDateType>due_period</dueDateType>' \
-              f'    <dueDate>2023-12-20 10:30:00</dueDate>' \
+              f'    <dueDate>2024-12-20 10:30:00</dueDate>' \
               f'    <duePeriod>3</duePeriod>' \
               f'</request>'
 
@@ -95,8 +95,10 @@ class ApiIspringRequest:
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         if response.status_code == 201:
             print('Курс назначен')
+            return True
         else:
             print('Курс не назначен')
+            return False
 
     def delete_user(self, userid):
         url = self.url_base + 'user' + f'/{userid}'
