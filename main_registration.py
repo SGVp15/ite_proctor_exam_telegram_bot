@@ -84,7 +84,7 @@ async def registration(file=TEMPLATE_FILE_XLSX):
             html = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
 
         subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.dateExam}'
-        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BСС, html=html)
+        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BСС, html=html).send_email()
 
     # Write Log
     with open(LOG_FILE, mode='a', encoding='utf-8') as f:

@@ -72,7 +72,6 @@ class IspringApi:
         :param due_date_type: 'unlimited','due_date','due_period'
         :return:
         """
-        dueDate = datetime.date()
         xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
               f'<request>' \
               f'    <courseIds>' \
