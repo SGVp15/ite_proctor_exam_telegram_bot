@@ -11,7 +11,7 @@ from Config.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
 
 class IspringApi:
     def __init__(self):
-        self.url_base = 'https://api-learn.ispringlearn.ru/'
+        self.url_base = 'https://api-learn.ispringlearn.ru'
         self.headers = CaseInsensitiveDict()
         self.headers = {'X-Auth-Email': f'{LOGIN_ISPRING}',
                         'X-Auth-Password': f'{PASSWORD_ISPRING}',
@@ -19,7 +19,7 @@ class IspringApi:
                         'Content-Type': 'application/xml'}
 
     def get_user(self):
-        url = self.url_base + 'user'
+        url = '/'.join([self.url_base, 'user'])
         response = requests.get(url=url, headers=self.headers)
         return response.text
 
@@ -42,24 +42,23 @@ class IspringApi:
               f'    <invitationMessage>{invitation_message}</invitationMessage>' \
               f'</request>'
 
-        url = self.url_base + 'user'
+        url = '/'.join([self.url_base, 'user'])
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         userid = re.findall(r'<response>(.*)</response>', response.text)[0]
         print(f'{__name__} - ok')
         return userid
 
     def reset_password(self, user: Contact):
+        url = '/'.join([self.url_base, 'user', user.id_ispring, 'password'])
         xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
               f'<request>' \
               f'    <password>{user.password}</password>' \
               f'</request>'
-
-        url = self.url_base + f'user/{user.id_ispring}/password'
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         print(f'{__name__}\t{response.status_code}')
 
     def get_content(self):
-        url = self.url_base + 'content'
+        url = '/'.join([self.url_base, 'content'])
         response = requests.get(url=url, headers=self.headers)
         return response.text
 
@@ -72,6 +71,7 @@ class IspringApi:
         :param due_date_type: 'unlimited','due_date','due_period'
         :return:
         """
+        url = '/'.join([self.url_base, 'enrollment'])
         xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
               f'<request>' \
               f'    <courseIds>' \
@@ -90,7 +90,6 @@ class IspringApi:
         for courseIds in root.iter('courseIds'):
             courseIds.set('id', 'yes')
 
-        url = self.url_base + 'enrollment'
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         if response.status_code == 201:
             print('Курс назначен')
@@ -99,13 +98,18 @@ class IspringApi:
             print('Курс не назначен')
             return False
 
-    def delete_user(self, userid):
-        url = self.url_base + 'user' + f'/{userid}'
+    def delete_user(self, userid) -> bool:
+        url = '/'.join([self.url_base, 'user', userid])
         response = requests.delete(url=url, headers=self.headers)
-        print(response.status_code)
-        print(response.text)
+        if response.status_code == 201:
+            return True
+        else:
+            print(response.status_code)
+            print(response.text)
+            return False
 
     def create_group(self, name_group, user_ids: list[str]):
+        url = '/'.join([self.url_base, 'group'])
         ids = ''
         if user_ids:
             for user_id in user_ids:
@@ -121,7 +125,6 @@ class IspringApi:
               f'{ids}' \
               f'</request>'
 
-        url = self.url_base + 'group'
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         print(response.status_code)
         print(response.text)
