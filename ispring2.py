@@ -9,7 +9,7 @@ from Contact import Contact
 from Config.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
 
 
-class ApiIspringRequest:
+class IspringApi:
     def __init__(self):
         self.url_base = 'https://api-learn.ispringlearn.ru/'
         self.headers = CaseInsensitiveDict()

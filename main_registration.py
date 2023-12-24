@@ -2,7 +2,7 @@ import asyncio
 from random import choice
 
 from Config.config import TEMPLATE_FILE_XLSX, LOG_FILE, EMAIL_BСС
-from ispring2 import ApiIspringRequest
+from ispring2 import IspringApi
 from parser import get_all_courses, get_all_users, get_contact_from_excel
 from proctor_edu import create_csv
 from selenium_for_proctoredu import Proctor
@@ -14,7 +14,7 @@ async def registration(file=TEMPLATE_FILE_XLSX):
     contacts = get_contact_from_excel(file)
     if not contacts:
         return
-    ispring_api = ApiIspringRequest()
+    ispring_api = IspringApi()
     courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
     all_users_ispring = get_all_users(ispring_api.get_user())
     emails_user_id = {}
