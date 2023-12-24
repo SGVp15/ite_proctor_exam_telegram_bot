@@ -10,7 +10,7 @@ from Config.config import TEMPLATE_FILE_XLSX, PAGE_NAME, LastName_column, FirstN
     Hour_column, Minute_column, FirstNameEng_column, LastNameEng_column, Proctor_column, Password_column
 
 
-def get_all_exam(xml: str) -> dict:
+def get_all_courses(xml: str) -> dict:
     root = ET.fromstring(xml)
     courses: dict = {}
     list_courses = []

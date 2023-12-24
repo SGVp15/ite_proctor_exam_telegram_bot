@@ -3,7 +3,7 @@ from random import choice
 
 from Config.config import TEMPLATE_FILE_XLSX, LOG_FILE, EMAIL_BСС
 from ispring2 import ApiIspringRequest
-from parser import get_all_exam, get_all_users, get_contact_from_excel
+from parser import get_all_courses, get_all_users, get_contact_from_excel
 from proctor_edu import create_csv
 from selenium_for_proctoredu import Proctor
 from My_jinja.my_jinja import MyJinja
@@ -15,7 +15,7 @@ async def registration(file=TEMPLATE_FILE_XLSX):
     if not contacts:
         return
     ispring_api = ApiIspringRequest()
-    exams_content_item_id: dict = get_all_exam(ispring_api.get_content())
+    courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
     all_users_ispring = get_all_users(ispring_api.get_user())
     emails_user_id = {}
     for user in all_users_ispring:
@@ -71,7 +71,7 @@ async def registration(file=TEMPLATE_FILE_XLSX):
 
     # user registration for the exam in ISPRING
     for contact in contacts:
-        course_id = choice(exams_content_item_id[contact.exam])
+        course_id = choice(courses_content_item_id[contact.exam])
         ispring_api.create_enrollment(learner_id=contact.id_ispring,
                                       course_id=course_id,
                                       access_date=contact.scheduledAt)
