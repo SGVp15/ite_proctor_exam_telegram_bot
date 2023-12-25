@@ -62,6 +62,7 @@ class EmailSending:
             if self.html != '':
                 part2 = MIMEText(self.html, 'html')
                 msg.attach(part2)
+
             # Attach parts into message container.
             # According to RFC 2046, the last part of a multipart message, in this case
             # the HTML message, is best and preferred.
