@@ -166,9 +166,9 @@ class Proctor:
                 await asyncio.sleep(1)
                 # class_name = 'webix_icon mdi mdi-link-variant'
                 # self.driver.find_element(By.CLASS_NAME, class_name).click()
-                xpath = '/html/body/div[13]/div/div[1]/div/div/div[2]/div/button'
+                xpath = '/html/body/div[13]/div/div[1]/div/div/div[2]/div/button/span'
                 self.driver.find_element(By.XPATH, xpath)
-                await asyncio.sleep(10)
+                await asyncio.sleep(1)
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
