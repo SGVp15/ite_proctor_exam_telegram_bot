@@ -169,7 +169,7 @@ class Proctor:
                 # self.driver.find_element(By.CLASS_NAME, class_name).click()
                 xpath = '/html/body/div[12]/div/div[1]/div/div/div[2]/div/button'
                 self.driver.find_element(By.XPATH, xpath).click()
-                await asyncio.sleep(10)
+                await asyncio.sleep(100)
 
                 url = ''
                 buffer = ''
