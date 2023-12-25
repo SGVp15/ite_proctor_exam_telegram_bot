@@ -18,7 +18,7 @@ from Config.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, EXECUTABLE_PATH
 async def activate_windows():
     win_names = ['Open', 'Открытие']
     is_win_activate = False
-    while is_win_activate == False:
+    while is_win_activate is False:
         await asyncio.sleep(1)
         for win_name in win_names:
             if win_name in pg.getAllTitles():
