@@ -56,21 +56,21 @@ class EmailSending:
                     file_data = f.read()
                     file_name = basename(file)
                     msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
-
-            part1 = MIMEText(self.text, 'plain')
-            part2 = MIMEText(self.html, 'html')
-
+            if self.text != '':
+                part1 = MIMEText(self.text, 'plain')
+                msg.attach(part1)
+            if self.html != '':
+                part2 = MIMEText(self.html, 'html')
+                msg.attach(part2)
             # Attach parts into message container.
             # According to RFC 2046, the last part of a multipart message, in this case
             # the HTML message, is best and preferred.
-            # msg.attach(part1)
-            msg.attach(part2)
 
             smtp = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
             smtp.login(self.user, self.password)
             smtp.sendmail(from_addr=self.from_email, to_addrs=self.to_address, msg=msg.as_string())
             smtp.quit()
-
+            print(f'Email send {self.to_address}')
             return f'Email send {self.to_address}'
 
         except Exception as e:

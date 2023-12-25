@@ -79,12 +79,12 @@ async def registration(file=TEMPLATE_FILE_XLSX):
     # Send email
     for contact in contacts:
         if contact.proctor and contact.is_create_enrollment:
-            html = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
+            text = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
         else:
-            html = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
+            text = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
 
         subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.dateExam}'
-        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BСС, html=html).send_email()
+        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BСС, text=text).send_email()
 
     # Write Log
     with open(LOG_FILE, mode='a', encoding='utf-8') as f:
