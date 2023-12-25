@@ -23,5 +23,6 @@ class TestEmailSending(TestCase):
         №	ФИО		Организация		Должность		e-mail
         1	Григорьева Сабина 					asdasdqdq@stadasdep.rasdasdu	'''
 
-        return EmailSending(to='g.savushkin@itexpert.ru', cc='phosphorusp15@gmail.com', text='text',
-                            html='html').send_email()
+
+        EmailSending(to=['phosphorusp15@gmail.com'], text='text',
+                         html='html').send_email()

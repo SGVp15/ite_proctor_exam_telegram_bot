@@ -1,10 +1,11 @@
 import smtplib
-from email.message import EmailMessage
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
 from os.path import basename
 
-from Config.config import SMTP_SERVER, SMTP_PORT
-from Config.config import EMAIL_LOGIN, EMAIL_PASSWORD, email_login_password
+from Config.config import SMTP_SERVER, SMTP_PORT, EMAIL_LOGIN, EMAIL_PASSWORD, email_login_password
 
 
 class EmailSending:
@@ -43,36 +44,29 @@ class EmailSending:
         self.files = files_path
 
     def send_email(self):
-        try:
-            msg = EmailMessage()
-            msg['From'] = self.from_email
-            msg['Subject'] = self.subject
-            msg['To'] = self.to
-            msg['Cc'] = self.cc
-            msg['Bcc'] = self.bcc
+        msg = MIMEMultipart()
+        msg['From'] = self.from_email
+        msg['Subject'] = self.subject
+        msg['To'] = self.to
+        msg['Cc'] = self.cc
+        msg['Bcc'] = self.bcc
 
-            for file in self.files:
-                with open(file, 'rb') as f:
-                    file_data = f.read()
-                    file_name = basename(file)
-                    msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
-            if self.text != '':
-                part1 = MIMEText(self.text, 'plain')
-                msg.attach(part1)
-            if self.html != '':
-                part2 = MIMEText(self.html, 'html')
-                msg.attach(part2)
+        msg.attach(MIMEText(self.text, 'plain'))
+        msg.attach(MIMEText(self.html, 'html'))
 
-            # Attach parts into message container.
-            # According to RFC 2046, the last part of a multipart message, in this case
-            # the HTML message, is best and preferred.
+        for f in self.files or []:
+            with open(f, "rb") as fil:
+                part = MIMEApplication(
+                    fil.read(),
+                    Name=basename(f)
+                )
+            # After the file is closed
+            part['Content-Disposition'] = 'attachment; filename="%s"' % basename(f)
+            msg.attach(part)
 
-            smtp = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
-            smtp.login(self.user, self.password)
-            smtp.sendmail(from_addr=self.from_email, to_addrs=self.to_address, msg=msg.as_string())
-            smtp.quit()
-            print(f'Email send {self.to_address}')
-            return f'Email send {self.to_address}'
-
-        except Exception as e:
-            return f'Error {e}'
+        smtp = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
+        smtp.login(self.user, self.password)
+        smtp.sendmail(from_addr=self.from_email, to_addrs=self.to_address, msg=msg.as_string())
+        smtp.quit()
+        print(f'Email send {self.to_address}')
+        return f'Email send {self.to_address}'
