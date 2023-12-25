@@ -1,6 +1,6 @@
 import os
 
-from dotenv import dotenv_values,find_dotenv
+from dotenv import dotenv_values, find_dotenv
 
 config = dotenv_values(find_dotenv())
 
@@ -19,8 +19,8 @@ LOG_PROGRAM = './logs.txt'
 # ====================================================================================================================
 # -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CS
 
-SESSIONS_CSV_FILE = os.path.join(os.getcwd() + 'data' + 'output' + 'csv' + 'sessions_import.csv')
-USERS_CSV_FILE = os.path.join(os.getcwd() + 'data' + 'output' + 'csv' + 'users_import.csv')
+SESSIONS_CSV_FILE = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'sessions_import.csv')
+USERS_CSV_FILE = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'users_import.csv')
 
 # == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV ==
 # ====================================================================================================================
@@ -29,7 +29,7 @@ USERS_CSV_FILE = os.path.join(os.getcwd() + 'data' + 'output' + 'csv' + 'users_i
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 
-TEMPLATE_FILE_XLSX = './data/output/template/template.xlsx'
+TEMPLATE_FILE_XLSX = os.path.join(os.getcwd(), 'data', 'output', 'template', 'template.xlsx')
 PAGE_NAME = 'Экзамены'
 
 LastName_column = 'A'

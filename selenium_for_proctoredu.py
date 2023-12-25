@@ -5,7 +5,8 @@ import pyautogui
 import pygetwindow as pg
 import pyperclip
 from selenium import webdriver
-from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException
+from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
+    StaleElementReferenceException
 from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -16,15 +17,17 @@ from Config.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, EXECUTABLE_PATH
 
 class Proctor:
     def __init__(self):
+
         chrome_options = Options()
         # chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument('--ignore-certificate-errors')
 
         self.driver = webdriver.Chrome(
             # executable_path=EXECUTABLE_PATH_WEBDRIVER,
-                                       options=chrome_options
-                                       )
+            options=chrome_options
+        )
         self.driver.get('https://itexpert.proctoring.online/')
+        self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException)
 
     async def authorization(self):
         exceptions = (NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException)
@@ -74,8 +77,9 @@ class Proctor:
                 self.driver.get('https://itexpert.proctoring.online/#!/users')
                 await asyncio.sleep(0.2)
                 self.driver.find_element(By.XPATH, xpath).click()
+                self.driver.find_element(By.XPATH, xpath)
                 break
-            except NoSuchElementException:
+            except self.web_error:
                 continue
 
         win_name = 'Open'
@@ -138,7 +142,7 @@ class Proctor:
                 self.driver.find_element(By.XPATH, xpath).send_keys(Keys.ENTER)
                 await asyncio.sleep(1)
                 break
-            except NoSuchElementException:
+            except self.web_error:
                 continue
 
         await asyncio.sleep(1)
@@ -176,10 +180,10 @@ class Proctor:
                 try:
                     xpath = '/html/body/div[12]/div/div[1]/div/div/div[3]/div/button'
                     self.driver.find_element(By.XPATH, xpath).click()
-                except NoSuchElementException:
+                except self.web_error:
                     print(xpath, 'NoSuchElement')
                 return url
-            except (NoSuchElementException, ElementClickInterceptedException):
+            except self.web_error:
                 print('NoSuchElement')
         return ''
 
@@ -199,15 +203,8 @@ class Proctor:
             self.driver.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
             return 'ok'
-        except NoSuchElementException:
+        except self.web_error:
             return 'элемент не найден'
 
     def quit(self):
         self.driver.quit()
-
-
-if __name__ == '__main__':
-    p_driver = Proctor()
-    print(p_driver.get_urls_sessions(['2023-04-20_Test_Ivanov_OPSC_proctor-1',
-                                      '2023-04-20_Test_Ivanov_OPSC_proctor-1']))
-    p_driver.quit()
