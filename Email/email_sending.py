@@ -49,7 +49,7 @@ class EmailSending:
         msg['Subject'] = self.subject
         msg['To'] = self.to
         msg['Cc'] = self.cc
-        msg['Bcc'] = self.bcc
+        # msg['Bcc'] = self.bcc
 
         msg.attach(MIMEText(self.text, 'plain'))
         msg.attach(MIMEText(self.html, 'html'))
