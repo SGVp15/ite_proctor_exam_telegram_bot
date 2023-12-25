@@ -70,6 +70,12 @@ class Proctor:
         await self.send_session_csv()
 
     async def send_users_csv(self):
+        try:
+            xpath_debug = '/html/body/div[25]/div'
+            self.driver.find_element(By.XPATH, xpath_debug).click()
+        except self.web_error:
+            pass
+
         xpath = '/html/body/div[3]/div[2]/div[2]/div[1]/div/div[7]/div/button'
         # xpath = ''
         while True:
