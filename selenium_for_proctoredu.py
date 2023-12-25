@@ -184,7 +184,7 @@ class Proctor:
 
                 # Закрыть крточку
                 try:
-                    xpath = '/html/body/div[12]/div/div[1]/div/div/div[3]/div/button'
+                    xpath = '/html/body/div[13]/div/div[1]/div/div/div[3]/div/button'
                     self.driver.find_element(By.XPATH, xpath).click()
                 except self.web_error:
                     print(xpath, 'NoSuchElement')
