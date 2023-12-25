@@ -156,7 +156,6 @@ class Proctor:
         return out
 
     async def get_url_session(self, text_to_find: str) -> str:
-        await self.authorization()
         await self.find_session(text_to_find)
         for _ in range(3):
             try:
