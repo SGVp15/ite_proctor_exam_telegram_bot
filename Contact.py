@@ -30,6 +30,7 @@ class Contact:
         self.url_course = None
         self.id_ispring = None
         self.identifier = None
+        self.is_create_enrollment: bool = False
 
     def normalize(self) -> bool:
         if self.firstNameEng == '':

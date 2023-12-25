@@ -20,8 +20,9 @@ class Proctor:
         # chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument('--ignore-certificate-errors')
 
-        self.driver = webdriver.Chrome(executable_path=EXECUTABLE_PATH_WEBDRIVER,
-                                       chrome_options=chrome_options
+        self.driver = webdriver.Chrome(
+            # executable_path=EXECUTABLE_PATH_WEBDRIVER,
+                                       options=chrome_options
                                        )
         self.driver.get('https://itexpert.proctoring.online/')
 
@@ -52,6 +53,7 @@ class Proctor:
                 continue
 
         xpath = '//button[1]'
+        xpath = '/html/body/div/div[2]/div[2]/div[2]/div/div[3]/div/button'
         try:
             await asyncio.sleep(0.2)
             if self.driver.find_element(By.XPATH, xpath):

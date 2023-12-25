@@ -69,16 +69,16 @@ async def registration(file=TEMPLATE_FILE_XLSX):
                     contacts.remove(contact)
         drive.quit()
 
-    # user registration for the exam in ISPRING
+    # User registration for the exam in ISPRING
     for contact in contacts:
         course_id = choice(courses_content_item_id[contact.exam])
-        ispring_api.create_enrollment(learner_id=contact.id_ispring,
-                                      course_id=course_id,
-                                      access_date=contact.scheduledAt)
+        contact.is_create_enrollment = ispring_api.create_enrollment(learner_id=contact.id_ispring,
+                                                                     course_id=course_id,
+                                                                     access_date=contact.scheduledAt)
 
     # Send email
     for contact in contacts:
-        if contact.proctor:
+        if contact.proctor and contact.is_create_enrollment:
             html = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
         else:
             html = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)

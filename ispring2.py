@@ -13,6 +13,10 @@ class IspringApi:
     def __init__(self):
         self.url_base = 'https://api-learn.ispringlearn.ru'
         self.headers = CaseInsensitiveDict()
+        #         self.headers["Host"] = Config.Host
+        #         self.headers["X-Auth-Account-Url"] = Config.X_Auth_Account_Url
+        #         self.headers["X-Auth-Email"] = Config.X_Auth_Email
+        #         self.headers["X-Auth-Password"] = Config.X_Auth_Password
         self.headers = {'X-Auth-Email': LOGIN_ISPRING,
                         'X-Auth-Password': PASSWORD_ISPRING,
                         'X-Auth-Account-Url': DOMAIN_ISPRING,
