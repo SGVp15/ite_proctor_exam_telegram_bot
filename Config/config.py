@@ -140,4 +140,4 @@ EMAIL_BСС = 'v.gromakov@itexpert.ru', 'g.savushkin@itexpert.ru', 'o.kuprienko@
 EMAIL_BСС_course = 'g.savushkin@itexpert.ru', 'a.rybalkin@itexpert.ru', 'kab@itexpert.ru'
 
 email_login_password = {}
-template_folder = './Email/template_email'
+template_folder = './Email/template_email/'
