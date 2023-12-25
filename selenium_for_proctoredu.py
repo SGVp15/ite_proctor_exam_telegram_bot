@@ -15,6 +15,22 @@ from Config.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, EXECUTABLE_PATH
     USERS_CSV_FILE
 
 
+async def activate_windows():
+    win_names = ['Open', 'Открытие']
+    is_win_activate = False
+    while is_win_activate == False:
+        await asyncio.sleep(1)
+        for win_name in win_names:
+            if win_name in pg.getAllTitles():
+                try:
+                    pg.getWindowsWithTitle(win_name)[0].activate()
+                    is_win_activate = True
+                    break
+                except pg.PyGetWindowException:
+                    continue
+        print(f'Wait windows title = {win_name}')
+
+
 class Proctor:
     def __init__(self):
 
@@ -70,12 +86,6 @@ class Proctor:
         await self.send_session_csv()
 
     async def send_users_csv(self):
-        try:
-            xpath_debug = '/html/body/div[25]/div'
-            self.driver.find_element(By.XPATH, xpath_debug).click()
-        except self.web_error:
-            pass
-
         xpath = '/html/body/div[3]/div[2]/div[2]/div[1]/div/div[7]/div/button'
         while True:
             try:
@@ -85,19 +95,15 @@ class Proctor:
                 self.driver.find_element(By.XPATH, xpath)
                 break
             except self.web_error:
+                try:
+                    xpath_debug = '/html/body/div[17]/div'
+                    self.driver.find_element(By.XPATH, xpath_debug).click()
+                except self.web_error:
+                    pass
                 continue
 
-        win_name = 'Open'
         pyperclip.copy(USERS_CSV_FILE)
-        while True:
-            await asyncio.sleep(1)
-            if win_name in pg.getAllTitles():
-                try:
-                    pg.getWindowsWithTitle(win_name)[0].activate()
-                    break
-                except pg.PyGetWindowException:
-                    continue
-            print(f'Wait windows title = {win_name}')
+        await activate_windows()
 
         await asyncio.sleep(0.5)
         p = pyperclip.paste()
@@ -118,16 +124,7 @@ class Proctor:
                 continue
 
         pyperclip.copy(SESSIONS_CSV_FILE)
-        win_name = 'Open'
-        while True:
-            await asyncio.sleep(1)
-            if win_name in pg.getAllTitles():
-                try:
-                    pg.getWindowsWithTitle(win_name)[0].activate()
-                    break
-                except pg.PyGetWindowException:
-                    continue
-            print(f'Wait windows title = {win_name}')
+        await activate_windows()
 
         await asyncio.sleep(0.5)
         pyautogui.hotkey('ctrl', 'v')
@@ -164,11 +161,14 @@ class Proctor:
         for _ in range(3):
             try:
                 # xpath = '//input[@type="text"][2]//a'
+
                 xpath = '/html/body/div[3]/div[2]/div[2]/div[3]/div[2]/div[2]/div/div[2]/div[1]/a'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
                 xpath = '/html/body/div[12]/div/div[1]/div/div/div[2]/div/button'
-                self.driver.find_element(By.XPATH, xpath).click()
+                class_name = 'webix_icon mdi mdi-link-variant'
+                self.driver.find_element(By.CLASS_NAME, class_name).click()
+                # self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
                 url = ''
