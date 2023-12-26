@@ -57,7 +57,7 @@ class Contact:
         remove_at = self.scheduledAt + datetime.timedelta(days=90)
 
         pattern_time = "%Y-%m-%dT%H:%M:%SZ"
-        self.dateExamForSubject = self.dateExam
+        self.dateExamForSubject = self.dateExam.strftime(pattern_time)
         self.deadline = deadline.strftime(pattern_time)
         self.removeAt = remove_at.strftime(pattern_time)
 

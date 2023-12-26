@@ -54,7 +54,7 @@ class EmailSending:
         msg.attach(MIMEText(self.text, 'plain'))
         msg.attach(MIMEText(self.html, 'html'))
 
-        for f in self.files or []:
+        for f in self.files:
             with open(f, "rb") as fil:
                 part = MIMEApplication(
                     fil.read(),
@@ -66,7 +66,7 @@ class EmailSending:
 
         smtp = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
         smtp.login(self.user, self.password)
-        smtp.sendmail(from_addr=self.from_email, to_addrs=self.to_address, msg=msg.as_string())
+        smtp.sendmail(from_addr=self.user, to_addrs=self.to_address, msg=msg.as_string())
         smtp.quit()
         print(f'Email send {self.to_address}')
         return f'Email send {self.to_address}'
