@@ -52,7 +52,7 @@ class IspringApi:
         if response.status_code == 201:
             return userid
         else:
-            return None
+            return response.status_code
 
     def reset_password(self, user: Contact):
         url = '/'.join([self.url_base, 'user', user.id_ispring, 'password'])
