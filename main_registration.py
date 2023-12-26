@@ -13,44 +13,9 @@ from Email import EmailSending, template_email_registration_exam_offline, templa
 async def registration(file=TEMPLATE_FILE_XLSX):
     contacts = get_contact_from_excel(file)
     if not contacts:
-        return
-    ispring_api = IspringApi()
-    courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
-    all_users_ispring = get_all_users(ispring_api.get_user())
-    emails_user_id = {}
-    for user in all_users_ispring:
-        emails_user_id.update({user['EMAIL']: user['userId']})
-    for contact in contacts:
-        contact.id_ispring = emails_user_id.get(contact.email, '')
+        return 'No contact'
 
-    # создать пользователя привязка к email
-    emails = [str(x['EMAIL']).lower() for x in all_users_ispring]
-    for contact in contacts:
-        if contact.email not in emails:
-            contact.id_ispring = ispring_api.create_user(contact)
-            print(contact.id_ispring)
-        else:
-            ispring_api.reset_password(contact)
-
-    all_users_ispring = get_all_users(ispring_api.get_user())
-    emails_user_id = {}
-    for user in all_users_ispring:
-        emails_user_id.update({user['EMAIL']: user['userId']})
-    for contact in contacts:
-        contact.id_ispring = emails_user_id[contact.email]
-
-    # назначить пользователя
-
-    all_users_ispring = get_all_users(ispring_api.get_user())
-
-    # # Delete users in ISPRING
-    # for contact in contacts:
-    #     ispringApi.delete_user(contact.id_ispring)
-    #     print(f'[delete] {contact}')
-    # print('del - ok')
-    # time.sleep(100_000)
-
-    # ProctorEDU
+    # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in contacts if c.proctor]
     if contacts_proctor:
         # Create CSV for ProctorEDU
@@ -68,6 +33,39 @@ async def registration(file=TEMPLATE_FILE_XLSX):
                     print(f"\n\n[error] NOT found URL {contact}\n\n")
                     contacts.remove(contact)
         drive.quit()
+
+    # -------------- ISPRING --------------
+    ispring_api = IspringApi()
+
+    all_users_ispring = get_all_users(ispring_api.get_user())
+
+    emails_user_id = {}
+
+    for user in all_users_ispring:
+        emails_user_id.update({user['EMAIL']: user['userId']})
+
+    # delete contact ispring
+    for contact in contacts:
+        contact.id_ispring = emails_user_id.get(contact.email, None)
+        if contact.id_ispring:
+            ispring_api.delete_user(contact.id_ispring)
+            print(contact.email, ' - deleted')
+            contact.id_ispring = None
+
+    # Create ispring users with email, id_ispring
+    for contact in contacts:
+        contact.id_ispring = ispring_api.create_user(contact)
+        print(contact.id_ispring)
+    # email <==> id_ispring
+    all_users_ispring = get_all_users(ispring_api.get_user())
+    emails_user_id = {}
+    for user in all_users_ispring:
+        emails_user_id.update({user['EMAIL']: user['userId']})
+    for contact in contacts:
+        contact.id_ispring = emails_user_id[contact.email]
+
+    # Get all courses ispring
+    courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
 
     # User registration for the exam in ISPRING
     for contact in contacts:
