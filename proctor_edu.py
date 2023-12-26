@@ -1,9 +1,10 @@
 import csv
 
 from Config.config import csv_header_session, csv_header_user, USERS_CSV_FILE, SESSIONS_CSV_FILE
+from Contact import Contact
 
 
-async def create_csv(contacts):
+async def create_csv(contacts:list[Contact]):
     with open(SESSIONS_CSV_FILE, 'w', encoding='utf-8', newline='') as csvfile:
         fieldnames = csv_header_session.keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
