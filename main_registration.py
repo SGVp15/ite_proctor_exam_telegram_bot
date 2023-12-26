@@ -46,23 +46,16 @@ async def registration(file=TEMPLATE_FILE_XLSX):
 
     # delete contact ispring
     for contact in contacts:
-        contact.id_ispring = emails_user_id.get(contact.email, None)
-        if contact.id_ispring:
+        contact.id_ispring = emails_user_id.get(contact.email, '')
+        if contact.id_ispring != '':
             ispring_api.delete_user(contact.id_ispring)
             print(contact.email, ' - deleted')
             contact.id_ispring = None
 
-    # Create ispring users with email, id_ispring
+    # Create ispring users with email <==> id_ispring
     for contact in contacts:
         contact.id_ispring = ispring_api.create_user(contact)
         print(contact.id_ispring)
-    # email <==> id_ispring
-    all_users_ispring = get_all_users(ispring_api.get_user())
-    emails_user_id = {}
-    for user in all_users_ispring:
-        emails_user_id.update({user['EMAIL']: user['userId']})
-    for contact in contacts:
-        contact.id_ispring = emails_user_id[contact.email]
 
     # Get all courses ispring
     courses_content_item_id: dict = get_all_courses(ispring_api.get_content())

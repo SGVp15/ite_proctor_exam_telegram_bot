@@ -49,7 +49,10 @@ class IspringApi:
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         userid = re.findall(r'<response>(.*)</response>', response.text)[0]
         print(f'{__name__} - ok')
-        return userid
+        if response.status_code == 201:
+            return userid
+        else:
+            return None
 
     def reset_password(self, user: Contact):
         url = '/'.join([self.url_base, 'user', user.id_ispring, 'password'])
