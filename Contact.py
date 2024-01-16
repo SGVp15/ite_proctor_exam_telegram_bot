@@ -78,7 +78,6 @@ class Contact:
         self.s = f'{datetime.datetime.now()}\tsubject={self.subject}\t' \
                  f'lastName={self.lastName}\tfirstName={self.firstName}\t' \
                  f'email={self.email}\tusername={self.username}\tpassword={self.password}\t' \
-                 f'{self.scheduledAt=}\t{self.dateExam=}\t{self.proctor=}\t' \
                  f'url={self.url_proctor}\n'
         return self.s
 
