@@ -103,7 +103,7 @@ class Proctor:
                 continue
 
         pyperclip.copy(USERS_CSV_FILE)
-        await activate_windows()
+        # await activate_windows()
 
         await asyncio.sleep(0.5)
         p = pyperclip.paste()

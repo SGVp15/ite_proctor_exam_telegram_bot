@@ -75,11 +75,12 @@ class Contact:
         return True
 
     def __str__(self) -> str:
-        return f'{datetime.datetime.now()}\t{self.lastName=}\t{self.firstName=}\t{self.email=}\t{self.password=}' \
-               f'{self.username=}\t{self.lastNameEng=}\t{self.firstNameEng=}\t' \
-               f'{self.exam=}\t{self.removeAt=}\t{self.deadline=}\t' \
-               f'{self.scheduledAt=}\t{self.dateExam=}\t{self.proctor=}\t' \
-               f'{self.subject=}\t{self.url_proctor=}\t{self.id_ispring=}\t{self.identifier=}\n'
+        self.s = f'{datetime.datetime.now()}\tsubject={self.subject}\t' \
+                 f'lastName={self.lastName}\tfirstName={self.firstName}\t' \
+                 f'email={self.email}\tusername={self.username}\tpassword={self.password}\t' \
+                 f'{self.scheduledAt=}\t{self.dateExam=}\t{self.proctor=}\t' \
+                 f'url={self.url_proctor}\n'
+        return self.s
 
 
 def to_md5(s: str):

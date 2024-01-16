@@ -5,8 +5,8 @@ from datetime import datetime
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from Contact import Contact
 from Config.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
+from Contact import Contact
 
 
 class IspringApi:
@@ -14,9 +14,9 @@ class IspringApi:
         self.url_base = 'https://api-learn.ispringlearn.ru'
         self.headers = CaseInsensitiveDict()
         #         self.headers["Host"] = Config.Host
-        #         self.headers["X-Auth-Account-Url"] = Config.X_Auth_Account_Url
-        #         self.headers["X-Auth-Email"] = Config.X_Auth_Email
-        #         self.headers["X-Auth-Password"] = Config.X_Auth_Password
+        #         self.headers["X-Auth-Account-Url"] = DOMAIN_ISPRING
+        #         self.headers["X-Auth-Email"] = LOGIN_ISPRING
+        #         self.headers["X-Auth-Password"] = PASSWORD_ISPRING
         self.headers = {'X-Auth-Email': LOGIN_ISPRING,
                         'X-Auth-Password': PASSWORD_ISPRING,
                         'X-Auth-Account-Url': DOMAIN_ISPRING,
@@ -87,7 +87,7 @@ class IspringApi:
               f'        <id>{learner_id}</id>' \
               f'    </learnerIds>' \
               f'    <accessDate>{access_date}</accessDate>' \
-              f'    <dueDateType>due_period</dueDateType>' \
+              f'    <dueDateType>{due_date_type}</dueDateType>' \
               f'    <dueDate>2024-12-20 10:30:00</dueDate>' \
               f'    <duePeriod>3</duePeriod>' \
               f'</request>'
