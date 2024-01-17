@@ -10,7 +10,7 @@ from My_jinja.my_jinja import MyJinja
 from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
 
 
-async def registration(file=TEMPLATE_FILE_XLSX):
+async def registration(file=TEMPLATE_FILE_XLSX) -> str:
     contacts = get_contact_from_excel(file)
     if not contacts:
         return 'No contact'
@@ -82,6 +82,11 @@ async def registration(file=TEMPLATE_FILE_XLSX):
         for contact in contacts:
             f.write(str(contact))
             print(contact)
+
+    out_str = ''
+    for contact in contacts:
+        out_str = f'{contact.lastName} {contact.firstName} {contact.email} {contact.exam} {contact.dateExam}\n'
+    return out_str
 
 
 if __name__ == '__main__':

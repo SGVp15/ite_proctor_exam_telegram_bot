@@ -23,6 +23,7 @@ async def handle_document(message: types.Message):
     # Read the contents of the file
     await bot.download_file(file_path, destination_dir='./data/input')
     path = f'./data/input/{file_path}'
-    await message.answer(f'Добавил {file_path}', reply_markup=inline_kb_main)
-    # asyncio.run(registration(path))
-    loop.create_task(registration(path))
+    await message.answer(f'Добавил {file_path}')
+    answer = await registration(path)
+    await message.answer(answer, reply_markup=inline_kb_main)
+    # loop.create_task(registration(path))
