@@ -2,7 +2,7 @@ from aiogram import types
 
 from Config.config import USERS_ID, ADMIN_ID
 from Telegram.keybords.inline import inline_kb_main
-from loader import dp, bot, loop
+from loader import dp, bot
 from main_registration import registration
 
 
