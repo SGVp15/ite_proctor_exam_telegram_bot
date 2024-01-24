@@ -3,9 +3,9 @@ from aiogram.fsm.context import FSMContext
 
 from aiogram.filters import Command
 
-from Config.config import ADMIN_ID, USERS_ID
+from Telegram.config import ADMIN_ID, USERS_ID
 from Telegram.keybords import inline
-from Telegram.loader import dp
+from Telegram.main import dp
 
 
 @dp.message(Command('start', 'help') & F.from_user.id.in_(*ADMIN_ID, ))

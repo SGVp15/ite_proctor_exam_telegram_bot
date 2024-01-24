@@ -1,8 +1,8 @@
 from aiogram import types, F
 
-from Config.config import USERS_ID, ADMIN_ID
+from Telegram.config import USERS_ID, ADMIN_ID
 from Telegram.keybords.inline import inline_kb_main
-from main import dp, bot
+from Telegram.main import bot, dp
 from main_registration import registration
 from aiogram.filters.command import Command
 

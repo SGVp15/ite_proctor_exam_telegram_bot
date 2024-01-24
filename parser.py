@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from openpyxl.reader.excel import load_workbook
 
 from Contact import Contact
-from Config.config import TEMPLATE_FILE_XLSX, PAGE_NAME, LastName_column, FirstName_column, Email_column, Exam_column, \
+from Telegram.config import TEMPLATE_FILE_XLSX, PAGE_NAME, LastName_column, FirstName_column, Email_column, Exam_column, \
     Date_column, \
     Hour_column, Minute_column, FirstNameEng_column, LastNameEng_column, Proctor_column, Password_column
 

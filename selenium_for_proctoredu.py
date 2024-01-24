@@ -11,7 +11,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-from Config.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, EXECUTABLE_PATH_WEBDRIVER, SESSIONS_CSV_FILE, \
+from Telegram.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, \
     USERS_CSV_FILE
 
 

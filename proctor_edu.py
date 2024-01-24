@@ -1,6 +1,6 @@
 import csv
 
-from Config.config import csv_header_session, csv_header_user, USERS_CSV_FILE, SESSIONS_CSV_FILE
+from Telegram.config import csv_header_session, csv_header_user, USERS_CSV_FILE, SESSIONS_CSV_FILE
 from Contact import Contact
 
 

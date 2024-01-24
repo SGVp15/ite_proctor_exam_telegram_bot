@@ -1,9 +1,9 @@
 from aiogram import types, F
 from aiogram.filters import Command
 
-from Config.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX
+from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX
 from Telegram.keybords.inline import inline_kb_main
-from Telegram.loader import dp, bot
+from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
 
 
