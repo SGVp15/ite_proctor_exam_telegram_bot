@@ -34,12 +34,12 @@ class Contact:
         self.is_create_enrollment: bool = False
 
     def normalize(self) -> bool:
-        if self.firstNameEng == '':
+        if self.firstNameEng == '' or self.firstNameEng in None:
             self.firstNameEng = transliterate(f'{self.firstName}').capitalize()
         else:
             self.firstNameEng = transliterate_error(self.firstNameEng)
 
-        if self.lastNameEng == '':
+        if self.lastNameEng == '' or self.lastNameEng in None:
             self.lastNameEng = transliterate(f'{self.lastName}').capitalize()
         else:
             self.lastNameEng = transliterate_error(self.lastNameEng)

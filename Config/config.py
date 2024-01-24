@@ -1,26 +1,27 @@
 import os
+from typing import List
 
 from dotenv import dotenv_values, find_dotenv
 
 config = dotenv_values(find_dotenv())
 
-BOT_TOKEN = config.get('BOT_TOKEN')
-ADMIN_ID = [int(x) for x in config['ADMIN_ID'].split(',')]
-USERS_ID = [int(x) for x in config['USERS_ID'].split(',')]
+BOT_TOKEN: str | None = config.get('BOT_TOKEN')
+ADMIN_ID: list[int] = [int(x) for x in config['ADMIN_ID'].split(',')]
+USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 
-QUEUE = './data/queue.txt'
+QUEUE: str = './data/queue.txt'
 
-LOG_FILE = './data/log.txt'
-LOG_BACKUP = './data/.history.txt'
-COURSES_FILE = './data/.courses.txt'
-COURSES_FILE_BACKUP = './data/.courses_backup.txt'
-LOG_PROGRAM = './logs.txt'
+LOG_FILE: str = './data/log.txt'
+LOG_BACKUP: str = './data/.history.txt'
+COURSES_FILE: str = './data/.courses.txt'
+COURSES_FILE_BACKUP: str = './data/.courses_backup.txt'
+LOG_PROGRAM: str = './logs.txt'
 
 # ====================================================================================================================
 # -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CSV -- CS
 
-SESSIONS_CSV_FILE = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'sessions_import.csv')
-USERS_CSV_FILE = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'users_import.csv')
+SESSIONS_CSV_FILE: str = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'sessions_import.csv')
+USERS_CSV_FILE: str = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'users_import.csv')
 
 # == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV == CSV ==
 # ====================================================================================================================

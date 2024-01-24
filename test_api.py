@@ -1,6 +1,6 @@
 import asyncio
 
-from ispring2 import IspringApi
+from Ispring.ispring2 import IspringApi
 from selenium_for_proctoredu import Proctor
 
 

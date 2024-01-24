@@ -1,9 +1,9 @@
 from aiogram import types
 
-from loader import dp
+from Telegram.loader import dp
 
 
-@dp.message_handler()
+@dp.message()
 async def echo(message: types.Message):
     await message.reply('Не понимаю, что это значит.'
                         'Воспользуйтесь командой /help')

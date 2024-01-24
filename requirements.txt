@@ -1,7 +1,7 @@
 Jinja2
 python-dotenv
-aiogram==2.25.1
-openpyxl==3.1.1
+aiogram
+openpyxl
 requests
 loguru
 lxml

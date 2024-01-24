@@ -1,7 +1,8 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from Telegram.Call_Back_Data import CallBackData as callback
 
-inline_btn_logs = InlineKeyboardButton('Скачать Логи', callback_data=callback.download_logs)
+
+inline_btn_logs = InlineKeyboardButton(text='Скачать Логи', callback_data=callback.download_logs)
 
 inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='⭐️ Скачать Логи', callback_data=callback.get_log), ],
