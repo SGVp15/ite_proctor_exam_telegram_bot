@@ -28,7 +28,7 @@ async def activate_windows():
                     break
                 except pg.PyGetWindowException:
                     continue
-        print(f'Wait windows title = {win_name}')
+            print(f'Wait windows title = {win_name}')
 
 
 class Proctor:
@@ -166,7 +166,8 @@ class Proctor:
                 await asyncio.sleep(1)
                 # class_name = 'webix_icon mdi mdi-link-variant'
                 # self.driver.find_element(By.CLASS_NAME, class_name).click()
-                xpath = '/html/body/div[13]/div/div[1]/div/div/div[2]/div/button/span'
+                # xpath = '/html/body/div[13]/div/div[1]/div/div/div[2]/div/button'
+                xpath = '/html/body/div[12]/div/div[1]/div/div/div[2]/div/button'
                 self.driver.find_element(By.XPATH, xpath)
                 await asyncio.sleep(1)
                 self.driver.find_element(By.XPATH, xpath).click()

@@ -16,14 +16,14 @@ async def send_welcome_admin(message: types.Message, state: FSMContext):
     await message.answer(text=text, reply_markup=inline.inline_kb_main)
 
 
-@dp.message(Command('start', 'help') & F.from_user.id.in_([*USERS_ID, ]), state=['*', None])
+@dp.message(Command('start', 'help') & F.from_user.id.in_({*USERS_ID}) & F.state.in_({'*', None}))
 async def send_welcome_new_user(message: types.Message):
     text = f'Здравствуйте, {message.from_user.first_name}.'
     text += f'\n ❓/id - узнать ваш id'
     await message.answer(text=text, reply_markup=inline.inline_kb_main)
 
 
-@dp.message(Command('start', 'help'), state=['*', None])
+@dp.message(Command('start', 'help') & F.state.in_({'*', None}))
 async def send_welcome(message: types.Message):
     text = f'Здравствуйте, {message.from_user.first_name}.'
     text += f'\n ❓/id - узнать ваш id'
@@ -32,4 +32,4 @@ async def send_welcome(message: types.Message):
 
 @dp.message(Command('id'))
 async def send_id(message: types.Message):
-    await message.answer(message.chat.id)
+    await message.answer(str(message.chat.id))

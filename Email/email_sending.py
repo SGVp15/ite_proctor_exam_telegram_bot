@@ -11,7 +11,7 @@ from Telegram.config import SMTP_SERVER, SMTP_PORT, EMAIL_LOGIN, EMAIL_PASSWORD,
 class EmailSending:
     def __init__(self, subject='Вы зарегистрированы на курс', from_email=EMAIL_LOGIN, to='', cc='', bcc='',
                  text='', html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
-                 login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None, files_path=[]):
+                 login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None, files_path: list = []):
         """
 
         :type text: Plain text Email, if html not support
