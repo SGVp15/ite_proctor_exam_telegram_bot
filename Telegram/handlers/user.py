@@ -20,4 +20,5 @@ async def download_document_handle(message: types.Message):
     await message.answer('Добавил файл', reply_markup=inline_kb_main)
 
     answer = await registration(path)
+    await message.answer(answer, reply_markup=inline_kb_main)
     loop.create_task(registration(path))
