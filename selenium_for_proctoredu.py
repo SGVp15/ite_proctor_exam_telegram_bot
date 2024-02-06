@@ -154,6 +154,8 @@ class Proctor:
         return out
 
     async def get_url_session(self, text_to_find: str) -> str:
+        self.driver.get('https://itexpert.proctoring.online/#!/rooms')
+        await asyncio.sleep(1)
         await self.find_session(text_to_find)
         for _ in range(3):
             try:
@@ -177,12 +179,12 @@ class Proctor:
                     continue
 
                 # Close form with user link
-                try:
-                    xpath = './/span[@class="webix_icon mdi mdi-close-circle"]/..'
-                    self.driver.find_element(By.XPATH, xpath).click()
-                except self.web_error:
-                    print(xpath, 'NoSuchElement')
-                return url
+                # try:
+                #     xpath = './/span[@class="webix_icon mdi mdi-close-circle"]/..'
+                #     self.driver.find_element(By.XPATH, xpath).click()
+                # except self.web_error:
+                #     print(xpath, 'NoSuchElement')
+                # return url
             except self.web_error:
                 print('NoSuchElement')
         return ''
