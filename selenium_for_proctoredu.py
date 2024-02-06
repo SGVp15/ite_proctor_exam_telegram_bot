@@ -157,6 +157,7 @@ class Proctor:
         for _ in range(3):
             await self.find_session(text_to_find)
             try:
+                # Click first row
                 xpath = '//div[@column="1"][1]/div/a[1]'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
@@ -166,7 +167,6 @@ class Proctor:
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
-                url = ''
                 buffer = ''
                 buffer = pyperclip.paste()
                 pyperclip.copy = ''
@@ -176,34 +176,20 @@ class Proctor:
                     return buffer
                 else:
                     continue
-
-                # Close form with user link
-                # try:
-                #     xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
-                #     button_close_form = self.driver.find_element(By.XPATH, xpath)
-                #     self.driver.implicitly_wait(1)
-                #     button_close_form.click()
-                # except (*self.web_error, ElementNotInteractableException):
-                #     print(xpath, 'NoSuchElement')
-                #     await asyncio.sleep(1)
-                # return url
             except self.web_error:
                 print('NoSuchElement')
         return ''
 
     async def download_report_file(self, text_to_find):
         await self.find_session(text_to_find)
-
-        await asyncio.sleep(1)
         try:
-            xpath = '/html/body/div[3]/div[2]/div[2]/div[3]/div[2]/div[2]/div/div[13]/div[1]/a'
+            # Click to report
+            xpath = '//a[@class="report_link webix_icon mdi mdi-file-video"]'
             self.driver.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
 
-            xpath = '/html/body/div[3]/div[2]/div[2]/div[1]/div[1]/div/div[3]/div/button'
-            self.driver.find_element(By.XPATH, xpath).click()
-            await asyncio.sleep(1)
-            xpath = '/html/body/div[20]/div/div[1]/div/div/div[4]/div/button'
+            # Download PDF file
+            xpath = '//span[@class="webix_icon_btn mdi mdi-file-pdf-box"]/..'
             self.driver.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
             return 'ok'
