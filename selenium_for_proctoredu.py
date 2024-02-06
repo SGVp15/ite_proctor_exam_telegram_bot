@@ -157,19 +157,15 @@ class Proctor:
 
     async def get_url_session(self, text_to_find: str) -> str:
         await self.find_session(text_to_find)
+        xpath_base = '/html/body/div[12]'
         for _ in range(3):
             try:
-                # xpath = '//input[@type="text"][2]//a'
-
                 xpath = '/html/body/div[3]/div[2]/div[2]/div[3]/div[2]/div[2]/div/div[2]/div[1]/a'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
-                # class_name = 'webix_icon mdi mdi-link-variant'
-                # self.driver.find_element(By.CLASS_NAME, class_name).click()
-                # xpath = '/html/body/div[13]/div/div[1]/div/div/div[2]/div/button'
-                xpath = '/html/body/div[12]/div/div[1]/div/div/div[2]/div/button'
-                self.driver.find_element(By.XPATH, xpath)
-                await asyncio.sleep(1)
+
+                # Copy user link to clipboard
+                xpath = xpath_base + '/div/div[1]/div/div/div[2]/div/button'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
@@ -183,10 +179,9 @@ class Proctor:
                 else:
                     continue
 
-                # Закрыть крточку
+                # Close form with user link
                 try:
-                    xpath = '/html/body/div[13]/div/div[1]/div/div/div[3]/div/button'
-                    xpath = '/html/body/div[12]/div/div[1]/div/div/div[3]/div/button'
+                    xpath = xpath_base + '/div/div[1]/div/div/div[3]/div/button'
                     self.driver.find_element(By.XPATH, xpath).click()
                 except self.web_error:
                     print(xpath, 'NoSuchElement')
