@@ -176,17 +176,16 @@ class Proctor:
                 else:
                     continue
 
-                for _ in range(10):
-                    # Close form with user link
-                    try:
-                        xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
-                        button_close_form = self.driver.find_element(By.XPATH, xpath)
-                        self.driver.implicitly_wait(1)
-                        button_close_form.click()
-                    except self.web_error:
-                        print(xpath, 'NoSuchElement')
-                        await asyncio.sleep(1)
-                    return url
+                # Close form with user link
+                try:
+                    xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
+                    button_close_form = self.driver.find_element(By.XPATH, xpath)
+                    self.driver.implicitly_wait(1)
+                    button_close_form.click()
+                except self.web_error:
+                    print(xpath, 'NoSuchElement')
+                    await asyncio.sleep(1)
+                return url
             except self.web_error:
                 print('NoSuchElement')
         return ''
