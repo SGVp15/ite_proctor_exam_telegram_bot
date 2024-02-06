@@ -71,7 +71,6 @@ class Proctor:
             except exceptions:
                 continue
 
-        xpath = '//button[1]'
         xpath = '/html/body/div/div[2]/div[2]/div[2]/div/div[3]/div/button'
         try:
             await asyncio.sleep(0.2)
@@ -120,7 +119,7 @@ class Proctor:
                 await asyncio.sleep(0.2)
                 self.driver.find_element(By.XPATH, xpath).click()
                 break
-            except NoSuchElementException:
+            except self.web_error:
                 continue
 
         pyperclip.copy(SESSIONS_CSV_FILE)
