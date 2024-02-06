@@ -180,7 +180,7 @@ class Proctor:
                 try:
                     xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
                     button_close_form = self.driver.find_element(By.XPATH, xpath)
-                    self.driver.implicitly_wait(1)
+                    self.driver.implicitly_wait(5)
                     button_close_form.click()
                 except self.web_error:
                     print(xpath, 'NoSuchElement')
