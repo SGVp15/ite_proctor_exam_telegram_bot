@@ -180,7 +180,9 @@ class Proctor:
                     # Close form with user link
                     try:
                         xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
-                        self.driver.find_element(By.XPATH, xpath).click()
+                        button_close_form = self.driver.find_element(By.XPATH, xpath)
+                        self.driver.implicitly_wait(1)
+                        button_close_form.click()
                     except self.web_error:
                         print(xpath, 'NoSuchElement')
                         await asyncio.sleep(1)
