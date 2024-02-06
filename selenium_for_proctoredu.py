@@ -154,8 +154,8 @@ class Proctor:
         return out
 
     async def get_url_session(self, text_to_find: str) -> str:
-        await self.find_session(text_to_find)
         for _ in range(3):
+            await self.find_session(text_to_find)
             try:
                 xpath = '//div[@column="1"][1]/div/a[1]'
                 self.driver.find_element(By.XPATH, xpath).click()
@@ -171,21 +171,22 @@ class Proctor:
                 buffer = pyperclip.paste()
                 pyperclip.copy = ''
                 await asyncio.sleep(1)
+                self.driver.get('https://itexpert.proctoring.online/#!/users')
                 if re.findall(r'https://itexpert\.proctoring\.online.*', buffer):
-                    url = buffer
+                    return buffer
                 else:
                     continue
 
                 # Close form with user link
-                try:
-                    xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
-                    button_close_form = self.driver.find_element(By.XPATH, xpath)
-                    self.driver.implicitly_wait(1)
-                    button_close_form.click()
-                except self.web_error:
-                    print(xpath, 'NoSuchElement')
-                    await asyncio.sleep(1)
-                return url
+                # try:
+                #     xpath = '//span[@class="webix_icon mdi mdi-close-circle"]/..'
+                #     button_close_form = self.driver.find_element(By.XPATH, xpath)
+                #     self.driver.implicitly_wait(1)
+                #     button_close_form.click()
+                # except (*self.web_error, ElementNotInteractableException):
+                #     print(xpath, 'NoSuchElement')
+                #     await asyncio.sleep(1)
+                # return url
             except self.web_error:
                 print('NoSuchElement')
         return ''
