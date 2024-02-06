@@ -86,7 +86,7 @@ class Proctor:
         await self.send_session_csv()
 
     async def send_users_csv(self):
-        xpath = '/html/body/div[3]/div[2]/div[2]/div[1]/div/div[7]/div/button'
+        xpath = '//span[@class="webix_icon mdi mdi-upload"]/..'
         while True:
             try:
                 self.driver.get('https://itexpert.proctoring.online/#!/users')
@@ -113,7 +113,7 @@ class Proctor:
         await asyncio.sleep(3)
 
     async def send_session_csv(self):  # Session send CSV
-        xpath = '/html/body/div[3]/div[2]/div[2]/div[1]/div/div[9]/div/button'
+        xpath = '//span[@class="webix_icon mdi mdi-upload"]/..'
         while True:
             try:
                 self.driver.get('https://itexpert.proctoring.online/#!/rooms')
@@ -137,8 +137,7 @@ class Proctor:
             try:
                 self.driver.get('https://itexpert.proctoring.online/#!/rooms')
                 await asyncio.sleep(1)
-                xpath = '//input[1]'
-                xpath = '/html/body/div[3]/div[2]/div[2]/div[2]/div/div[1]/div/input'
+                xpath = '//div[@class="webix_view webix_control webix_el_search"]/div/input'
                 self.driver.find_element(By.XPATH, xpath).clear()
                 self.driver.find_element(By.XPATH, xpath).send_keys(text_to_find)
                 self.driver.find_element(By.XPATH, xpath).send_keys(Keys.ENTER)
@@ -157,15 +156,13 @@ class Proctor:
 
     async def get_url_session(self, text_to_find: str) -> str:
         await self.find_session(text_to_find)
-        xpath_base = '/html/body/div[12]'
         for _ in range(3):
             try:
-                xpath = '/html/body/div[3]/div[2]/div[2]/div[3]/div[2]/div[2]/div/div[2]/div[1]/a'
+                xpath = '//div[@column="1"][1]/div/a[1]'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
                 # Copy user link to clipboard
-                # xpath = xpath_base + '/div/div[1]/div/div/div[2]/div/button'
                 xpath = './/span[@class="webix_icon mdi mdi-link-variant"]/..'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
@@ -182,7 +179,6 @@ class Proctor:
 
                 # Close form with user link
                 try:
-                    # xpath = xpath_base + '/div/div[1]/div/div/div[3]/div/button'
                     xpath = './/span[@class="webix_icon mdi mdi-close-circle"]/..'
                     self.driver.find_element(By.XPATH, xpath).click()
                 except self.web_error:
