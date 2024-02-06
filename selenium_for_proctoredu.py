@@ -165,7 +165,8 @@ class Proctor:
                 await asyncio.sleep(1)
 
                 # Copy user link to clipboard
-                xpath = xpath_base + '/div/div[1]/div/div/div[2]/div/button'
+                # xpath = xpath_base + '/div/div[1]/div/div/div[2]/div/button'
+                xpath = './/span[@class="webix_icon mdi mdi-link-variant"]/..'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
@@ -181,7 +182,8 @@ class Proctor:
 
                 # Close form with user link
                 try:
-                    xpath = xpath_base + '/div/div[1]/div/div/div[3]/div/button'
+                    # xpath = xpath_base + '/div/div[1]/div/div/div[3]/div/button'
+                    xpath = './/span[@class="webix_icon mdi mdi-close-circle"]/..'
                     self.driver.find_element(By.XPATH, xpath).click()
                 except self.web_error:
                     print(xpath, 'NoSuchElement')
