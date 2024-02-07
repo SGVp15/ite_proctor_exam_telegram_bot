@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from Telegram.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
+from Ispring.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
 from Contact import Contact
 
 

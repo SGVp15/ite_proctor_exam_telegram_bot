@@ -11,8 +11,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-from Telegram.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, \
-    USERS_CSV_FILE
+from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 
 
 async def activate_windows():
@@ -31,7 +30,7 @@ async def activate_windows():
             print(f'Wait windows title = {win_name}')
 
 
-class Proctor:
+class ProctorEduSelenium:
     def __init__(self):
 
         chrome_options = Options()
@@ -39,45 +38,38 @@ class Proctor:
         chrome_options.add_argument('--ignore-certificate-errors')
 
         self.driver = webdriver.Chrome(
-            # executable_path=EXECUTABLE_PATH_WEBDRIVER,
             options=chrome_options
         )
         self.driver.get('https://itexpert.proctoring.online/')
-        self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException)
+        self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
+                          ElementNotInteractableException)
 
     async def authorization(self):
-        exceptions = (NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException)
+        self.driver.get('https://itexpert.proctoring.online/')
 
-        text = PASSWORD_PROCTOREDU
-        xpath = '/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
         for i in range(10):
             try:
                 await asyncio.sleep(0.2)
-                self.driver.find_element(By.XPATH, xpath).clear()
-                self.driver.find_element(By.XPATH, xpath).send_keys(text)
+                input_password = self.driver.find_element(By.XPATH,
+                                                          value='//div[@class="webix_scroll_cont"]//div[@class="webix_el_box"]/input[2]'
+                                                          )
+                input_password.clear()
+                input_password.send_keys(PASSWORD_PROCTOREDU)
+
+                await asyncio.sleep(0.2)
+                input_login = self.driver.find_element(By.XPATH,
+                                                       value='//div[@class="webix_scroll_cont"]//div[@class="webix_el_box"]/input'
+                                                       )
+                input_login.clear()
+                input_login.send_keys(LOGIN_PROCTOREDU)
+
+                await asyncio.sleep(0.2)
+                button_ = self.driver.find_element(By.XPATH, value='//div[@class="webix_scroll_cont"]//button')
+                button_.click()
+                await asyncio.sleep(0.2)
                 break
-            except exceptions:
-                continue
-
-        text = LOGIN_PROCTOREDU
-        xpath = '/html/body/div/div[2]/div[2]/div[2]/div/div[1]/div/input'
-        for i in range(10):
-            try:
-                await asyncio.sleep(0.2)
-                if self.driver.find_element(By.XPATH, xpath):
-                    self.driver.find_element(By.XPATH, xpath).clear()
-                    self.driver.find_element(By.XPATH, xpath).send_keys(text)
-                    break
-            except exceptions:
-                continue
-
-        xpath = '/html/body/div/div[2]/div[2]/div[2]/div/div[3]/div/button'
-        try:
-            await asyncio.sleep(0.2)
-            if self.driver.find_element(By.XPATH, xpath):
-                self.driver.find_element(By.XPATH, xpath).click()
-        except exceptions:
-            pass
+            except self.web_error:
+                pass
 
     async def create_users_and_session(self):
         await self.authorization()
@@ -85,7 +77,7 @@ class Proctor:
         await self.send_session_csv()
 
     async def send_users_csv(self):
-        xpath = '//span[@class="webix_icon mdi mdi-upload"]/..'
+        xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
         while True:
             try:
                 self.driver.get('https://itexpert.proctoring.online/#!/users')
@@ -112,7 +104,7 @@ class Proctor:
         await asyncio.sleep(3)
 
     async def send_session_csv(self):  # Session send CSV
-        xpath = '//span[@class="webix_icon mdi mdi-upload"]/..'
+        xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
         while True:
             try:
                 self.driver.get('https://itexpert.proctoring.online/#!/rooms')
@@ -163,7 +155,7 @@ class Proctor:
                 await asyncio.sleep(1)
 
                 # Copy user link to clipboard
-                xpath = '//span[@class="webix_icon mdi mdi-link-variant"]/..'
+                xpath = '//span[@class="webix_icon mdi mdi-link-variant"]//ancestor::button'
                 self.driver.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
@@ -189,7 +181,7 @@ class Proctor:
             await asyncio.sleep(1)
 
             # Download PDF file
-            xpath = '//span[@class="webix_icon_btn mdi mdi-file-pdf-box"]/..'
+            xpath = '//span[@class="webix_icon_btn mdi mdi-file-pdf-box"]/ancestor::button'
             self.driver.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
             return 'ok'

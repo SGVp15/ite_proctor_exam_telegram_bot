@@ -1,7 +1,7 @@
 import asyncio
 
 from Ispring.ispring2 import IspringApi
-from selenium_for_proctoredu import Proctor
+from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 
 
 async def test_ispring():
@@ -10,7 +10,7 @@ async def test_ispring():
 
 
 async def test_proctoredu():
-    drive = Proctor()
+    drive = ProctorEduSelenium()
     await drive.authorization()
     drive.quit()
     print("[test] ProctorEDU OK")

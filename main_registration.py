@@ -5,7 +5,7 @@ from Telegram.config import TEMPLATE_FILE_XLSX, LOG_FILE, EMAIL_BCC
 from Ispring.ispring2 import IspringApi
 from parser import get_all_courses, get_all_users, get_contact_from_excel
 from proctor_edu import create_csv
-from selenium_for_proctoredu import Proctor
+from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
 from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
 
@@ -22,7 +22,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
         await create_csv(contacts_proctor)
 
         # Webdriver ProctorEDU
-        drive = Proctor()
+        drive = ProctorEduSelenium()
         await drive.create_users_and_session()
 
         # Get link ProctorEDU
