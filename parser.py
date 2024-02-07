@@ -5,9 +5,14 @@ import xml.etree.ElementTree as ET
 from openpyxl.reader.excel import load_workbook
 
 from Contact import Contact
-from Telegram.config import TEMPLATE_FILE_XLSX, PAGE_NAME, LastName_column, FirstName_column, Email_column, Exam_column, \
-    Date_column, \
-    Hour_column, Minute_column, FirstNameEng_column, LastNameEng_column, Proctor_column, Password_column
+from Telegram.config import (
+    TEMPLATE_FILE_XLSX,
+    PAGE_NAME,
+    LastName_column, FirstName_column, Email_column, Exam_column,
+    Date_column, Hour_column, Minute_column,
+    FirstNameEng_column, LastNameEng_column,
+    Proctor_column, Password_column
+)
 
 
 def get_all_courses(xml: str) -> dict:
@@ -47,7 +52,6 @@ def get_all_users(xml: str) -> list[dict]:
 
 def clean_export_excel(s):
     s = s.replace(',', ', ')
-    # Очистка текста от двойных пробелов
     s = re.sub(r'\s{2,}', ' ', s)
     s = s.strip()
     if s in ('None', '#N/A'):

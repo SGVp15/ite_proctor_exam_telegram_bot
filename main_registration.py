@@ -5,7 +5,7 @@ from Telegram.config import TEMPLATE_FILE_XLSX, LOG_FILE
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
 from parser import get_all_courses, get_all_users, get_contact_from_excel
-from proctor_edu import create_csv
+from ProctorEDU.csv_creator import create_csv
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
 from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
