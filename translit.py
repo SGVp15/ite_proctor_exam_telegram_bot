@@ -1,5 +1,5 @@
 def transliterate(string: str) -> str:
-    # Слоаврь с заменами
+    # Dict for transliter
     abc = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
            'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
            'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
@@ -15,13 +15,14 @@ def transliterate(string: str) -> str:
     # '[': '', ']': '', '{': '', '}': '', 'ґ': '', 'ї': '', 'є': '', 'Ґ': 'g', 'Ї': 'i',
     # 'Є': 'e', '—': ''}
 
-    # заменяем все буквы в строке
+    # Replace all characters in string
     for key in abc:
         string = string.replace(key, abc[key])
     return string
 
 
 def transliterate_error(string: str) -> str:
+    # Dict for transliter
     abc = {'а': 'a', 'о': 'o', 'с': 'c', 'у': 'y',
            'и': 'u',
            'в': 'b', 'н': 'h', 'р': 'p', 'е': 'e',
@@ -32,9 +33,7 @@ def transliterate_error(string: str) -> str:
            'В': 'B', 'Н': 'H', 'Р': 'P', 'Е': 'E',
            'К': 'K', 'М': 'M', 'Т': 'T', 'Х': 'X',
            }
-    # Слоаврь с заменами
-
-    # заменяем все буквы в строке
+    # Replace all characters in string
     for key in abc:
         string = string.replace(key, abc[key])
     return string
