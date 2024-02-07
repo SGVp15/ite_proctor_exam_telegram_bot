@@ -51,30 +51,38 @@ class ProctorEduSelenium:
             try:
                 await asyncio.sleep(0.2)
                 input_password = self.driver.find_element(By.XPATH,
-                                                          value='//div[@class="webix_scroll_cont"]//div[@class="webix_el_box"]/input[2]'
+                                                          # value='//div[@class="webix_scroll_cont"][2]//div[@class="webix_el_box"]/input[2]'
+                                                          value='/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
                                                           )
                 input_password.clear()
                 input_password.send_keys(PASSWORD_PROCTOREDU)
 
                 await asyncio.sleep(0.2)
                 input_login = self.driver.find_element(By.XPATH,
-                                                       value='//div[@class="webix_scroll_cont"]//div[@class="webix_el_box"]/input'
+                                                       value='/html/body/div/div[2]/div[2]/div[2]/div/div[1]/div/input'
                                                        )
                 input_login.clear()
                 input_login.send_keys(LOGIN_PROCTOREDU)
 
                 await asyncio.sleep(0.2)
-                button_ = self.driver.find_element(By.XPATH, value='//div[@class="webix_scroll_cont"]//button')
-                button_.click()
+                button_enter = self.driver.find_element(By.XPATH, value='//div[@class="webix_scroll_cont"]//button')
+                button_enter.click()
                 await asyncio.sleep(0.2)
                 break
             except self.web_error:
                 pass
 
+    def is_authorized(self):
+        if self.driver.current_url != 'https://itexpert.proctoring.online/#!/rooms':
+            print('Error authorization')
+            return 0
+        return 1
+
     async def create_users_and_session(self):
         await self.authorization()
-        await self.send_users_csv()
-        await self.send_session_csv()
+        if self.is_authorized:
+            await self.send_users_csv()
+            await self.send_session_csv()
 
     async def send_users_csv(self):
         xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
