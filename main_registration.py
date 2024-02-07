@@ -1,7 +1,8 @@
 import asyncio
 from random import choice
 
-from Telegram.config import TEMPLATE_FILE_XLSX, LOG_FILE, EMAIL_BCC
+from Telegram.config import TEMPLATE_FILE_XLSX, LOG_FILE
+from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
 from parser import get_all_courses, get_all_users, get_contact_from_excel
 from proctor_edu import create_csv

@@ -1,5 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
-from Telegram.config import template_folder as template_folder_config
+from Email.config import template_folder as template_folder_config
 
 
 class MyJinja:
