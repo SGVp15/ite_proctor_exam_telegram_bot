@@ -51,7 +51,6 @@ class ProctorEduSelenium:
             try:
                 await asyncio.sleep(0.2)
                 input_password = self.driver.find_element(By.XPATH,
-                                                          # value='//div[@class="webix_scroll_cont"][2]//div[@class="webix_el_box"]/input[2]'
                                                           value='/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
                                                           )
                 input_password.clear()
@@ -104,9 +103,6 @@ class ProctorEduSelenium:
                 pyperclip.copy(file_path)
             except Exception:
                 await asyncio.sleep(0.2)
-            # clip = str(pyperclip.paste())
-            # if clip == file_path:
-            #     break
         await activate_windows()
 
         await asyncio.sleep(0.5)
