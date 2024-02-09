@@ -99,11 +99,14 @@ class ProctorEduSelenium:
                 await asyncio.sleep(0.2)
                 continue
 
-        while str(pyperclip.paste) != file_path:
+        while str(pyperclip.paste()) != file_path:
             try:
                 pyperclip.copy(file_path)
             except Exception:
                 await asyncio.sleep(0.2)
+            # clip = str(pyperclip.paste())
+            # if clip == file_path:
+            #     break
         await activate_windows()
 
         await asyncio.sleep(0.5)
