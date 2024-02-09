@@ -6,6 +6,7 @@ config = dotenv_values(find_dotenv())
 
 LOGIN_PROCTOREDU = config.get('LOGIN_PROCTOREDU')
 PASSWORD_PROCTOREDU = config.get('PASSWORD_PROCTOREDU')
+
 csv_header_session = {
     'identifier': 'Date_Name_Exam',
     # 'provider': '',
@@ -53,6 +54,7 @@ csv_header_session = {
     # 'conclusion': '',
     # 'comment': '',
 }
+
 csv_header_user = {
     'nickname': 'email',
     'username': 'username',
@@ -60,5 +62,6 @@ csv_header_user = {
     'role': 'student',
     'lang': 'ru',
 }
-SESSIONS_CSV_FILE: str = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'sessions_import.csv')
-USERS_CSV_FILE: str = os.path.join(os.getcwd(), 'data', 'output', 'csv', 'users_import.csv')
+
+SESSIONS_CSV_FILE: str = str(os.path.join(os.getcwd(), 'data', 'output', 'csv', 'sessions_import.csv'))
+USERS_CSV_FILE: str = str(os.path.join(os.getcwd(), 'data', 'output', 'csv', 'users_import.csv'))
