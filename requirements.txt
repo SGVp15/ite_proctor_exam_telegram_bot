@@ -9,3 +9,4 @@ PyAutoGUI
 pyperclip
 selenium
 PyGetWindow
+selenium-stealth

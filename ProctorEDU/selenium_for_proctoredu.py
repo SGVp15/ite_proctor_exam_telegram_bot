@@ -12,6 +12,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
+from selenium_stealth import stealth
 
 
 async def activate_windows():
@@ -32,14 +33,25 @@ async def activate_windows():
 
 class ProctorEduSelenium:
     def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument("start-maximized")
 
-        chrome_options = Options()
-        # chrome_options.add_argument("--disable-extensions")
-        chrome_options.add_argument('--ignore-certificate-errors')
+        # options.add_argument("--headless")
 
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
+        options.add_argument('--ignore-certificate-errors')
         self.driver = webdriver.Chrome(
-            options=chrome_options
+            options=options
         )
+        stealth(self.driver,
+                languages=["ru-RU", "ru"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
         self.driver.get('https://itexpert.proctoring.online/')
         self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
                           ElementNotInteractableException)
