@@ -81,48 +81,29 @@ class ProctorEduSelenium:
     async def create_users_and_session(self):
         await self.authorization()
         if self.is_authorized:
-            await self.send_users_csv()
-            await self.send_session_csv()
+            await self.send_csv(url='https://itexpert.proctoring.online/#!/users',
+                                file_path=USERS_CSV_FILE)
+            await self.send_csv(url='https://itexpert.proctoring.online/#!/rooms',
+                                file_path=SESSIONS_CSV_FILE)
 
-    async def send_users_csv(self):
+    async def send_csv(self, url='https://itexpert.proctoring.online/#!/users', file_path=USERS_CSV_FILE):
         xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
         while True:
             try:
-                self.driver.get('https://itexpert.proctoring.online/#!/users')
+                self.driver.get(url)
                 await asyncio.sleep(0.2)
-                self.driver.find_element(By.XPATH, xpath).click()
-                self.driver.find_element(By.XPATH, xpath)
+                button_upload = self.driver.find_element(By.XPATH, xpath)
+                button_upload.click()
                 break
             except self.web_error:
-                try:
-                    xpath_debug = '/html/body/div[17]/div'
-                    self.driver.find_element(By.XPATH, xpath_debug).click()
-                except self.web_error:
-                    pass
+                await asyncio.sleep(0.2)
                 continue
 
-        pyperclip.copy(USERS_CSV_FILE)
-        await activate_windows()
-
-        await asyncio.sleep(0.5)
-        p = pyperclip.paste()
-        pyautogui.hotkey('ctrl', 'v')
-        await asyncio.sleep(0.5)
-        pyautogui.press('enter')
-        await asyncio.sleep(3)
-
-    async def send_session_csv(self):  # Session send CSV
-        xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
-        while True:
+        while str(pyperclip.paste) != file_path:
             try:
-                self.driver.get('https://itexpert.proctoring.online/#!/rooms')
+                pyperclip.copy(file_path)
+            except Exception:
                 await asyncio.sleep(0.2)
-                self.driver.find_element(By.XPATH, xpath).click()
-                break
-            except self.web_error:
-                continue
-
-        pyperclip.copy(SESSIONS_CSV_FILE)
         await activate_windows()
 
         await asyncio.sleep(0.5)
