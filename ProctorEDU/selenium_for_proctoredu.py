@@ -25,7 +25,7 @@ async def activate_windows():
                 try:
                     pg.getWindowsWithTitle(win_name)[0].activate()
                     is_win_activate = True
-                    break
+                    return
                 except pg.PyGetWindowException:
                     continue
             print(f'Wait windows title = {win_name}')
@@ -115,8 +115,9 @@ class ProctorEduSelenium:
         while str(pyperclip.paste()) != file_path:
             try:
                 pyperclip.copy(file_path)
-            except Exception:
+            except Exception as e:
                 await asyncio.sleep(0.2)
+
         await activate_windows()
 
         await asyncio.sleep(0.5)

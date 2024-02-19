@@ -47,9 +47,20 @@ class EmailSending:
         msg = MIMEMultipart()
         msg['From'] = self.from_email
         msg['Subject'] = self.subject
-        msg['To'] = self.to
-        msg['Cc'] = self.cc
-        # msg['Bcc'] = self.bcc
+        if type(self.to) == str:
+            msg['To'] = self.to
+        else:
+            msg['To'] = ','.join(self.to)
+
+        if type(self.cc) == str:
+            msg['Cc'] = self.cc
+        else:
+            msg['Cc'] = ','.join(self.cc)
+
+        if type(self.bcc) == str:
+            msg['Bcc'] = self.bcc
+        else:
+            msg['Bcc'] = ','.join(self.bcc)
 
         msg.attach(MIMEText(self.text, 'plain'))
         msg.attach(MIMEText(self.html, 'html'))
