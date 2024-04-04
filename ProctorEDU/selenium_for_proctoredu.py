@@ -64,21 +64,26 @@ class ProctorEduSelenium:
         for i in range(10):
             try:
                 await asyncio.sleep(0.2)
-                input_password = self.driver.find_element(By.XPATH,
-                                                          value='/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
-                                                          )
+                input_password = self.driver.find_element(
+                    By.XPATH,
+                    value='/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
+                )
                 input_password.clear()
                 input_password.send_keys(PASSWORD_PROCTOREDU)
 
                 await asyncio.sleep(0.2)
-                input_login = self.driver.find_element(By.XPATH,
-                                                       value='/html/body/div/div[2]/div[2]/div[2]/div/div[1]/div/input'
-                                                       )
+                input_login = self.driver.find_element(
+                    By.XPATH,
+                    value='/html/body/div/div[2]/div[2]/div[2]/div/div[1]/div/input'
+                )
                 input_login.clear()
                 input_login.send_keys(LOGIN_PROCTOREDU)
 
                 await asyncio.sleep(0.2)
-                button_enter = self.driver.find_element(By.XPATH, value='//div[@class="webix_scroll_cont"]//button')
+                button_enter = self.driver.find_element(
+                    By.XPATH,
+                    value='//div[@class="webix_scroll_cont"]//button'
+                )
                 button_enter.click()
                 await asyncio.sleep(0.2)
                 break
@@ -113,10 +118,10 @@ class ProctorEduSelenium:
                 continue
 
         while str(pyperclip.paste()) != file_path:
-            try:
-                pyperclip.copy(file_path)
-            except Exception as e:
-                await asyncio.sleep(0.2)
+            # try:
+            pyperclip.copy(file_path)
+            # except Exception as e:
+            await asyncio.sleep(0.2)
 
         await activate_windows()
 
