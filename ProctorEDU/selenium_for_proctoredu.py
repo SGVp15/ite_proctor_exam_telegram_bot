@@ -119,11 +119,16 @@ class ProctorEduSelenium:
 
         await activate_windows()
 
-        while str(pyperclip.paste()) != file_path:
-            # try:
-            pyperclip.copy(file_path)
-            # except Exception as e:
-            await asyncio.sleep(0.2)
+        while True:
+            try:
+                buffer = pyperclip.paste()
+                if buffer != file_path:
+                    pyperclip.copy(file_path)
+                    break
+            except Exception as e:
+                pass
+            finally:
+                await asyncio.sleep(0.2)
 
         await asyncio.sleep(0.5)
         pyautogui.hotkey('ctrl', 'v')
