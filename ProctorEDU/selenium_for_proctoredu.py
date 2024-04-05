@@ -125,7 +125,7 @@ class ProctorEduSelenium:
                 if buffer != file_path:
                     pyperclip.copy(file_path)
                     break
-            except Exception as e:
+            except TypeError as e:
                 pass
             finally:
                 await asyncio.sleep(0.2)
