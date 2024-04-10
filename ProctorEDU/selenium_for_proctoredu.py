@@ -120,6 +120,7 @@ class ProctorEduSelenium:
         await activate_windows()
 
         while True:
+            pyperclip.copy(file_path)
             try:
                 buffer = pyperclip.paste()
                 if buffer != file_path:
