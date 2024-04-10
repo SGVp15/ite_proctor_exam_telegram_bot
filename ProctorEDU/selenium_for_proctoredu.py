@@ -131,7 +131,7 @@ class ProctorEduSelenium:
         #     finally:
         #         await asyncio.sleep(0.2)
 
-        await asyncio.sleep(5)
+        await asyncio.sleep(0.5)
         pyautogui.write(file_path)
         # pyautogui.hotkey('ctrl', 'v')
         await asyncio.sleep(0.5)
