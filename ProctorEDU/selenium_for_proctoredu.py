@@ -119,20 +119,21 @@ class ProctorEduSelenium:
 
         await activate_windows()
 
-        while True:
-            pyperclip.copy(file_path)
-            try:
-                buffer = pyperclip.paste()
-                if buffer != file_path:
-                    pyperclip.copy(file_path)
-                    break
-            except TypeError as e:
-                pass
-            finally:
-                await asyncio.sleep(0.2)
+        # while True:
+        #     pyperclip.copy(file_path)
+        #     try:
+        #         buffer = pyperclip.paste()
+        #         if buffer != file_path:
+        #             pyperclip.copy(file_path)
+        #             break
+        #     except TypeError as e:
+        #         pass
+        #     finally:
+        #         await asyncio.sleep(0.2)
 
-        await asyncio.sleep(0.5)
-        pyautogui.hotkey('ctrl', 'v')
+        await asyncio.sleep(5)
+        pyautogui.write(file_path)
+        # pyautogui.hotkey('ctrl', 'v')
         await asyncio.sleep(0.5)
         pyautogui.press('enter')
         await asyncio.sleep(3)
