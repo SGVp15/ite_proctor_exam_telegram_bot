@@ -70,12 +70,17 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
     # Send email
     for contact in contacts:
-        if contact.proctor and contact.is_create_enrollment:
-            text = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
+        if contact.is_create_enrollment:
+            if contact.proctor:
+                text = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
+            else:
+                text = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
         else:
-            text = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
-
+            print(f'[Error] ISPRING not enrollment {contact}')
         subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.dateExam}'
+        if contact.proctor and not contact.url_proctor:
+            print(f'[Error] URL {contact}')
+            continue
         EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
 
     # Write Log
