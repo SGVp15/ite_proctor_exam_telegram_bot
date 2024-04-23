@@ -132,7 +132,7 @@ class ProctorEduSelenium:
         #         await asyncio.sleep(0.2)
 
         await asyncio.sleep(0.5)
-        pyautogui.write(file_path, interval=0.1)
+        pyautogui.write(file_path, interval=0.01)
         # pyautogui.hotkey('ctrl', 'v')
         await asyncio.sleep(0.5)
         pyautogui.press('enter')
