@@ -32,6 +32,7 @@ class Contact:
         self.id_ispring = None
         self.identifier = None
         self.is_create_enrollment: bool = False
+        self.status = 'Error'
 
     def normalize(self) -> bool:
         if self.firstNameEng == '':
@@ -75,7 +76,7 @@ class Contact:
         return True
 
     def __str__(self) -> str:
-        self.s = f'{datetime.datetime.now()}\tsubject={self.subject}\t' \
+        self.s = f'{self.status}\t{datetime.datetime.now()}\tsubject={self.subject}\t' \
                  f'lastName={self.lastName}\tfirstName={self.firstName}\t' \
                  f'email={self.email}\tusername={self.username}\tpassword={self.password}\t' \
                  f'url={self.url_proctor}\n'

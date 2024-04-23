@@ -1,6 +1,7 @@
 import asyncio
 from random import choice
 
+from Contact import Contact
 from Telegram.config import TEMPLATE_FILE_XLSX, LOG_FILE
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
@@ -12,7 +13,7 @@ from Email import EmailSending, template_email_registration_exam_offline, templa
 
 
 async def registration(file=TEMPLATE_FILE_XLSX) -> str:
-    contacts = get_contact_from_excel(file)
+    contacts: list[Contact] = get_contact_from_excel(file)
     if not contacts:
         return 'No contact'
 
@@ -82,6 +83,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
             print(f'[Error] URL {contact}')
             continue
         EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
+        contact.status = 'Ok'
 
     # Write Log
     with open(LOG_FILE, mode='a', encoding='utf-8') as f:
