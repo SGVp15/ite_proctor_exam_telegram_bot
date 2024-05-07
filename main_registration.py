@@ -54,11 +54,12 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
     # Create ispring users with email <==> id_ispring
     for contact in contacts:
-
-        for user in get_all_users(ispring_api.get_user()):
-            emails_user_id.update({user['EMAIL']: user['userId']})
-
         contact.id_ispring = emails_user_id.get(contact.email, None)
+        if contact.id_ispring is None:
+            for user in get_all_users(ispring_api.get_user()):
+                emails_user_id.update({user['EMAIL']: user['userId']})
+        contact.id_ispring = emails_user_id.get(contact.email, None)
+
         if contact.id_ispring is None:
             contact.id_ispring = ispring_api.create_user(contact)
         print(contact.id_ispring)
