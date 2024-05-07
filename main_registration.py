@@ -39,11 +39,9 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
     # -------------- ISPRING --------------
     ispring_api = IspringApi()
 
-    all_users_ispring = get_all_users(ispring_api.get_user())
-
     emails_user_id = {}
 
-    for user in all_users_ispring:
+    for user in get_all_users(ispring_api.get_user()):
         emails_user_id.update({user['EMAIL']: user['userId']})
 
     # delete contact ispring
@@ -56,7 +54,12 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
     # Create ispring users with email <==> id_ispring
     for contact in contacts:
-        contact.id_ispring = ispring_api.create_user(contact)
+        for user in get_all_users(ispring_api.get_user()):
+            emails_user_id.update({user['EMAIL']: user['userId']})
+
+        contact.id_ispring = emails_user_id.get(contact.email, '')
+        if contact.id_ispring == '':
+            contact.id_ispring = ispring_api.create_user(contact)
         print(contact.id_ispring)
 
     # Get all courses ispring
