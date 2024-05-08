@@ -5,7 +5,7 @@ from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 
 
 async def test_ispring():
-    IspringApi().get_user()
+    IspringApi().get_users()
     print("[test] Ispring OK")
 
 

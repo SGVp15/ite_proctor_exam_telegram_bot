@@ -22,7 +22,7 @@ class IspringApi:
                         'X-Auth-Account-Url': DOMAIN_ISPRING,
                         'Content-Type': 'application/xml'}
 
-    def get_user(self):
+    def get_users(self):
         url = '/'.join([self.url_base, 'user'])
         response = requests.get(url=url, headers=self.headers)
         return response.text
