@@ -6,41 +6,41 @@ from translit import transliterate, transliterate_error
 
 class Contact:
     def __init__(self):
-        self.NameEng = None
-        self.lastName = None
-        self.firstName = None
-        self.lastNameEng = None
-        self.firstNameEng = None
-        self.email = None
-        self.username = None
-        self.password = None
-        self.exam = None
-        self.course = None
-        self.course_small = None
-        self.lector = None
+        self.NameEng: str | None = None
+        self.lastName: str | None = None
+        self.firstName: str | None = None
+        self.lastNameEng: str | None = None
+        self.firstNameEng: str | None = None
+        self.email: str | None = None
+        self.username: str | None = None
+        self.password: str | None = None
+        self.exam: str | None = None
+        self.course: str | None = None
+        self.course_small: str | None = None
+        self.lector: str | None = None
         self.date_from_file = None
         self.dateExam = None
-        self.dateExamConnect = None
-        self.removeAt = None
-        self.deadline = None
-        self.scheduledAt = None
-        self.proctor = None
-        self.subject = None
+        self.dateExamConnect: str | None = None
+        self.removeAt: str | None = None
+        self.deadline: str | None = None
+        self.scheduledAt: str | None = None
+        self.proctor: str | None = None
+        self.subject: str | None = None
         self.dateExamForSubject = None
-        self.url_proctor = None
-        self.url_course = None
-        self.id_ispring = None
-        self.identifier = None
+        self.url_proctor: str | None = None
+        self.url_course: str | None = None
+        self.id_ispring: str | None = None
+        self.identifier: str | None = None
         self.is_create_enrollment: bool = False
         self.status = 'Error'
 
     def normalize(self) -> bool:
-        if self.firstNameEng == '':
+        if self.firstNameEng == '' or self.firstNameEng is None:
             self.firstNameEng = transliterate(f'{self.firstName}').capitalize()
         else:
             self.firstNameEng = transliterate_error(self.firstNameEng)
 
-        if self.lastNameEng == '':
+        if self.lastNameEng == '' or self.lastNameEng is None:
             self.lastNameEng = transliterate(f'{self.lastName}').capitalize()
         else:
             self.lastNameEng = transliterate_error(self.lastNameEng)
