@@ -27,6 +27,11 @@ class IspringApi:
         response = requests.get(url=url, headers=self.headers)
         return response.text
 
+    def get_enrollments(self):
+        url = '/'.join([self.url_base, 'enrollment'])
+        response = requests.get(url=url, headers=self.headers)
+        return response.text
+
     def create_user(self, user: Contact, department_id='2745eb28-449c-11ed-8def-3ea1876893eb', role='learner',
                     send_login_email='false',
                     invitation_message='Используйте следующие данные, чтобы войти в Академию iSpring:'):
