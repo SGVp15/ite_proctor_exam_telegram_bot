@@ -72,7 +72,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
         course_id = choice(courses_content_item_id[contact.exam])
         contact.is_create_enrollment = ispring_api.create_enrollment(learner_id=contact.id_ispring,
                                                                      course_id=course_id,
-                                                                     access_date=contact.scheduledAt)
+                                                                     access_date=contact.scheduled_at)
 
     # Send email
     for contact in contacts:
@@ -83,7 +83,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
                 text = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
         else:
             print(f'[Error] ISPRING not enrollment {contact}')
-        subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.dateExam}'
+        subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.date_exam}'
         if contact.proctor and not contact.url_proctor:
             print(f'[Error] URL {contact}')
             continue
@@ -98,7 +98,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
     out_str = ''
     for contact in contacts:
-        out_str += f'{contact.lastName} {contact.firstName} {contact.email} {contact.exam} {contact.dateExam}\n'
+        out_str += f'{contact.last_name_rus} {contact.first_name_rus} {contact.email} {contact.exam} {contact.date_exam}\n'
     return out_str
 
 

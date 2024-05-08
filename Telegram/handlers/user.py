@@ -29,9 +29,17 @@ async def download_document_handle(message: types.Message):
 async def show_registration(callback_query: types.callback_query):
     sessions = ['', '']
     for session in sessions:
-        await bot.send_message(chat_id=callback_query.from_user.id, text=f'callback_query')
+        await bot.send_message(
+            chat_id=callback_query.from_user.id,
+            text=f'callback_query',
+            reply_markup=inline_kb_main
+        )
 
 
 @dp.callback_query(F.data.in_({CallBackData.del_registration}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def del_registration(callback_query: types.callback_query):
-    await bot.send_message(chat_id=callback_query.from_user.id, text=f'del_registration')
+    await bot.send_message(
+        chat_id=callback_query.from_user.id,
+        text=f'del_registration',
+        reply_markup=inline_kb_main
+    )

@@ -72,10 +72,10 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         i += 1
         user = Contact()
 
-        user.lastName = clean_export_excel(read_excel(file_excel, column=LastName_column, row=i)).capitalize().strip()
-        if user.lastName == '':
+        user.last_name_rus = clean_export_excel(read_excel(file_excel, column=LastName_column, row=i)).capitalize().strip()
+        if user.last_name_rus == '':
             continue
-        user.firstName = clean_export_excel(read_excel(file_excel, column=FirstName_column, row=i)).capitalize().strip()
+        user.first_name_rus = clean_export_excel(read_excel(file_excel, column=FirstName_column, row=i)).capitalize().strip()
         user.email = clean_export_excel(read_excel(file_excel, column=Email_column, row=i)).lower().strip()
         user.password = clean_export_excel(read_excel(file_excel, column=Password_column, row=i)).strip()
 
@@ -86,9 +86,9 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         hour = int(clean_export_excel(read_excel(file_excel, column=Hour_column, row=i)).lower())
         minute = int(clean_export_excel(read_excel(file_excel, column=Minute_column, row=i)).lower())
 
-        user.firstNameEng = clean_export_excel(
+        user.first_name_eng = clean_export_excel(
             read_excel(file_excel, column=FirstNameEng_column, row=i)).capitalize().strip()
-        user.lastNameEng = clean_export_excel(
+        user.last_name_eng = clean_export_excel(
             read_excel(file_excel, column=LastNameEng_column, row=i)).capitalize().strip()
         user.proctor = clean_export_excel(read_excel(file_excel, column=Proctor_column, row=i)).lower().strip()
         t = user.date_from_file
@@ -101,7 +101,7 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         year = t[2]
         month = t[1]
         day = t[0]
-        user.dateExam = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute)
+        user.date_exam = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute)
 
         if user.normalize():
             users.append(user)

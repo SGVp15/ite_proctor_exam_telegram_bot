@@ -17,9 +17,9 @@ async def create_csv(contacts: list[Contact]):
                 'members': f'proctor-{contact.proctor}',
                 'subject': contact.subject,
                 'identifier': contact.identifier,
-                'scheduledAt': contact.scheduledAt,
+                'scheduledAt': contact.scheduled_at,
                 'deadline': contact.deadline,
-                'removeAt': contact.removeAt,
+                'removeAt': contact.remove_at,
             })
 
             writer.writerow(csv_header_session)

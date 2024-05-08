@@ -38,8 +38,8 @@ class IspringApi:
               f'    <fields>' \
               f'        <login>{user.username}</login>' \
               f'        <email>{user.email}</email>' \
-              f'        <first_name>{user.firstName}</first_name>' \
-              f'        <last_name>{user.lastName}</last_name>' \
+              f'        <first_name>{user.first_name_rus}</first_name>' \
+              f'        <last_name>{user.last_name_rus}</last_name>' \
               f'    </fields>' \
               f'    <role>{role}</role>' \
               f'    <sendLoginEmail>{send_login_email}</sendLoginEmail>' \
