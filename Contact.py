@@ -82,6 +82,12 @@ class Contact:
                  f'url={self.url_proctor}\n'
         return self.s
 
+    def __eq__(self, other):
+        if self.email == other.email:
+            return True
+        else:
+            return False
+
 
 def to_md5(s: str):
     return hashlib.md5(s.encode()).hexdigest()
