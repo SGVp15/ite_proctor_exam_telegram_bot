@@ -85,8 +85,8 @@ class Contact:
     def __eq__(self, other):
         if self.email == other.email:
             return True
-        else:
-            return False
+
+        return False
 
 
 def to_md5(s: str):
