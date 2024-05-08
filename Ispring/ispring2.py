@@ -47,10 +47,10 @@ class IspringApi:
               f'</request>'
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        userid = re.findall(r'<response>(.*)</response>', response.text)[0]
+        user_id = re.findall(r'<response>(.*)</response>', response.text)[0]
         print(f'{__name__} - ok')
         if response.status_code == 201:
-            return userid
+            return user_id
         else:
             return response.status_code
 

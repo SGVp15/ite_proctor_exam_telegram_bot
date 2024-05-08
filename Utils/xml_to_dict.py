@@ -1,7 +1,7 @@
 import xmltodict
 
 
-def get_ispring_users(s: str):
+def get_ispring_users(s: str) -> list[dict]:
     my_dict = xmltodict.parse(s)
 
     users_from_ispring: list = my_dict.get('response').get('userProfile')
@@ -13,3 +13,9 @@ def get_ispring_users(s: str):
             user[field.get('name')] = field.get('value')
 
     return users_from_ispring
+
+
+def get_ispring_enrollment(s: str) -> list[dict]:
+    my_dict = xmltodict.parse(s)
+    enrollments_ispring: list = my_dict.get('response').get('enrollment')
+    return enrollments_ispring
