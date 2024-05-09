@@ -6,8 +6,8 @@ inline_btn_logs = InlineKeyboardButton(text='Скачать Логи', callback_
 inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='⭐️ Скачать Логи', callback_data=CallBackData.get_log), ],
     [InlineKeyboardButton(text='📩 Скачать Шаблон', callback_data=CallBackData.get_template_file_xlsx), ],
-    [InlineKeyboardButton(text='Проказать регистрацию', callback_data=CallBackData.show_registration), ],
-    [InlineKeyboardButton(text='Удалить регистрацию', callback_data=CallBackData.edit_registration), ],
+    [InlineKeyboardButton(text='Проказать регистрацию ISPRING', callback_data=CallBackData.show_registration), ],
+    [InlineKeyboardButton(text='Удалить регистрацию ISPRING', callback_data=CallBackData.edit_registration), ],
     [InlineKeyboardButton(text='>> Admin >>', callback_data=CallBackData.admin_menu), ],
 ])
 
