@@ -1,6 +1,6 @@
 from aiogram import types, F
 
-from Ispring.ispring2 import get_session_in_enrollments_users_contents
+from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.config import USERS_ID, ADMIN_ID
 from Telegram.keybords.inline import inline_kb_main, del_enrollment
@@ -44,10 +44,14 @@ async def show_registration(callback_query: types.callback_query):
     )
 
 
-@dp.callback_query(F.data.in_({CallBackData.del_registration}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+@dp.callback_query(F.regexp('delete_session_id_.*') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def del_registration(callback_query: types.callback_query):
+    if IspringApi().delete_enrollment(callback_query):
+        text = 'Сессия удалена'
+    else:
+        text = 'Не получилось удалить сессию'
     await bot.send_message(
         chat_id=callback_query.from_user.id,
-        text=f'del_registration',
+        text=text,
         reply_markup=inline_kb_main
     )

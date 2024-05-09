@@ -8,7 +8,6 @@ inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='📩 Скачать Шаблон', callback_data=CallBackData.get_template_file_xlsx), ],
     [InlineKeyboardButton(text='Проказать регистрацию', callback_data=CallBackData.show_registration), ],
     [InlineKeyboardButton(text='>> Admin >>', callback_data=CallBackData.admin_menu), ],
-    [InlineKeyboardButton(text='?? Удалить регистрацию', callback_data=CallBackData.del_registration), ],
 ])
 
 inline_kb_admin = InlineKeyboardMarkup(inline_keyboard=[
@@ -19,7 +18,6 @@ inline_kb_admin = InlineKeyboardMarkup(inline_keyboard=[
 
 def del_enrollment(enrollment_id: str):
     inline_kb_del = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Delete', callback_data=f'delete_{enrollment_id}'), ],
+        [InlineKeyboardButton(text='Delete', callback_data=f'delete_session_id_{enrollment_id}'), ],
     ])
-
     return inline_kb_del

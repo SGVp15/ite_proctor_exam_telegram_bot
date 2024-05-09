@@ -111,38 +111,55 @@ class IspringApi:
             print('Курс не назначен')
             return False
 
-    def delete_user(self, userid) -> bool:
-        url = '/'.join([self.url_base, 'user', userid])
-        response = requests.delete(url=url, headers=self.headers)
-        if response.status_code == 201:
-            return True
-        else:
-            print(response.status_code)
-            print(response.text)
-            return False
-
-    def create_group(self, name_group, user_ids: list[str]):
-        url = '/'.join([self.url_base, 'group'])
-        ids = ''
-        if user_ids:
-            for user_id in user_ids:
-                ids += f'<id>{user_id}</id>'
-
-            ids = f'<userIds>' \
-                  f'{ids}' \
-                  f'</userIds>'
-
-        xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
-              f'<request>' \
-              f'<name>{name_group}</name>' \
-              f'{ids}' \
-              f'</request>'
+    def delete_enrollment(self, enrollment_id):
+        url = '/'.join([self.url_base, 'enrollment', 'delete'])
+        xml = f'''
+<?xml version="1.0" encoding="UTF-8"?>
+<DeleteEnrollments>
+    <enrollmentIds>     
+    <id>{enrollment_id}</id>
+    </enrollmentIds>
+</DeleteEnrollments>'''
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
+        if response.status_code == 201:
+            return True
+        return False
+
+
+def delete_user(self, userid) -> bool:
+    url = '/'.join([self.url_base, 'user', userid])
+    response = requests.delete(url=url, headers=self.headers)
+    if response.status_code == 201:
+        return True
+    else:
         print(response.status_code)
         print(response.text)
-        group_id = re.findall(r'<response>(.*)</response>', response.text)[0]
-        return group_id
+        return False
+
+
+def create_group(self, name_group, user_ids: list[str]):
+    url = '/'.join([self.url_base, 'group'])
+    ids = ''
+    if user_ids:
+        for user_id in user_ids:
+            ids += f'<id>{user_id}</id>'
+
+        ids = f'<userIds>' \
+              f'{ids}' \
+              f'</userIds>'
+
+    xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
+          f'<request>' \
+          f'<name>{name_group}</name>' \
+          f'{ids}' \
+          f'</request>'
+
+    response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
+    print(response.status_code)
+    print(response.text)
+    group_id = re.findall(r'<response>(.*)</response>', response.text)[0]
+    return group_id
 
 
 def get_session_in_enrollments_users_contents() -> list[Session]:
