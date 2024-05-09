@@ -170,4 +170,5 @@ def get_str_enrollments_users_contents() -> list[str]:
             f'{enrollment.get('user').get('LAST_NAME')} {enrollment.get('user').get('FIRST_NAME')} '
             f'{enrollment.get('user').get('EMAIL')}'
         )
+    sorted(all_str)
     return all_str
