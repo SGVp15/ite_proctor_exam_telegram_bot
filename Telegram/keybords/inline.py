@@ -15,3 +15,11 @@ inline_kb_admin = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ],
     [InlineKeyboardButton(text='📩  Скачать Логи Программные', callback_data=CallBackData.get_log_program), ],
 ])
+
+
+def del_enrollment(enrollment_id: str):
+    inline_kb_del = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Delete', callback_data=f'delete_{enrollment_id}'), ],
+    ])
+
+    return inline_kb_del

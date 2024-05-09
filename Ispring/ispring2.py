@@ -5,8 +5,9 @@ from datetime import datetime
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from Ispring.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
 from Contact import Contact
+from Ispring.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
+from Ispring.session import Session
 from Utils.xml_to_dict import get_ispring_users, get_ispring_enrollments, get_ispring_contents
 
 
@@ -144,31 +145,18 @@ class IspringApi:
         return group_id
 
 
-def enrollments_users_contents() -> list[dict]:
+def get_session_in_enrollments_users_contents() -> list[Session]:
     users = get_ispring_users(IspringApi().get_users())
     enrollments = get_ispring_enrollments(IspringApi().get_enrollments())
     courses = get_ispring_contents(IspringApi().get_content())
+
+    sessions: list[Session] = []
     for enrollment in enrollments:
         for user in users:
             if enrollment.get('learnerId') == user.get('userId'):
-                enrollment['user'] = user
+                for course in courses:
+                    if enrollment.get('courseId') == course.get('contentItemId'):
+                        sessions.append(Session(enrollment_dict=enrollment, user_dict=user, course_dict=course))
+                        break
                 break
-        for course in courses:
-            if enrollment.get('courseId') == course.get('contentItemId'):
-                enrollment['course'] = course
-                break
-    return enrollments
-
-
-def get_str_enrollments_users_contents() -> list[str]:
-    enrollments = enrollments_users_contents()
-    all_str = []
-    for enrollment in enrollments:
-        all_str.append(
-            f'{enrollment.get('accessDate')} '
-            f'{enrollment.get('course').get('title')} '
-            f'{enrollment.get('user').get('LAST_NAME')} {enrollment.get('user').get('FIRST_NAME')} '
-            f'{enrollment.get('user').get('EMAIL')}'
-        )
-    all_str = sorted(all_str)
-    return all_str
+    return sessions

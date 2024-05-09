@@ -1,9 +1,9 @@
 from aiogram import types, F
 
-from Ispring.ispring2 import get_str_enrollments_users_contents
+from Ispring.ispring2 import get_session_in_enrollments_users_contents
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.config import USERS_ID, ADMIN_ID
-from Telegram.keybords.inline import inline_kb_main
+from Telegram.keybords.inline import inline_kb_main, del_enrollment
 from Telegram.main import bot, dp, loop
 from main_registration import registration
 
@@ -28,11 +28,13 @@ async def download_document_handle(message: types.Message):
 
 @dp.callback_query(F.data.in_({CallBackData.show_registration}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def show_registration(callback_query: types.callback_query):
-    sessions = get_str_enrollments_users_contents()
+    sessions = get_session_in_enrollments_users_contents()
+    sessions = sorted(sessions)
     for session in sessions:
         await bot.send_message(
             chat_id=callback_query.from_user.id,
-            text=f'{session}'
+            text=f'{session}',
+            reply_markup=del_enrollment(session.enrollment_id),
         )
 
     await bot.send_message(
