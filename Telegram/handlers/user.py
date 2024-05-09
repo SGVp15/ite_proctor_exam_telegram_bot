@@ -26,7 +26,7 @@ async def download_document_handle(message: types.Message):
     loop.create_task(registration(path))
 
 
-@dp.callback_query(F.data.in_({CallBackData.show_registration}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+@dp.callback_query(F.data.in_({CallBackData.edit_registration}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def show_registration(callback_query: types.callback_query):
     sessions = get_session_in_enrollments_users_contents()
     sessions = sorted(sessions)
@@ -44,9 +44,27 @@ async def show_registration(callback_query: types.callback_query):
     )
 
 
-@dp.callback_query(F.regexp('delete_session_id_.*') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+@dp.callback_query(F.data.in_({CallBackData.show_registration}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+async def show_registration(callback_query: types.callback_query):
+    sessions = get_session_in_enrollments_users_contents()
+    sessions = sorted(sessions)
+    text = ''
+    for session in sessions:
+        text += f'{session}\n'
+    await bot.send_message(
+        chat_id=callback_query.from_user.id,
+        text=text,
+        reply_markup=inline_kb_main
+    )
+
+
+@dp.callback_query(
+    F.data.regexp(f'{CallBackData.del_registration}' + r'.*')
+    & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def del_registration(callback_query: types.callback_query):
-    if IspringApi().delete_enrollment(callback_query):
+    delete_id = callback_query.data.replace(CallBackData.del_registration, '')
+    print(f'{delete_id=}')
+    if IspringApi().delete_enrollment(delete_id):
         text = 'Сессия удалена'
     else:
         text = 'Не получилось удалить сессию'

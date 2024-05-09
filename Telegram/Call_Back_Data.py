@@ -14,4 +14,5 @@ class CallBackData:
     send_test_email = 'send_test_email'
     get_template_file_xlsx = 'get_template_file_xlsx'
     show_registration = 'show_registration'
-    del_registration = 'del_registration'
+    edit_registration = 'edit_registration'
+    del_registration = 'delete_session_id_'

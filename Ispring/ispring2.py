@@ -104,17 +104,16 @@ class IspringApi:
             courseIds.set('id', 'yes')
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        if response.status_code == 201:
+        if response.status_code >= 200 and response.status_code < 300:
             print('Курс назначен')
             return True
         else:
             print('Курс не назначен')
             return False
 
-    def delete_enrollment(self, enrollment_id):
+    def delete_enrollment(self, enrollment_id: str):
         url = '/'.join([self.url_base, 'enrollment', 'delete'])
-        xml = f'''
-<?xml version="1.0" encoding="UTF-8"?>
+        xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <DeleteEnrollments>
     <enrollmentIds>     
     <id>{enrollment_id}</id>
@@ -122,7 +121,7 @@ class IspringApi:
 </DeleteEnrollments>'''
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        if response.status_code == 201:
+        if response.status_code >= 200 and response.status_code < 300:
             return True
         return False
 
@@ -130,7 +129,7 @@ class IspringApi:
 def delete_user(self, userid) -> bool:
     url = '/'.join([self.url_base, 'user', userid])
     response = requests.delete(url=url, headers=self.headers)
-    if response.status_code == 201:
+    if response.status_code >= 200 and response.status_code < 300:
         return True
     else:
         print(response.status_code)
