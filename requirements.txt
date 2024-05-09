@@ -10,3 +10,4 @@ pyperclip
 selenium
 PyGetWindow
 selenium-stealth
+xmltodict
