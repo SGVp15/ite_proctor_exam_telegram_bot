@@ -32,9 +32,10 @@ async def show_registration(callback_query: types.callback_query):
     for session in sessions:
         await bot.send_message(
             chat_id=callback_query.from_user.id,
-            text=f'session',
+            text=f'{session}',
             reply_markup=inline_kb_main
         )
+
     await bot.send_message(
         chat_id=callback_query.from_user.id,
         text=f'End',
