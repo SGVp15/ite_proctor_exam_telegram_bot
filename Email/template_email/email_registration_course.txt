@@ -1,4 +1,4 @@
-Добрый день, {{user.firstName}}!
+Добрый день, {{user.first_name_rus}}!
 Для подключения к онлайн-занятиям по курсу {{user.course}} используйте ссылку:
 {{user.url_course}}
 
