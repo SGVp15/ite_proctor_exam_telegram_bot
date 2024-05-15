@@ -77,7 +77,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
                                                                      course_id=course_id,
                                                                      access_date=contact.scheduled_at)
 
-    # -------------- Send email --------------
+    # -------------- SEND EMAIL --------------
     for contact in contacts:
         if contact.is_create_enrollment:
             if contact.proctor:

@@ -75,7 +75,7 @@ class IspringApi:
         response = requests.get(url=url, headers=self.headers)
         return response.text
 
-    def create_enrollment(self, learner_id: str, course_id: str, access_date: datetime,
+    def create_enrollment(self, learner_id: str, course_id: str, access_date: str,
                           due_date_type='due_period') -> bool:
         """
         :param learner_id:
