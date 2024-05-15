@@ -101,7 +101,8 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
     out_str = ''
     for contact in contacts:
-        out_str += f'{contact.last_name_rus} {contact.first_name_rus} {contact.email} {contact.exam} {contact.date_exam}\n'
+        out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
+                    f'{contact.email} {contact.exam} {contact.date_exam}\n')
     return out_str
 
 
