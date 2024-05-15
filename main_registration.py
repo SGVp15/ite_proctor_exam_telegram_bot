@@ -52,7 +52,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
     #         print(contact.email, ' - deleted')
     #         contact.id_ispring = None
 
-    # Create ispring users with email <==> id_ispring
+    # Create ispring users with email <==> id_ispring and reset password if user exist
     for contact in contacts:
         contact.id_ispring = emails_user_id.get(contact.email, None)
         if contact.id_ispring is None:
