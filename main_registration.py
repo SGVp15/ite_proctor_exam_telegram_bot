@@ -62,6 +62,9 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
         if contact.id_ispring is None:
             contact.id_ispring = ispring_api.create_user(contact)
+        else:
+            ispring_api.reset_password(contact)
+            print(f' {contact.email} [reset password]')
         print(contact.id_ispring)
 
     # Get all courses ispring
@@ -74,7 +77,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
                                                                      course_id=course_id,
                                                                      access_date=contact.scheduled_at)
 
-    # Send email
+    # -------------- Send email --------------
     for contact in contacts:
         if contact.is_create_enrollment:
             if contact.proctor:
