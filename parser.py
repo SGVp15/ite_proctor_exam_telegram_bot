@@ -72,10 +72,12 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         i += 1
         user = Contact()
 
-        user.last_name_rus = clean_export_excel(read_excel(file_excel, column=LastName_column, row=i)).capitalize().strip()
+        user.last_name_rus = clean_export_excel(
+            read_excel(file_excel, column=LastName_column, row=i)).capitalize().strip()
         if user.last_name_rus == '':
             continue
-        user.first_name_rus = clean_export_excel(read_excel(file_excel, column=FirstName_column, row=i)).capitalize().strip()
+        user.first_name_rus = clean_export_excel(
+            read_excel(file_excel, column=FirstName_column, row=i)).capitalize().strip()
         user.email = clean_export_excel(read_excel(file_excel, column=Email_column, row=i)).lower().strip()
         user.password = clean_export_excel(read_excel(file_excel, column=Password_column, row=i)).strip()
 
