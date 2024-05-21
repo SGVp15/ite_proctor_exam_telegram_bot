@@ -13,6 +13,7 @@ from Email import EmailSending, template_email_registration_exam_offline, templa
 
 
 async def registration(file=TEMPLATE_FILE_XLSX) -> str:
+    # -------------- Excel --------------
     contacts: list[Contact] = get_contact_from_excel(file)
     if not contacts:
         return 'No contact'

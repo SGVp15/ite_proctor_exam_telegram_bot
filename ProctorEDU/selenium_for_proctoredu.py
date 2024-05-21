@@ -119,18 +119,6 @@ class ProctorEduSelenium:
 
         await activate_windows()
 
-        # while True:
-        #     pyperclip.copy(file_path)
-        #     try:
-        #         buffer = pyperclip.paste()
-        #         if buffer != file_path:
-        #             pyperclip.copy(file_path)
-        #             break
-        #     except TypeError as e:
-        #         pass
-        #     finally:
-        #         await asyncio.sleep(0.2)
-
         await asyncio.sleep(0.5)
         pyautogui.write(file_path, interval=0.01)
         await asyncio.sleep(0.5)
@@ -201,6 +189,15 @@ class ProctorEduSelenium:
             return 'ok'
         except self.web_error:
             return 'элемент не найден'
+
+    async def del_session(self, text_to_find: str) -> str:
+        await self.find_session(text_to_find)
+        # Click first row
+        xpath = '//div[@column="1"][1]/div/a[1]'
+        self.driver.find_element(By.XPATH, xpath).click()
+        await asyncio.sleep(5)
+
+        return ''
 
     def quit(self):
         self.driver.quit()

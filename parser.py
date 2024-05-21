@@ -83,8 +83,8 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
 
         user.date_from_file = clean_export_excel(read_excel(file_excel, column=Date_column, row=i)).lower().strip()
 
-        hour = int(clean_export_excel(read_excel(file_excel, column=Hour_column, row=i)).lower())
-        minute = int(clean_export_excel(read_excel(file_excel, column=Minute_column, row=i)).lower())
+        hour = int(round(float(clean_export_excel(read_excel(file_excel, column=Hour_column, row=i)).lower())))
+        minute = int(round(float(clean_export_excel(read_excel(file_excel, column=Minute_column, row=i)).lower())))
 
         user.first_name_eng = clean_export_excel(
             read_excel(file_excel, column=FirstNameEng_column, row=i)).capitalize().strip()
