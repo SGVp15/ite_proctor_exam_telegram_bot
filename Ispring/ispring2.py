@@ -104,7 +104,7 @@ class IspringApi:
             courseIds.set('id', 'yes')
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        if response.status_code >= 200 and response.status_code < 300:
+        if 200 <= response.status_code < 300:
             print('Курс назначен')
             return True
         else:
@@ -121,44 +121,67 @@ class IspringApi:
 </DeleteEnrollments>'''
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        if response.status_code >= 200 and response.status_code < 300:
+        if 200 <= response.status_code < 300:
             return True
         return False
 
-
-def delete_user(self, userid) -> bool:
-    url = '/'.join([self.url_base, 'user', userid])
-    response = requests.delete(url=url, headers=self.headers)
-    if response.status_code >= 200 and response.status_code < 300:
-        return True
-    else:
-        print(response.status_code)
-        print(response.text)
+    def users_deactivate(self, users):
+        url = '/'.join([self.url_base, 'users', 'deactivate'])
+        ids = ''
+        for user in users:
+            ids += f"<userIds>{user.id_ispring}</userIds>\n"
+        xml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<request>
+    {ids}
+</request>'''
+        response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
+        if 200 <= response.status_code < 300:
+            return True
         return False
 
+    def user_scheduled_deactivation(self, userId, date):
+        url = '/'.join([self.url_base, 'user', userId, 'scheduled_deactivation'])
+        xml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<request>
+    <date>{date}</date>
+</request>'''
+        response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
+        if 200 <= response.status_code < 300:
+            return True
+        return False
 
-def create_group(self, name_group, user_ids: list[str]):
-    url = '/'.join([self.url_base, 'group'])
-    ids = ''
-    if user_ids:
-        for user_id in user_ids:
-            ids += f'<id>{user_id}</id>'
+    def delete_user(self, userid) -> bool:
+        url = '/'.join([self.url_base, 'user', userid])
+        response = requests.delete(url=url, headers=self.headers)
+        if 200 <= response.status_code < 300:
+            return True
+        else:
+            print(response.status_code)
+            print(response.text)
+            return False
 
-        ids = f'<userIds>' \
+    def create_group(self, name_group, user_ids: list[str]):
+        url = '/'.join([self.url_base, 'group'])
+        ids = ''
+        if user_ids:
+            for user_id in user_ids:
+                ids += f'<id>{user_id}</id>'
+
+            ids = f'<userIds>' \
+                  f'{ids}' \
+                  f'</userIds>'
+
+        xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
+              f'<request>' \
+              f'<name>{name_group}</name>' \
               f'{ids}' \
-              f'</userIds>'
+              f'</request>'
 
-    xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
-          f'<request>' \
-          f'<name>{name_group}</name>' \
-          f'{ids}' \
-          f'</request>'
-
-    response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-    print(response.status_code)
-    print(response.text)
-    group_id = re.findall(r'<response>(.*)</response>', response.text)[0]
-    return group_id
+        response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
+        print(response.status_code)
+        print(response.text)
+        group_id = re.findall(r'<response>(.*)</response>', response.text)[0]
+        return group_id
 
 
 def get_session_in_enrollments_users_contents() -> list[Session]:
