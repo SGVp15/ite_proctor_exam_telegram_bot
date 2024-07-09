@@ -36,10 +36,12 @@ async def get_file(callback_query: types.callback_query):
     elif query == call_back.get_template_file_xlsx:
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
     elif query == call_back.get_last_excel_file:
-        path = ''
-        file_name = ''
+        path = os.path.join('./', 'data', 'input', 'documents')
+        files = os.listdir('./data/input/documents/')
+        paths = [os.path.join(path, basename) for basename in files]
+        path = max(paths, key=os.path.getctime)
+        file_name = os.path.basename(path)
         file = FSInputFile(path, file_name)
-
     # try:
     #     if is_empty_file(file):
     #         await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
