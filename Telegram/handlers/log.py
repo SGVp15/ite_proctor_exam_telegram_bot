@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
@@ -20,7 +22,8 @@ async def send_id(message: types.Message):
 
 
 @dp.callback_query(
-    F.data.in_({call_back.get_log, call_back.get_log_program, call_back.get_template_file_xlsx})
+    F.data.in_(
+        {call_back.get_log, call_back.get_log_program, call_back.get_template_file_xlsx, call_back.get_last_excel_file})
     & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def get_file(callback_query: types.callback_query):
@@ -32,6 +35,10 @@ async def get_file(callback_query: types.callback_query):
         file = FSInputFile(LOG_FILE, 'log_file.txt')
     elif query == call_back.get_template_file_xlsx:
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
+    elif query == call_back.get_last_excel_file:
+        path = ''
+        file_name = ''
+        file = FSInputFile(path, file_name)
 
     # try:
     #     if is_empty_file(file):
