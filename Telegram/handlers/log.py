@@ -37,7 +37,7 @@ async def get_file(callback_query: types.callback_query):
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
     elif query == call_back.get_last_excel_file:
         path = os.path.join('./', 'data', 'input', 'documents')
-        files = os.listdir('./data/input/documents/')
+        files = os.listdir(path)
         paths = [os.path.join(path, basename) for basename in files]
         path = max(paths, key=os.path.getctime)
         file_name = os.path.basename(path)
