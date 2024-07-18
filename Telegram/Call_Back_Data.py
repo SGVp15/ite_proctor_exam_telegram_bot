@@ -4,6 +4,7 @@ class CallBackData:
     get_registration_webinar = 'get_registration_webinar'
     get_seller = 'get_seller'
     get_last_excel_file = 'get_last_excel_file'
+    show_excel_file = 'show_excel_file'
     show_queue = 'show_queue'
     zoom_menu = 'zoom_menu'
     admin_menu = 'admin_menu'
