@@ -4,7 +4,7 @@ import Telegram.keybords.inline
 from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.config import USERS_ID, ADMIN_ID
-from Telegram.keybords.inline import inline_kb_main, del_enrollment
+from Telegram.keybords.inline import inline_kb_main, del_enrollment, inline_show_list_file
 from Telegram.main import bot, dp, loop
 from main_registration import registration
 
@@ -64,7 +64,7 @@ async def show_list_files(callback_query: types.callback_query):
     await bot.send_message(
         chat_id=callback_query.from_user.id,
         text='',
-        reply_markup=Telegram.keybords.inline.get_list_files_keyboard()
+        reply_markup=inline_show_list_file
     )
 
 

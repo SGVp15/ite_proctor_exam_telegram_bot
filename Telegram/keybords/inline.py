@@ -44,3 +44,4 @@ def get_list_files_keyboard(path='./data/input/documents/') -> [InlineKeyboardBu
 
 
 # get_list_files_keyboard()
+inline_show_list_file = InlineKeyboardMarkup(inline_keyboard=[*get_list_files_keyboard()])
