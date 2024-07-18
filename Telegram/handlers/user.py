@@ -63,7 +63,7 @@ async def show_registration(callback_query: types.callback_query):
 async def show_list_files(callback_query: types.callback_query):
     await bot.send_message(
         chat_id=callback_query.from_user.id,
-        text='',
+        text='Список файлов',
         reply_markup=inline_show_list_file
     )
 
