@@ -41,7 +41,4 @@ def get_list_files_keyboard(path=DOCUMENTS) -> [InlineKeyboardButton]:
             ]
         )
     out_buttons.append([InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ], )
-    return out_buttons
-
-
-inline_show_list_file = InlineKeyboardMarkup(inline_keyboard=[*get_list_files_keyboard()])
+    return InlineKeyboardMarkup(inline_keyboard=[*out_buttons])
