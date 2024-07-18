@@ -189,6 +189,7 @@ def get_session_in_enrollments_users_contents() -> list[Session]:
     enrollments = get_ispring_enrollments(IspringApi().get_enrollments())
     courses = get_ispring_contents(IspringApi().get_content())
 
+    # TODO enrollments can be str! work it
     sessions: list[Session] = []
     for enrollment in enrollments:
         for user in users:
