@@ -1,6 +1,8 @@
 import os
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from Telegram.config import DOCUMENTS
 from Telegram.Call_Back_Data import CallBackData
 
 inline_btn_logs = InlineKeyboardButton(text='Скачать Логи', callback_data=CallBackData.download_logs)
@@ -28,7 +30,7 @@ def del_enrollment(enrollment_id: str):
     return inline_kb_del
 
 
-def get_list_files_keyboard(path='./data/input/documents/') -> [InlineKeyboardButton]:
+def get_list_files_keyboard(path=DOCUMENTS) -> [InlineKeyboardButton]:
     out_buttons = []
     files = os.listdir(path)
     for file in files:

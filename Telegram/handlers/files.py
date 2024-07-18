@@ -4,7 +4,7 @@ from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
-from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX
+from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
@@ -17,28 +17,31 @@ def is_empty_file(file) -> bool:
 
 
 @dp.callback_query(
-    F.data.startswith('file_') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.startswith('file_download_') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
-async def get_file(callback_query: types.callback_query):
+async def download_file(callback_query: types.callback_query):
     query = callback_query.data
-    file = LOG_FILE
-    if query == call_back.get_log_program:
-        file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
-    elif query == call_back.get_log:
-        file = FSInputFile(LOG_FILE, 'log_file.txt')
-    elif query == call_back.get_template_file_xlsx:
-        file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
-    elif query == call_back.get_last_excel_file:
-        path = os.path.join('./', 'data', 'input', 'documents')
-        files = os.listdir(path)
-        paths = [os.path.join(path, basename) for basename in files]
-        path = max(paths, key=os.path.getctime)
-        file_name = os.path.basename(path)
+    file_name = str(query).replace('file_download_', '')
+    path = os.path.join(DOCUMENTS, file_name)
+    if os.path.exists(file_name):
         file = FSInputFile(path, file_name)
-    # try:
-    #     if is_empty_file(file):
-    #         await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
-    #                                         reply_markup=inline_kb_main)
-    # except UnicodeDecodeError:
-    #     ...
-    await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
+        await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
+    else:
+        await bot.send_message(chat_id=callback_query.from_user.id, text='Файла не существует',
+                               reply_markup=inline_kb_main)
+
+
+@dp.callback_query(
+    F.data.startswith('file_delete_') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+)
+async def delete_file(callback_query: types.callback_query):
+    query = callback_query.data
+    file_name = str(query).replace('file_download_', '')
+    path = os.path.join(DOCUMENTS, file_name)
+    if os.path.exists(file_name):
+        os.remove(path)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Файл {file_name} удален',
+                               reply_markup=inline_kb_main)
+    else:
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Файл {file_name} не существует',
+                               reply_markup=inline_kb_main)

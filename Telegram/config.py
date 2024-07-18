@@ -30,3 +30,5 @@ Proctor_column = 'K'
 
 #  == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL
 #  ====================================================================================================================
+
+DOCUMENTS = './data/input/documents/'
