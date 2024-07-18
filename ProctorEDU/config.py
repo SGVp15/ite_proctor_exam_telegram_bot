@@ -15,7 +15,7 @@ csv_header_session = {
     'timezone': '3',
     'attempt': '1',
     'timeout': '10',
-    'lifetime': '60',
+    'lifetime': '120',
     'deadline': '',
     # 'rules': '',
     'url': 'https://itexpert.ispringlearn.ru/',
