@@ -35,12 +35,11 @@ def get_list_files_keyboard(path='./data/input/documents/') -> [InlineKeyboardBu
         out_buttons.append(
             [
                 InlineKeyboardButton(text=f'⏬ {file}', callback_data=f'file_download_{file}'),
-                InlineKeyboardButton(text=f'❌ {file}', callback_data=f'file_delete_{file}'),
+                InlineKeyboardButton(text=f'🗑 {file}', callback_data=f'file_delete_{file}'),
             ]
         )
     out_buttons.append([InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ], )
     return out_buttons
 
 
-# get_list_files_keyboard()
 inline_show_list_file = InlineKeyboardMarkup(inline_keyboard=[*get_list_files_keyboard()])
