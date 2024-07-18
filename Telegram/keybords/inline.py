@@ -30,7 +30,6 @@ def del_enrollment(enrollment_id: str):
 
 def get_list_files_keyboard(path='./data/input/documents/') -> [InlineKeyboardButton]:
     out_buttons = []
-    path = 'C:/Users/user/PycharmProjects/ite_proctor_exam_telegram_bot/data/input/documents'
     files = os.listdir(path)
     for file in files:
         out_buttons.append(
