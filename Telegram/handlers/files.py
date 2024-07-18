@@ -36,7 +36,7 @@ async def download_file(callback_query: types.callback_query):
 )
 async def delete_file(callback_query: types.callback_query):
     query = callback_query.data
-    file_name = str(query).replace('file_download_', '')
+    file_name = str(query).replace('file_delete_', '')
     path = os.path.join(DOCUMENTS, file_name)
     if os.path.exists(path):
         os.remove(path)
