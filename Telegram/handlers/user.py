@@ -59,8 +59,8 @@ async def show_registration(callback_query: types.callback_query):
     )
 
 
-@dp.callback_query(F.data.in_({CallBackData.show_excel_file}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def show_registration(callback_query: types.callback_query):
+@dp.callback_query(F.data.in_({CallBackData.show_list_file}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+async def show_list_files(callback_query: types.callback_query):
     await bot.send_message(
         chat_id=callback_query.from_user.id,
         text='',
