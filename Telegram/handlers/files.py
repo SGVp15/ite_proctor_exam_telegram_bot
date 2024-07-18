@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
 from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS
-from Telegram.keybords.inline import inline_kb_main
+from Telegram.keybords.inline import inline_kb_main, get_list_files_keyboard
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
 
@@ -28,7 +28,7 @@ async def download_file(callback_query: types.callback_query):
         await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
     else:
         await bot.send_message(chat_id=callback_query.from_user.id, text='Файла не существует',
-                               reply_markup=inline_kb_main)
+                               reply_markup=get_list_files_keyboard())
 
 
 @dp.callback_query(
@@ -41,7 +41,7 @@ async def delete_file(callback_query: types.callback_query):
     if os.path.exists(path):
         os.remove(path)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Файл {file_name} удален',
-                               reply_markup=inline_kb_main)
+                               reply_markup=get_list_files_keyboard())
     else:
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Файл {file_name} не существует',
-                               reply_markup=inline_kb_main)
+                               reply_markup=get_list_files_keyboard())
