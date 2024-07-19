@@ -1,10 +1,9 @@
 from aiogram import types, F
 
-import Telegram.keybords.inline
 from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.config import USERS_ID, ADMIN_ID
-from Telegram.keybords.inline import inline_kb_main, del_enrollment, get_list_files_keyboard
+from Telegram.keybords.inline import inline_kb_main, del_enrollment
 from Telegram.main import bot, dp, loop
 from main_registration import registration
 
@@ -56,15 +55,6 @@ async def show_registration(callback_query: types.callback_query):
         chat_id=callback_query.from_user.id,
         text=text,
         reply_markup=inline_kb_main
-    )
-
-
-@dp.callback_query(F.data.in_({CallBackData.show_list_file}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def show_list_files(callback_query: types.callback_query):
-    await bot.send_message(
-        chat_id=callback_query.from_user.id,
-        text='Список файлов',
-        reply_markup=get_list_files_keyboard()
     )
 
 

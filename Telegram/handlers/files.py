@@ -7,7 +7,7 @@ from aiogram.types import FSInputFile
 from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS
 from Telegram.keybords.inline import inline_kb_main, get_list_files_keyboard
 from Telegram.main import dp, bot
-from Telegram.Call_Back_Data import CallBackData as call_back
+from Telegram.Call_Back_Data import CallBackData as call_back, CallBackData
 
 
 def is_empty_file(file) -> bool:
@@ -45,3 +45,12 @@ async def delete_file(callback_query: types.callback_query):
     else:
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Файл {file_name} не существует',
                                reply_markup=get_list_files_keyboard())
+
+
+@dp.callback_query(F.data.in_({CallBackData.show_list_file}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+async def show_list_files(callback_query: types.callback_query):
+    await bot.send_message(
+        chat_id=callback_query.from_user.id,
+        text='Список файлов',
+        reply_markup=get_list_files_keyboard()
+    )
