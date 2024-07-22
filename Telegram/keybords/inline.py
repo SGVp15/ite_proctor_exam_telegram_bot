@@ -7,6 +7,18 @@ from Telegram.Call_Back_Data import CallBackData
 
 inline_btn_logs = InlineKeyboardButton(text='Скачать Логи', callback_data=CallBackData.download_logs)
 
+
+def del_enrollment(enrollment_id: str):
+    inline_kb_del = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Delete', callback_data=f'{CallBackData.del_registration}{enrollment_id}'), ],
+    ])
+    return inline_kb_del
+
+
+def add_return_main_menu():
+    return [InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ]
+
+
 inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='⭐️ Скачать Логи', callback_data=CallBackData.get_log), ],
     [InlineKeyboardButton(text='📩 Скачать Шаблон', callback_data=CallBackData.get_template_file_xlsx), ],
@@ -17,17 +29,11 @@ inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='>> Admin >>', callback_data=CallBackData.admin_menu), ],
 ])
 
+
 inline_kb_admin = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ],
+    add_return_main_menu(),
     [InlineKeyboardButton(text='📩  Скачать Логи Программные', callback_data=CallBackData.get_log_program), ],
 ])
-
-
-def del_enrollment(enrollment_id: str):
-    inline_kb_del = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Delete', callback_data=f'{CallBackData.del_registration}{enrollment_id}'), ],
-    ])
-    return inline_kb_del
 
 
 def get_list_files_keyboard(path=DOCUMENTS) -> [InlineKeyboardButton]:
@@ -40,5 +46,5 @@ def get_list_files_keyboard(path=DOCUMENTS) -> [InlineKeyboardButton]:
                 InlineKeyboardButton(text=f'🗑 {file}', callback_data=f'file_delete_{file}'),
             ]
         )
-    out_buttons.append([InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ], )
+    out_buttons.append(add_return_main_menu())
     return InlineKeyboardMarkup(inline_keyboard=[*out_buttons])

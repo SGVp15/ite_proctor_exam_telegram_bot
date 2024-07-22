@@ -1,8 +1,10 @@
+import os.path
+
 from aiogram import types, F
 
 from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
-from Telegram.config import USERS_ID, ADMIN_ID
+from Telegram.config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
 from Telegram.keybords.inline import inline_kb_main, del_enrollment
 from Telegram.main import bot, dp, loop
 from main_registration import registration
@@ -15,10 +17,10 @@ async def download_document_handle(message: types.Message):
     # Download the file
     file = await bot.get_file(file_id)
     file_path = file.file_path
-    path = f'./data/input/{file_path}'
+    path = os.path.join(PATH_DOWNLOAD_FILE, file_path)
 
     # Read the contents of the file
-    await bot.download_file(file_path, destination=f'./data/input/{file_path}')
+    await bot.download_file(file_path, destination=path)
     await message.answer('Добавил файл', reply_markup=inline_kb_main)
 
     answer = await registration(path)

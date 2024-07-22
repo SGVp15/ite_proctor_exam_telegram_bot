@@ -1,3 +1,5 @@
+import os
+
 from dotenv import dotenv_values, find_dotenv
 
 config = dotenv_values(find_dotenv())
@@ -9,4 +11,5 @@ SMTP_PORT = 465
 EMAIL_BCC = ['g.savushkin@itexpert.ru', 'o.kuprienko@itexpert.ru', 'p.moiseenko@itexpert.ru']
 EMAIL_BCC_course = ['g.savushkin@itexpert.ru', 'a.rybalkin@itexpert.ru', 'kab@itexpert.ru']
 email_login_password = {}
-template_folder = './Email/template_email/'
+
+template_folder: str = os.path.join(os.getcwd(), 'Email', 'template_email')

@@ -4,7 +4,7 @@ from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
-from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX
+from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
@@ -36,7 +36,7 @@ async def get_file(callback_query: types.callback_query):
     elif query == call_back.get_template_file_xlsx:
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
     elif query == call_back.get_last_excel_file:
-        path = os.path.join('./', 'data', 'input', 'documents')
+        path = os.path.join(DOCUMENTS)
         files = os.listdir(path)
         paths = [os.path.join(path, basename) for basename in files]
         path = max(paths, key=os.path.getctime)

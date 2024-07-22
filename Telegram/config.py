@@ -8,13 +8,13 @@ BOT_TOKEN: str | None = config.get('BOT_TOKEN')
 ADMIN_ID: list[int] = [int(x) for x in config['ADMIN_ID'].split(',')]
 USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 
-LOG_FILE: str = './data/log.txt'
+LOG_FILE: str = os.path.join(os.getcwd(), 'data', 'log.txt')
 
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 
-TEMPLATE_FILE_XLSX = os.path.join(os.getcwd(), 'data', 'output', 'template', 'template.xlsx')
-PAGE_NAME = 'Экзамены'
+TEMPLATE_FILE_XLSX: str = os.path.join(os.getcwd(), 'data', 'output', 'template', 'template.xlsx')
+PAGE_NAME: str = 'Экзамены'
 
 LastName_column = 'A'
 FirstName_column = 'B'
@@ -31,4 +31,6 @@ Proctor_column = 'K'
 #  == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL
 #  ====================================================================================================================
 
-DOCUMENTS = './data/input/documents/'
+DOCUMENTS: str = os.path.join(os.getcwd(), 'data', 'input', 'documents')
+
+PATH_DOWNLOAD_FILE: str = os.path.join(os.getcwd(), 'data', 'input')
