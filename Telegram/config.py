@@ -16,17 +16,17 @@ LOG_FILE: str = os.path.join(os.getcwd(), 'data', 'log.txt')
 TEMPLATE_FILE_XLSX: str = os.path.join(os.getcwd(), 'data', 'output', 'template', 'template.xlsx')
 PAGE_NAME: str = 'Экзамены'
 
-LastName_column = 'A'
-FirstName_column = 'B'
-LastNameEng_column = 'C'
-FirstNameEng_column = 'D'
-Email_column = 'E'
-Password_column = 'F'
-Exam_column = 'G'
-Date_column = 'H'
-Hour_column = 'I'
-Minute_column = 'J'
-Proctor_column = 'K'
+LastName_column: str = 'A'
+FirstName_column: str = 'B'
+LastNameEng_column: str = 'C'
+FirstNameEng_column: str = 'D'
+Email_column: str = 'E'
+Password_column: str = 'F'
+Exam_column: str = 'G'
+Date_column: str = 'H'
+Hour_column: str = 'I'
+Minute_column: str = 'J'
+Proctor_column: str = 'K'
 
 #  == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL
 #  ====================================================================================================================
