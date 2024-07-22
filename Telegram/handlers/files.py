@@ -16,11 +16,11 @@ def is_empty_file(file_path) -> bool:
 
 
 @dp.callback_query(
-    F.data.startswith('file_download_') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.startswith(CallBackData.file_download_) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def download_file(callback_query: types.callback_query):
     query = callback_query.data
-    file_name = str(query).replace('file_download_', '')
+    file_name = str(query).replace(CallBackData.file_download_, '')
     path = os.path.join(DOCUMENTS, file_name)
     if os.path.exists(path):
         file = FSInputFile(path, file_name)
@@ -31,11 +31,11 @@ async def download_file(callback_query: types.callback_query):
 
 
 @dp.callback_query(
-    F.data.startswith('file_delete_') & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.startswith(CallBackData.file_delete_) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def delete_file(callback_query: types.callback_query):
     query = callback_query.data
-    file_name = str(query).replace('file_delete_', '')
+    file_name = str(query).replace(CallBackData.file_delete_, '')
     path = os.path.join(DOCUMENTS, file_name)
     if os.path.exists(path):
         os.remove(path)

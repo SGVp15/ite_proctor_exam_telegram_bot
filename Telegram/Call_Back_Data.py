@@ -18,3 +18,6 @@ class CallBackData:
     show_registration = 'show_registration'
     edit_registration = 'edit_registration'
     del_registration = 'delete_session_id_'
+
+    file_download_ = 'file_download_'
+    file_delete_ = 'file_delete_'
