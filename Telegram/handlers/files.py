@@ -9,8 +9,8 @@ from Telegram.keybords.inline import inline_kb_main, get_list_files_keyboard
 from Telegram.main import dp, bot
 
 
-def is_empty_file(file) -> bool:
-    with open(file=file, mode="r", encoding='utf-8') as f:
+def is_empty_file(file_path) -> bool:
+    with open(file=file_path, mode="r", encoding='utf-8') as f:
         s = f.read()
     return len(s) <= 10
 
