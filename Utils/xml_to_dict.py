@@ -13,7 +13,9 @@ def get_ispring_users(s: str) -> list[dict]:
 
 def get_ispring_enrollments(s: str) -> list[dict]:
     my_dict = xmltodict.parse(s)
-    enrollments_ispring: list = my_dict.get('response').get('enrollment')
+    enrollments_ispring = my_dict.get('response').get('enrollment')
+    if type(enrollments_ispring) == dict:
+        return [enrollments_ispring, ]
     return enrollments_ispring
 
 
