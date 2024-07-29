@@ -6,7 +6,7 @@ file_log = logging.FileHandler(SYSTEMLOG)
 console_out = logging.StreamHandler()
 
 
-def configure_logging(level=logging.WARNING):
+def configure_logging(level=logging.INFO):
     logging.basicConfig(
         handlers=(file_log, console_out),
         level=level,
