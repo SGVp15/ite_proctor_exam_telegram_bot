@@ -40,12 +40,9 @@ def get_all_users(xml: str) -> list[dict]:
     root = ET.fromstring(xml)
     users: list[dict] = []
     for i, group1 in enumerate(root.findall('userProfile')):
-        # print(group1.find('userId').text)
         users.append({'userId': group1.find('userId').text})
         for group2 in group1.findall('fields'):
             for group3 in group2.findall('field'):
-                # print(group3.find('name').text)
-                # print(group3.find('value').text)
                 users[i].update({group3.find('name').text: group3.find('value').text})
     return users
 

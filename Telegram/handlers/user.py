@@ -7,6 +7,7 @@ from Telegram.Call_Back_Data import CallBackData
 from Telegram.config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
 from Telegram.keybords.inline import inline_kb_main, del_enrollment
 from Telegram.main import bot, dp, loop
+from Utils.log import log
 from main_registration import registration
 
 
@@ -65,7 +66,7 @@ async def show_registration(callback_query: types.callback_query):
     & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def del_registration(callback_query: types.callback_query):
     delete_id = callback_query.data.replace(CallBackData.del_registration, '')
-    print(f'{delete_id=}')
+    log.info(f'{delete_id=}')
     if IspringApi().delete_enrollment(delete_id):
         text = 'Сессия удалена'
     else:

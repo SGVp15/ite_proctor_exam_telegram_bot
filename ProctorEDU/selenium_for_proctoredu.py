@@ -14,6 +14,8 @@ from selenium.webdriver.common.by import By
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from selenium_stealth import stealth
 
+from Utils.log import log
+
 
 async def activate_windows():
     win_names = ['Open', 'Открытие']
@@ -28,7 +30,7 @@ async def activate_windows():
                     return
                 except pg.PyGetWindowException:
                     continue
-            print(f'Wait windows title = {win_name}')
+            log.info(f'Wait windows title = {win_name}')
 
 
 class ProctorEduSelenium:
@@ -92,7 +94,7 @@ class ProctorEduSelenium:
 
     def is_authorized(self):
         if self.driver.current_url != 'https://itexpert.proctoring.online/#!/rooms':
-            print('Error authorization')
+            log.info('Error authorization')
             return 0
         return 1
 
@@ -171,7 +173,7 @@ class ProctorEduSelenium:
                 else:
                     continue
             except self.web_error:
-                print('NoSuchElement')
+                log.error('NoSuchElement')
         return ''
 
     async def download_report_file(self, text_to_find):

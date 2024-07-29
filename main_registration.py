@@ -10,6 +10,7 @@ from ProctorEDU.csv_creator import create_csv
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
 from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
+from Utils.log import log
 
 
 async def registration(file=TEMPLATE_FILE_XLSX) -> str:
@@ -33,7 +34,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
             if contact.proctor:
                 contact.url_proctor = await drive.get_url_session(contact.subject)
                 if contact.url_proctor == '':
-                    print(f"\n\n[error] NOT found URL {contact}\n\n")
+                    log.warning(f"\n\n[error] NOT found URL {contact}\n\n")
                     contacts.remove(contact)
         drive.quit()
 
@@ -50,7 +51,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
     #     contact.id_ispring = emails_user_id.get(contact.email, None)
     #     if contact.id_ispring:
     #         ispring_api.delete_user(contact.id_ispring)
-    #         print(contact.email, ' - deleted')
+    #         log.warning(contact.email, ' - deleted')
     #         contact.id_ispring = None
 
     # Create ispring users with email <==> id_ispring and reset password if user exist
@@ -65,8 +66,8 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
             contact.id_ispring = ispring_api.create_user(contact)
         else:
             ispring_api.reset_password(contact)
-            print(f' {contact.email} [reset password]')
-        print(contact.id_ispring)
+            log.warning(f' {contact.email} [reset password]')
+        log.warning(contact.id_ispring)
 
     # Get all courses ispring
     courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
@@ -86,10 +87,10 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
             else:
                 text = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
         else:
-            print(f'[Error] ISPRING not enrollment {contact}')
+            log.error(f'[Error] ISPRING not enrollment {contact}')
         subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.date_exam}'
         if contact.proctor and not contact.url_proctor:
-            print(f'[Error] URL {contact}')
+            log.error(f'[Error] URL {contact}')
             continue
         EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
         contact.status = 'Ok'
@@ -98,7 +99,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
     with open(LOG_FILE, mode='a', encoding='utf-8') as f:
         for contact in contacts:
             f.write(str(contact))
-            print(contact)
+            log.warning(contact)
 
     out_str = ''
     for contact in contacts:

@@ -9,7 +9,7 @@ from Contact import Contact
 from Ispring.config import LOGIN_ISPRING, PASSWORD_ISPRING, DOMAIN_ISPRING
 from Ispring.session import Session
 from Utils.xml_to_dict import get_ispring_users, get_ispring_enrollments, get_ispring_contents
-
+from Utils.log import log
 
 class IspringApi:
     def __init__(self):
@@ -55,7 +55,7 @@ class IspringApi:
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         user_id = re.findall(r'<response>(.*)</response>', response.text)[0]
-        print(f'{__name__} - ok')
+        log.info(f'{__name__} - ok')
         if response.status_code == 201:
             return user_id
         else:
@@ -68,7 +68,7 @@ class IspringApi:
               f'    <password>{user.password}</password>' \
               f'</request>'
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        print(f'{__name__}\t{response.status_code}')
+        log.info(f'{__name__}\t{response.status_code}')
 
     def get_content(self):
         url = '/'.join([self.url_base, 'content'])
@@ -105,10 +105,10 @@ class IspringApi:
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
         if 200 <= response.status_code < 300:
-            print('Курс назначен')
+            log.info('Курс назначен')
             return True
         else:
-            print('Курс не назначен')
+            log.info('Курс не назначен')
             return False
 
     def delete_enrollment(self, enrollment_id: str):
@@ -156,8 +156,8 @@ class IspringApi:
         if 200 <= response.status_code < 300:
             return True
         else:
-            print(response.status_code)
-            print(response.text)
+            log.info(response.status_code)
+            log.info(response.text)
             return False
 
     def create_group(self, name_group, user_ids: list[str]):
@@ -178,8 +178,8 @@ class IspringApi:
               f'</request>'
 
         response = requests.post(url=url, headers=self.headers, data=xml.encode('utf-8'))
-        print(response.status_code)
-        print(response.text)
+        log.info(response.status_code)
+        log.info(response.text)
         group_id = re.findall(r'<response>(.*)</response>', response.text)[0]
         return group_id
 
