@@ -13,7 +13,7 @@ class Test(TestCase):
 
     def test_get_ispring_enrollment(self):
         s = IspringApi().get_enrollments()
-        s='''<?xml version="1.0" encoding="UTF-8"?>
+        s = '''<?xml version="1.0" encoding="UTF-8"?>
 <response>
     <enrollment>
         <enrollmentId>fc1fc35c-040d-11ed-a2ba-b6f58d6fa7b5</enrollmentId>
@@ -34,9 +34,9 @@ class Test(TestCase):
         s = IspringApi().get_enrollments()
         enrollments = get_ispring_enrollments(s)
         print(enrollments)
+
     def test_get_ispring_contents(self):
         return
         s = IspringApi().get_content()
         courses = get_ispring_contents(s)
         print(courses)
-

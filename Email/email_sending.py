@@ -48,17 +48,17 @@ class EmailSending:
         msg = MIMEMultipart()
         msg['From'] = self.from_email
         msg['Subject'] = self.subject
-        if type(self.to) == str:
+        if type(self.to) is str:
             msg['To'] = self.to
         else:
             msg['To'] = ','.join(self.to)
 
-        if type(self.cc) == str:
+        if type(self.cc) is str:
             msg['Cc'] = self.cc
         else:
             msg['Cc'] = ','.join(self.cc)
 
-        if type(self.bcc) == str:
+        if type(self.bcc) is str:
             msg['Bcc'] = self.bcc
         else:
             msg['Bcc'] = ','.join(self.bcc)

@@ -11,6 +11,7 @@ from Ispring.session import Session
 from Utils.xml_to_dict import get_ispring_users, get_ispring_enrollments, get_ispring_contents
 from Utils.log import log
 
+
 class IspringApi:
     def __init__(self):
         self.url_base = 'https://api-learn.ispringlearn.ru'
