@@ -8,6 +8,7 @@ from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DO
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
+from config import SYSTEMLOG
 
 
 def is_empty_file(file) -> bool:
@@ -30,7 +31,7 @@ async def get_file(callback_query: types.callback_query):
     query = callback_query.data
     file = LOG_FILE
     if query == call_back.get_log_program:
-        file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
+        file = FSInputFile(SYSTEMLOG, 'systemlog.txt')
     elif query == call_back.get_log:
         file = FSInputFile(LOG_FILE, 'log_file.txt')
     elif query == call_back.get_template_file_xlsx:
