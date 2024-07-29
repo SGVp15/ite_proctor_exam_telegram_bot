@@ -14,6 +14,12 @@ async def main():
 
 
 if __name__ == '__main__':
-    log.warning('Exam_Registration_bot start')
-    asyncio.run(main())
-    # git pull https://github.com/SGVp15/proctor_exam_telegram_bot | python main.py
+
+    try:
+        log.info('Exam_Registration_bot START')
+        asyncio.run(main())
+    except:
+        pass
+    finally:
+        log.error('Exam_Registration_bot STOP')
+# git pull https://github.com/SGVp15/proctor_exam_telegram_bot | python main.py
