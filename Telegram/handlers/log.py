@@ -23,7 +23,6 @@ def is_empty_file(file) -> bool:
         return True
 
 
-
 @dp.message(Command('id'))
 async def send_id(message: types.Message):
     await message.answer(str(message.chat.id))
