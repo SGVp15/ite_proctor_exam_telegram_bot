@@ -15,12 +15,14 @@ from config import SYSTEMLOG
 def is_empty_file(file) -> bool:
     if not os.path.exists(file):
         return True
+
     try:
         with open(file=file, mode="r", encoding='utf-8') as f:
             s = f.read()
             return len(s) <= 10
-    except TypeError:
-        return False
+    except UnicodeDecodeError:
+        log.error('UnicodeDecodeError')
+    return False
 
 
 @dp.message(Command('id'))
