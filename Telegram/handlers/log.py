@@ -13,8 +13,11 @@ from config import SYSTEMLOG
 
 
 def is_empty_file(file) -> bool:
-    with open(file=file, mode="r", encoding='utf-8') as f:
-        s = f.read()
+    try:
+        with open(file=file, mode="r", encoding='utf-8') as f:
+            s = f.read()
+    except TypeError:
+        return True
     return len(s) <= 10
 
 
@@ -30,6 +33,7 @@ async def send_id(message: types.Message):
 )
 async def get_file(callback_query: types.callback_query):
     query = callback_query.data
+
     if query == call_back.get_log_program:
         file = FSInputFile(SYSTEMLOG, 'systemlog.txt')
     elif query == call_back.get_log:
@@ -43,11 +47,12 @@ async def get_file(callback_query: types.callback_query):
         path = max(paths, key=os.path.getctime)
         file_name = os.path.basename(path)
         file = FSInputFile(path, file_name)
+
     try:
-        # if is_empty_file(file.path) and os.path():
-        # await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
-        #                                 reply_markup=inline_kb_main)
-        # else:
-        await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
+        if is_empty_file(file.path):
+            await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
+                                            reply_markup=inline_kb_main)
+        else:
+            await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
     except UnicodeDecodeError:
         log.error('UnicodeDecodeError')
