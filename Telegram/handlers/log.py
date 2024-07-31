@@ -44,10 +44,10 @@ async def get_file(callback_query: types.callback_query):
         file_name = os.path.basename(path)
         file = FSInputFile(path, file_name)
     try:
-        if is_empty_file(file.path):
-            await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
-                                            reply_markup=inline_kb_main)
-        else:
-            await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
+        # if is_empty_file(file.path) and os.path():
+        # await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
+        #                                 reply_markup=inline_kb_main)
+        # else:
+        await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
     except UnicodeDecodeError:
         log.error('UnicodeDecodeError')
