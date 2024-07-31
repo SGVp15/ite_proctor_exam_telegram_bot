@@ -30,16 +30,12 @@ async def send_id(message: types.Message):
 )
 async def get_file(callback_query: types.callback_query):
     query = callback_query.data
-    file_path = LOG_FILE
     if query == call_back.get_log_program:
         file = FSInputFile(SYSTEMLOG, 'systemlog.txt')
-        file_path = SYSTEMLOG
     elif query == call_back.get_log:
         file = FSInputFile(LOG_FILE, 'log_file.txt')
-        file_path = LOG_FILE
     elif query == call_back.get_template_file_xlsx:
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
-        file_path = TEMPLATE_FILE_XLSX
     elif query == call_back.get_last_excel_file:
         path = os.path.join(DOCUMENTS)
         files = os.listdir(path)
@@ -48,7 +44,7 @@ async def get_file(callback_query: types.callback_query):
         file_name = os.path.basename(path)
         file = FSInputFile(path, file_name)
     try:
-        if is_empty_file(file_path):
+        if is_empty_file(file.path):
             await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
                                             reply_markup=inline_kb_main)
         else:
