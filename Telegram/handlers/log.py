@@ -8,6 +8,7 @@ from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DO
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
+from Utils.log import log
 from config import SYSTEMLOG
 
 
@@ -43,10 +44,11 @@ async def get_file(callback_query: types.callback_query):
         path = max(paths, key=os.path.getctime)
         file_name = os.path.basename(path)
         file = FSInputFile(path, file_name)
-    # try:
-    #     if is_empty_file(file):
-    #         await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
-    #                                         reply_markup=inline_kb_main)
-    # except UnicodeDecodeError:
-    #     ...
-    await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
+    try:
+        if is_empty_file(file):
+            await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
+                                            reply_markup=inline_kb_main)
+        else:
+            await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
+    except UnicodeDecodeError:
+        log.error('UnicodeDecodeError')
