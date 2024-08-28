@@ -1,4 +1,4 @@
-Добрый день, {{ user.lastName }} {{ user.firstName }}!
+Добрый день, {{ user.last_name_rus }} {{ user.first_name_rus }}!
 Вы зарегистрированы на экзамен {{ user.exam }}, который пройдет {{ user.dateExam }} по адресу г. Москва, Каланчевская ул., д. 15, офис 402 (Учебный центр).
 
 Логин:  {{ user.username }}
