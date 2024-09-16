@@ -81,7 +81,6 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
 
     # -------------- SEND EMAIL --------------
     for contact in contacts:
-        text = ''
         if contact.is_create_enrollment:
             if contact.proctor:
                 text = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
@@ -100,7 +99,7 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
     with open(LOG_FILE, mode='a', encoding='utf-8') as f:
         for contact in contacts:
             f.write(str(contact))
-            log.warning(contact)
+            log.info(contact)
 
     out_str = ''
     for contact in contacts:

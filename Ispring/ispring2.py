@@ -96,10 +96,10 @@ class IspringApi:
               f'    </learnerIds>' \
               f'    <accessDate>{access_date}</accessDate>' \
               f'    <dueDateType>{due_date_type}</dueDateType>' \
-              f'    <dueDate>2024-12-20 10:30:00</dueDate>' \
               f'    <duePeriod>3</duePeriod>' \
               f'</request>'
 
+        # f'    <dueDate>2024-12-20 10:30:00</dueDate>' \
         root = ET.fromstring(xml)
         for courseIds in root.iter('courseIds'):
             courseIds.set('id', 'yes')

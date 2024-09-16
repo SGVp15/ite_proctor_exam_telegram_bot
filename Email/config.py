@@ -12,4 +12,4 @@ EMAIL_BCC = ['g.savushkin@itexpert.ru', 'o.kuprienko@itexpert.ru', 'p.moiseenko@
 EMAIL_BCC_course = ['g.savushkin@itexpert.ru', 'a.rybalkin@itexpert.ru', 'kab@itexpert.ru']
 email_login_password = {}
 
-template_folder: str = os.path.join(os.getcwd(), 'Email', 'template_email')
+TEMPLATE_FOLDER: str = os.path.join(os.getcwd(), 'Email', 'template_email')
