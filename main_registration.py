@@ -14,6 +14,7 @@ from Utils.log import log
 
 
 async def registration(file=TEMPLATE_FILE_XLSX) -> str:
+    out_str = ''
     # -------------- Excel --------------
     contacts: list[Contact] = get_contact_from_excel(file)
     if not contacts:
@@ -78,6 +79,8 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
         contact.is_create_enrollment = ispring_api.create_enrollment(learner_id=contact.id_ispring,
                                                                      course_id=course_id,
                                                                      access_date=contact.scheduled_at)
+        if contact.is_create_enrollment is False:
+            out_str += f'[Error] ISPRINT ENROLLMENT {contact}\n'
 
     # -------------- SEND EMAIL --------------
     for contact in contacts:
@@ -88,11 +91,13 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
                 text = MyJinja(template_file=template_email_registration_exam_offline).render_document(user=contact)
             subject = f'Вы зарегистрированы на экзамен {contact.exam} {contact.date_exam}'
             if contact.proctor and not contact.url_proctor:
+                out_str += f'[Error] URL {contact}\n'
                 log.error(f'[Error] URL {contact}')
                 continue
             EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
             contact.status = 'Ok'
         else:
+            out_str += f'[Error] ISPRING not enrollment {contact}\n'
             log.error(f'[Error] ISPRING not enrollment {contact}')
 
     # Write Log
@@ -101,7 +106,6 @@ async def registration(file=TEMPLATE_FILE_XLSX) -> str:
             f.write(str(contact))
             log.info(contact)
 
-    out_str = ''
     for contact in contacts:
         out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
                     f'{contact.email} {contact.exam} {contact.date_exam}\n')
