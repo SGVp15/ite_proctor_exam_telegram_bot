@@ -8,12 +8,10 @@ from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
     StaleElementReferenceException
 from selenium.webdriver import Keys
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-
-from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from selenium_stealth import stealth
 
+from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Utils.log import log
 
 
