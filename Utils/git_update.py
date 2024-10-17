@@ -3,6 +3,8 @@ import subprocess
 import sys
 from asyncio import sleep
 
+from Utils.log import log
+
 
 def check_for_updates():
     result = subprocess.run(["git", "diff", "--name-only"], capture_output=True, text=True)
@@ -26,7 +28,7 @@ def restart_script():
 
 async def git_update():
     if check_for_updates():
-        print('check_for_updates [ ok ]')
+        log.info('BOT UPDATE')
         pull_updates()
         restart_script()
-    await sleep(10)  # Проверка каждые 60 секунд
+    await sleep(60)  # Проверка каждые 60 секунд
