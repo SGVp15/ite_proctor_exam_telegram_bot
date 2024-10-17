@@ -10,9 +10,7 @@ def check_for_updates():
     result = str(result).split('\n')
     if len(result) > 3:
         return True
-    print(result.stdout)
-    print(bool(result.stdout))
-    return bool(result.stdout)
+    print(result)
     return False
 
 
