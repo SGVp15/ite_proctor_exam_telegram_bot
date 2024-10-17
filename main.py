@@ -16,7 +16,6 @@ async def main():
 
 
 if __name__ == '__main__':
-
     try:
         log.info('Exam_Registration_bot START')
         asyncio.run(main())
