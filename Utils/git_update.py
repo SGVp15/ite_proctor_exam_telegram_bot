@@ -26,8 +26,9 @@ def restart_script():
 
 
 async def git_update():
-    if check_for_updates():
-        log.info('BOT UPDATE')
-        pull_updates()
-        restart_script()
-    await sleep(60)  # Проверка каждые 60 секунд
+    while True:
+        if check_for_updates():
+            log.info('BOT UPDATE')
+            pull_updates()
+            restart_script()
+        await sleep(60)  # Проверка каждые 60 секунд

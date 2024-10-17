@@ -9,8 +9,8 @@ from Utils.log import log
 
 async def main():
     tasks = [
-        git_update(),
         start_bot(),
+        git_update(),
     ]
     await asyncio.gather(*tasks)
 
