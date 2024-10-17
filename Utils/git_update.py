@@ -5,7 +5,8 @@ from asyncio import sleep
 
 
 def check_for_updates():
-    result = subprocess.run(["git", "diff", "--name-only"], capture_output=True, text=True)
+    result = subprocess.run(["git", "diff"], capture_output=True, text=True)
+    print(result.stdout)
     return bool(result.stdout)
 
 
@@ -20,6 +21,7 @@ def restart_script():
 
 async def git_update():
     if check_for_updates():
+        print('check_for_updates [ ok ]')
         pull_updates()
         restart_script()
     await sleep(60)  # Проверка каждые 60 секунд
