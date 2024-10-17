@@ -7,7 +7,6 @@ from Utils.log import log
 
 
 def check_for_updates():
-    result = subprocess.run(["git", "diff", "--name-only"], capture_output=True, text=True)
     result = subprocess.run(["git", "pull"], capture_output=True, text=True)
     rows = str(result.stdout).split('\n')
     if len(rows) > 3:
