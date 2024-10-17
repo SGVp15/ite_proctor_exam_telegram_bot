@@ -24,7 +24,7 @@ inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='📩 Скачать Шаблон', callback_data=CallBackData.get_template_file_xlsx), ],
     # [InlineKeyboardButton(text='📩 Скачать Поcледний excel', callback_data=CallBackData.get_last_excel_file), ],
     [InlineKeyboardButton(text='📒 Показать входящие файлы', callback_data=CallBackData.show_list_file), ],
-    [InlineKeyboardButton(text='Показать регистрацию ISPRING', callback_data=CallBackData.show_registration), ],
+    [InlineKeyboardButton(text='📒 Показать регистрацию ISPRING 📒', callback_data=CallBackData.show_registration), ],
     [InlineKeyboardButton(text='🗑 Удалить регистрацию ISPRING 🗑', callback_data=CallBackData.edit_registration), ],
     [InlineKeyboardButton(text='>> Admin >>', callback_data=CallBackData.admin_menu), ],
 ])
