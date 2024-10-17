@@ -24,4 +24,4 @@ async def git_update():
         print('check_for_updates [ ok ]')
         pull_updates()
         restart_script()
-    await sleep(60)  # Проверка каждые 60 секунд
+    await sleep(10)  # Проверка каждые 60 секунд
