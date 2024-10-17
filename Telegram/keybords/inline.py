@@ -16,7 +16,7 @@ def del_enrollment(enrollment_id: str):
 
 
 def add_return_main_menu():
-    return [InlineKeyboardButton(text='<< Back <<', callback_data=CallBackData.back_to_main), ]
+    return [InlineKeyboardButton(text='🔙 Назад', callback_data=CallBackData.back_to_main), ]
 
 
 inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
