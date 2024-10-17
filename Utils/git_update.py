@@ -6,9 +6,14 @@ from asyncio import sleep
 
 def check_for_updates():
     result = subprocess.run(["git", "diff", "--name-only"], capture_output=True, text=True)
+    result = subprocess.run(["git", "pull"], capture_output=True, text=True)
+    result = str(result).split('\n')
+    if result > 3:
+        return True
     print(result.stdout)
     print(bool(result.stdout))
     return bool(result.stdout)
+    return False
 
 
 def pull_updates():
