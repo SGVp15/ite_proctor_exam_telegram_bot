@@ -5,8 +5,8 @@ from asyncio import sleep
 
 
 def check_for_updates():
-    result = subprocess.run(["git", "diff"], capture_output=True, text=True)
-    print(result.stdout)
+    result = subprocess.run(["git", "diff", "--name-only"], capture_output=True, text=True)
+    print(bool(result.stdout))
     return bool(result.stdout)
 
 
