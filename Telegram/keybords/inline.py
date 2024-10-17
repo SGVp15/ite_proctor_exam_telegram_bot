@@ -10,7 +10,7 @@ inline_btn_logs = InlineKeyboardButton(text='Скачать Логи', callback_
 
 def del_enrollment(enrollment_id: str):
     inline_kb_del = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Delete', callback_data=f'{CallBackData.del_registration}{enrollment_id}'), ],
+        [InlineKeyboardButton(text='🗑 Delete', callback_data=f'{CallBackData.del_registration}{enrollment_id}'), ],
     ])
     return inline_kb_del
 
