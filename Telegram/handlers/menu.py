@@ -1,7 +1,7 @@
 from aiogram import types, F
 
 from Telegram.config import ADMIN_ID
-from Telegram.keybords.inline import inline_kb_admin, inline_kb_main
+from Telegram.keybords.inline import k_admin_menu, inline_kb_main
 from Telegram.main import bot, dp
 from Telegram.Call_Back_Data import CallBackData
 
@@ -10,7 +10,7 @@ from Telegram.Call_Back_Data import CallBackData
 async def admin_menu(callback_query: types.callback_query):
     await bot.edit_message_reply_markup(chat_id=callback_query.from_user.id,
                                         message_id=callback_query.message.message_id,
-                                        reply_markup=inline_kb_admin)
+                                        reply_markup=k_admin_menu)
 
 
 @dp.callback_query(F.data.in_({CallBackData.back_to_main}))

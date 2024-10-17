@@ -15,7 +15,7 @@ def del_enrollment(enrollment_id: str):
     return inline_kb_del
 
 
-def add_return_main_menu():
+def button_return_main_menu():
     return [InlineKeyboardButton(text='🔙 Назад', callback_data=CallBackData.back_to_main), ]
 
 
@@ -30,9 +30,9 @@ inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 
-inline_kb_admin = InlineKeyboardMarkup(inline_keyboard=[
-    add_return_main_menu(),
+k_admin_menu = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='📄 Скачать Логи Программные 📄', callback_data=CallBackData.get_log_program), ],
+    button_return_main_menu(),
 ])
 
 
@@ -46,5 +46,5 @@ def get_list_files_keyboard(path=DOCUMENTS) -> [InlineKeyboardButton]:
                 InlineKeyboardButton(text=f'🗑 {file}', callback_data=f'{CallBackData.file_delete_}{file}'),
             ]
         )
-    out_buttons.append(add_return_main_menu())
+    out_buttons.append(button_return_main_menu())
     return InlineKeyboardMarkup(inline_keyboard=[*out_buttons])
