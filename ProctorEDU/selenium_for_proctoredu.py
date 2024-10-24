@@ -12,6 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium_stealth import stealth
 
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
+from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.log import log
 
 
@@ -33,6 +34,8 @@ async def activate_windows():
 
 class ProctorEduSelenium:
     def __init__(self):
+        ChromedriverAutoupdate(operatingSystem="win").check()
+
         options = webdriver.ChromeOptions()
         options.add_argument("start-maximized")
 
