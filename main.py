@@ -1,6 +1,7 @@
 import asyncio
 
 from Telegram.main import start_bot
+from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log
 
@@ -16,6 +17,7 @@ async def main():
 
 
 if __name__ == '__main__':
+    ChromedriverAutoupdate(operatingSystem="win").check()
     try:
         log.info('Exam_Registration_bot START')
         asyncio.run(main())
