@@ -82,7 +82,6 @@ async def del_registration(callback_query: types.callback_query):
             & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def get_json(message: types.Message):
     await message.answer('Получил JSON', reply_markup=inline_kb_main)
-    # TODO распарсить json
     # answer = await registration()
     # await message.answer(answer, reply_markup=inline_kb_main)
     # loop.create_task(registration())
