@@ -11,8 +11,6 @@ def check_for_updates():
     rows = str(result.stdout).split('\n')
     if len(rows) > 3:
         return True
-    # print(result)
-    # print(bool(result.stdout))
     return False
 
 
