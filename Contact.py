@@ -1,10 +1,11 @@
 import datetime
-import random
 import hashlib
+import random
+
 from translit import transliterate, transliterate_error
 
 
-class Contact:
+class Contact():
     def __init__(self):
         self.name_eng: str | None = None
         self.last_name_rus: str | None = None
