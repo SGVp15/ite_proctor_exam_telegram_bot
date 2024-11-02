@@ -78,8 +78,8 @@ async def del_registration(callback_query: types.callback_query):
     )
 
 
-@dp.message(F.data.regexp('JSON=.*')
-            & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+@dp.message(F.text.regexp(r'{.*}') &
+            F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def get_json(message: types.Message):
     await message.answer('Получил JSON', reply_markup=inline_kb_main)
     # answer = await registration()
