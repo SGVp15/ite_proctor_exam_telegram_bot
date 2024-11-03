@@ -41,11 +41,11 @@ class User(BaseModel):
         return exam
 
 
-@app.post("/users_for_exam")
-def users(s: User):
-    s.allowed_exams = ''
-    return s
-
 @app.get("/allowed_exams")
 def get_allowed_exams():
     return allowed_exams
+
+
+@app.post("/users_for_exam")
+def users(user_list: User):
+    return user_list
