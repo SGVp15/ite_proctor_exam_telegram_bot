@@ -1,51 +1,28 @@
-from datetime import datetime
-
 from fastapi import FastAPI
-from pydantic import BaseModel, EmailStr, field_validator
+
+from Telegram.config import LOG_FILE
+from config import allowed_exams
+from fastAPI.user_api import User
 
 app = FastAPI()
-allowed_exams: list = [
-    'BAFC',
-    'BASRMC',
-    'CPIC',
-    'Cobit2019C',
-    'ICSC',
-    'ITAMC',
-    'ITHRC',
-    'ITIL4FC',
-    'OPSC',
-    'RCVC',
-    'RISKC',
-    'SCMC',
-    'SOA4C',
-    'SYSAC',
-]
-
-
-class User(BaseModel):
-    last_name_rus: str
-    first_name_rus: str
-    email: EmailStr
-    last_name_eng: str = ''
-    first_name_eng: str = ''
-    username: str | None = None
-    password: str | None = None
-    exam: str
-    is_online_exam: bool
-    date_exam: datetime
-
-    @field_validator('exam')
-    def validate_exam(exam):
-        if exam not in allowed_exams:
-            raise ValueError(f"Invalid exam: {exam}. Allowed exams are: {allowed_exams}")
-        return exam
 
 
 @app.get("/allowed_exams")
-def get_allowed_exams():
+async def get_allowed_exams():
     return allowed_exams
 
 
-@app.post("/users_for_exam")
-def users(user_list: User):
+@app.get("/show_queue_registration")
+async def show_queue_registration():
+    return 'show_queue_registration'
+
+
+@app.get("/log_registration")
+async def log_registration():
+    with open(LOG_FILE, encoding='utf-8', mode='r') as f:
+        return f.read()
+
+
+@app.post("/registration_for_exam")
+async def users(user_list: User):
     return user_list

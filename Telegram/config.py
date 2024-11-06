@@ -8,11 +8,13 @@ BOT_TOKEN: str | None = config.get('BOT_TOKEN')
 ADMIN_ID: list[int] = [int(x) for x in config['ADMIN_ID'].split(',')]
 USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 
+os.makedirs(os.path.join(os.getcwd(), 'data'), exist_ok=True)
 LOG_FILE: str = os.path.join(os.getcwd(), 'data', 'log.txt')
 
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 
+os.makedirs(os.path.join(os.getcwd(), 'data', 'output', 'template'), exist_ok=True)
 TEMPLATE_FILE_XLSX: str = os.path.join(os.getcwd(), 'data', 'output', 'template', 'template.xlsx')
 PAGE_NAME: str = 'Экзамены'
 
@@ -30,7 +32,7 @@ Proctor_column: str = 'K'
 
 #  == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL
 #  ====================================================================================================================
-
+os.makedirs(os.path.join(os.getcwd(), 'data', 'input', 'documents'), exist_ok=True)
 DOCUMENTS: str = os.path.join(os.getcwd(), 'data', 'input', 'documents')
 
 PATH_DOWNLOAD_FILE: str = os.path.join(os.getcwd(), 'data', 'input')
