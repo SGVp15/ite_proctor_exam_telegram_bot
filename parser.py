@@ -25,10 +25,6 @@ def get_all_courses(xml: str) -> dict:
 
 
 def get_all_users(xml: str) -> list[dict]:
-    """
-
-    :rtype: object
-    """
     root = ET.fromstring(xml)
     users: list[dict] = []
     for i, group1 in enumerate(root.findall('userProfile')):
