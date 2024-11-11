@@ -4,7 +4,7 @@ from aiogram import types, F
 from aiogram.types import FSInputFile
 
 from Telegram.Call_Back_Data import CallBackData
-from Telegram.config import USERS_ID, ADMIN_ID, DOCUMENTS
+from config import USERS_ID, ADMIN_ID, DOCUMENTS
 from Telegram.keybords.inline import inline_kb_main, get_list_files_keyboard
 from Telegram.main import dp, bot
 

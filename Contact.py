@@ -1,8 +1,8 @@
 import datetime
-import hashlib
 import random
 
-from translit import transliterate, transliterate_error
+from Utils.utils import to_md5
+from Utils.translit import transliterate, transliterate_error
 
 
 class Contact():
@@ -89,7 +89,3 @@ class Contact():
             return True
 
         return False
-
-
-def to_md5(s: str):
-    return hashlib.md5(s.encode()).hexdigest()

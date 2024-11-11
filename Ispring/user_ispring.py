@@ -1,9 +1,3 @@
-import datetime
-import random
-import hashlib
-from translit import transliterate, transliterate_error
-
-
 class UserIspring:
     def __init__(self):
         '''<?xml version="1.0" encoding="UTF-8"?>

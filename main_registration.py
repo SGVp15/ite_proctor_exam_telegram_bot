@@ -2,10 +2,10 @@ import asyncio
 from random import choice
 
 from Contact import Contact
-from Telegram.config import TEMPLATE_FILE_XLSX, LOG_FILE
+from config import LOG_FILE
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
-from parser import get_all_courses, get_all_users, get_contact_from_excel
+from parser import get_all_courses, get_all_users
 from ProctorEDU.csv_creator import create_csv
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
@@ -13,13 +13,8 @@ from Email import EmailSending, template_email_registration_exam_offline, templa
 from Utils.log import log
 
 
-async def registration(file=TEMPLATE_FILE_XLSX) -> str:
+async def registration(contacts: [Contact]) -> str:
     out_str = ''
-    # -------------- Excel --------------
-    contacts: list[Contact] = get_contact_from_excel(file)
-    if not contacts:
-        return 'No contact'
-
     # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in contacts if c.proctor]
     if contacts_proctor:

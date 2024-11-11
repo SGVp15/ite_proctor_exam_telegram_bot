@@ -2,17 +2,9 @@ import datetime
 import re
 import xml.etree.ElementTree as ET
 
-from openpyxl.reader.excel import load_workbook
-
 from Contact import Contact
-from Telegram.config import (
-    TEMPLATE_FILE_XLSX,
-    PAGE_NAME,
-    LastName_column, FirstName_column, Email_column, Exam_column,
-    Date_column, Hour_column, Minute_column,
-    FirstNameEng_column, LastNameEng_column,
-    Proctor_column, Password_column
-)
+from EXCEL.my_excel import read_excel_file
+from config import TEMPLATE_FILE_XLSX
 
 
 def get_all_courses(xml: str) -> dict:
@@ -47,49 +39,50 @@ def get_all_users(xml: str) -> list[dict]:
     return users
 
 
-def clean_export_excel(s):
-    s = s.replace(',', ', ')
-    s = re.sub(r'\s{2,}', ' ', s)
-    s = s.strip()
-    if s in ('None', '#N/A'):
+def clean_string(s: str):
+    if type(s) is str:
+        s = s.replace(',', ', ')
+        s = re.sub(r'\s{2,}', ' ', s)
+        s = s.strip()
+    elif s in ('None', '#N/A', None):
         s = ''
     return s
 
 
-def read_excel(excel, column, row):
-    sheet_ranges = excel[PAGE_NAME]
-    return str(sheet_ranges[f'{column}{row}'].value)
-
-
-def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
-    file_excel = load_workbook(filename=filename, data_only=True)
+def get_contact_from_data(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
     users = []
-    i = 1
-    while i < 1000:
-        i += 1
+    sheet_data: dict = read_excel_file(filename=filename, sheet_names=('Экзамены',))
+    sheet_data = sheet_data.get('Экзамены')
+    for data in sheet_data[1:]:
         user = Contact()
 
-        user.last_name_rus = clean_export_excel(
-            read_excel(file_excel, column=LastName_column, row=i)).capitalize().strip()
-        if user.last_name_rus == '':
+        # LastName_column: str = 'A'	0
+        # FirstName_column: str = 'B'	1
+        # LastNameEng_column: str = 'C'	2
+        # FirstNameEng_column: str = 'D'	3
+        # Email_column: str = 'E'	4
+        # Password_column: str = 'F'	5
+        # Exam_column: str = 'G'	6
+        # Date_column: str = 'H'	7
+        # Hour_column: str = 'I'	8
+        # Minute_column: str = 'J'	9
+        # Proctor_column: str = 'K'	10
+        if data[0] is None:
             continue
-        user.first_name_rus = clean_export_excel(
-            read_excel(file_excel, column=FirstName_column, row=i)).capitalize().strip()
-        user.email = clean_export_excel(read_excel(file_excel, column=Email_column, row=i)).lower().strip()
-        user.password = clean_export_excel(read_excel(file_excel, column=Password_column, row=i)).strip()
+        user.last_name_rus = clean_string(data[0]).capitalize()
+        if user.last_name_rus in (None, ''):
+            continue
+        user.first_name_rus = clean_string(data[1]).capitalize()
+        user.last_name_eng = clean_string(data[2]).capitalize()
+        user.first_name_eng = clean_string(data[3]).capitalize()
+        user.email = clean_string(data[4]).lower()
+        user.password = clean_string(data[5])
+        user.exam = clean_string(data[6])
+        user.date_from_file = clean_string(data[7]).lower()
+        hour = int(clean_string(data[8]))
+        minute = int(clean_string(data[9]))
 
-        user.exam = clean_export_excel(read_excel(file_excel, column=Exam_column, row=i)).strip()
-
-        user.date_from_file = clean_export_excel(read_excel(file_excel, column=Date_column, row=i)).lower().strip()
-
-        hour = int(round(float(clean_export_excel(read_excel(file_excel, column=Hour_column, row=i)).lower())))
-        minute = int(round(float(clean_export_excel(read_excel(file_excel, column=Minute_column, row=i)).lower())))
-
-        user.first_name_eng = clean_export_excel(
-            read_excel(file_excel, column=FirstNameEng_column, row=i)).capitalize().strip()
-        user.last_name_eng = clean_export_excel(
-            read_excel(file_excel, column=LastNameEng_column, row=i)).capitalize().strip()
-        user.proctor = clean_export_excel(read_excel(file_excel, column=Proctor_column, row=i)).lower().strip()
+        user.proctor = clean_string(data[10])
         t = user.date_from_file
         t = re.sub(r'[^\d.]', '', t)
         t = t.split('.')
@@ -105,3 +98,10 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         if user.normalize():
             users.append(user)
     return users
+
+
+def get_contact_from_excel(file):
+    contacts: list[Contact] = get_contact_from_data(file)
+    if len(contacts) == 0:
+        return None
+    return contacts

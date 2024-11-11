@@ -4,12 +4,11 @@ from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
-from Telegram.config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS
+from config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEMLOG
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
 from Utils.log import log
-from config import SYSTEMLOG
 
 
 def is_empty_file(file) -> bool:

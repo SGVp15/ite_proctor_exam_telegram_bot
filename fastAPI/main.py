@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
-from Telegram.config import LOG_FILE
-from config import allowed_exams
+from config import LOG_FILE, allowed_exams
 from fastAPI.user_api import User
 
 app = FastAPI()
