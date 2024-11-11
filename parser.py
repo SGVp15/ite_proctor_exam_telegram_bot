@@ -67,6 +67,7 @@ def get_contact_from_data(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
         # Hour_column: str = 'I'	8
         # Minute_column: str = 'J'	9
         # Proctor_column: str = 'K'	10
+
         if data[0] is None:
             continue
         user.last_name_rus = clean_string(data[0]).capitalize()
