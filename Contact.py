@@ -76,7 +76,7 @@ class Contact():
             self.proctor = None
 
         if self.password == '' or self.password is None:
-            self.password = f'{self.username}_{random.randint(1000, 9999)}'
+            self.password = f'{self.username}_{random.randint(0000, 9999):04d}'
 
         self.subject = f'{self.date_exam_for_subject}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'
