@@ -1,7 +1,7 @@
 import datetime
 import random
 
-from Utils.utils import to_md5
+from Utils.utils import to_md5, clean_string
 from Utils.translit import transliterate, transliterate_error
 
 
@@ -37,12 +37,18 @@ class Contact():
         self.status = 'Error'
 
     def normalize(self) -> bool:
-        if self.first_name_eng == '' or self.first_name_eng is None:
+        self.first_name_rus = clean_string(self.first_name_rus).capitalize()
+        self.last_name_eng = clean_string(self.last_name_eng).capitalize()
+        self.first_name_eng = clean_string(self.first_name_eng).capitalize()
+        self.email = clean_string(self.email).lower()
+        self.date_from_file = clean_string(self.date_from_file).lower()
+
+        if self.first_name_eng in ('', None):
             self.first_name_eng = transliterate(f'{self.first_name_rus}').capitalize()
         else:
             self.first_name_eng = transliterate_error(self.first_name_eng)
 
-        if self.last_name_eng == '' or self.last_name_eng is None:
+        if self.last_name_eng in ('', None):
             self.last_name_eng = transliterate(f'{self.last_name_rus}').capitalize()
         else:
             self.last_name_eng = transliterate_error(self.last_name_eng)

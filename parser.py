@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 from Contact import Contact
 from EXCEL.my_excel import read_excel_file
-from config import TEMPLATE_FILE_XLSX
+from config import TEMPLATE_FILE_XLSX, PAGE_NAME
 
 
 def get_all_courses(xml: str) -> dict:
@@ -35,21 +35,9 @@ def get_all_users(xml: str) -> list[dict]:
     return users
 
 
-def clean_string(s: str):
-    if type(s) is str:
-        s = s.replace(',', ', ')
-        s = re.sub(r'\s{2,}', ' ', s)
-        s = s.strip()
-    elif s in ('None', '#N/A', None):
-        s = ''
-    return s
-
-
-def get_contact_from_data(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
+def get_contact_from_data(data_list) -> list[Contact]:
     users = []
-    sheet_data: dict = read_excel_file(filename=filename, sheet_names=('Экзамены',))
-    sheet_data = sheet_data.get('Экзамены')
-    for data in sheet_data[1:]:
+    for data in data_list:
         user = Contact()
 
         # LastName_column: str = 'A'	0
@@ -66,20 +54,20 @@ def get_contact_from_data(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
 
         if data[0] is None:
             continue
-        user.last_name_rus = clean_string(data[0]).capitalize()
+        user.last_name_rus = data[0]
         if user.last_name_rus in (None, ''):
             continue
-        user.first_name_rus = clean_string(data[1]).capitalize()
-        user.last_name_eng = clean_string(data[2]).capitalize()
-        user.first_name_eng = clean_string(data[3]).capitalize()
-        user.email = clean_string(data[4]).lower()
-        user.password = clean_string(data[5])
-        user.exam = clean_string(data[6])
-        user.date_from_file = clean_string(data[7]).lower()
-        hour = int(clean_string(data[8]))
-        minute = int(clean_string(data[9]))
+        user.first_name_rus = data[1]
+        user.last_name_eng = data[2]
+        user.first_name_eng = data[3]
+        user.email = data[4]
+        user.password = data[5]
+        user.exam = data[6]
+        user.date_from_file = data[7].lower()
+        hour = int(data[8])
+        minute = int(data[9])
 
-        user.proctor = clean_string(data[10])
+        user.proctor = data[10]
         t = user.date_from_file
         t = re.sub(r'[^\d.]', '', t)
         t = t.split('.')
@@ -97,8 +85,11 @@ def get_contact_from_data(filename=TEMPLATE_FILE_XLSX) -> list[Contact]:
     return users
 
 
-def get_contact_from_excel(file):
-    contacts: list[Contact] = get_contact_from_data(file)
+def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):
+    sheet_data: dict = read_excel_file(filename=filename, sheet_names=(PAGE_NAME,))
+    sheet_data = sheet_data.get(PAGE_NAME)
+
+    contacts: list[Contact] = get_contact_from_data(sheet_data[:1])
     if len(contacts) == 0:
         return None
     return contacts
