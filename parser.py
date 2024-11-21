@@ -35,7 +35,7 @@ def get_all_users(xml: str) -> list[dict]:
     return users
 
 
-def get_contact_from_data(data_list) -> list[Contact]:
+def get_contact_from_array(data_list) -> list[Contact]:
     users = []
     for data in data_list:
         user = Contact()
@@ -89,7 +89,7 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):
     sheet_data: dict = read_excel_file(filename=filename, sheet_names=(PAGE_NAME,))
     sheet_data = sheet_data.get(PAGE_NAME)
 
-    contacts: list[Contact] = get_contact_from_data(sheet_data[1:])
+    contacts: list[Contact] = get_contact_from_array(sheet_data[1:])
     if len(contacts) == 0:
         return None
     return contacts
