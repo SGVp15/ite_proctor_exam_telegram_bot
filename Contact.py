@@ -43,12 +43,12 @@ class Contact():
         self.email = clean_string(self.email).lower()
         self.date_from_file = clean_string(self.date_from_file).lower()
 
-        if self.first_name_eng in ('', None):
+        if not self.first_name_eng:
             self.first_name_eng = transliterate(f'{self.first_name_rus}').capitalize()
         else:
             self.first_name_eng = transliterate_error(self.first_name_eng)
 
-        if self.last_name_eng in ('', None):
+        if not self.last_name_eng:
             self.last_name_eng = transliterate(f'{self.last_name_rus}').capitalize()
         else:
             self.last_name_eng = transliterate_error(self.last_name_eng)
