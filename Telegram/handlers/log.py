@@ -31,19 +31,19 @@ async def send_id(message: types.Message):
 
 @dp.callback_query(
     F.data.in_(
-        {call_back.get_log, call_back.get_log_program, call_back.get_template_file_xlsx, call_back.get_last_excel_file})
+        {call_back.GET_LOG, call_back.GET_LOG_PROGRAM, call_back.GET_TEMPLATE_FILE_XLSX, call_back.GET_LAST_EXCEL_FILE})
     & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def get_file(callback_query: types.callback_query):
     query = callback_query.data
 
-    if query == call_back.get_log_program:
+    if query == call_back.GET_LOG_PROGRAM:
         file = FSInputFile(SYSTEMLOG, 'systemlog.txt')
-    elif query == call_back.get_log:
+    elif query == call_back.GET_LOG:
         file = FSInputFile(LOG_FILE, 'log_file.txt')
-    elif query == call_back.get_template_file_xlsx:
+    elif query == call_back.GET_TEMPLATE_FILE_XLSX:
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
-    elif query == call_back.get_last_excel_file:
+    elif query == call_back.GET_LAST_EXCEL_FILE:
         path = os.path.join(DOCUMENTS)
         files = os.listdir(path)
         paths = [os.path.join(path, basename) for basename in files]

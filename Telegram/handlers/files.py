@@ -16,11 +16,11 @@ def is_empty_file(file_path) -> bool:
 
 
 @dp.callback_query(
-    F.data.startswith(CallBackData.file_download_) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.startswith(CallBackData.FILE_DOWNLOAD_) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def download_file(callback_query: types.callback_query):
     query = callback_query.data
-    file_name = str(query).replace(CallBackData.file_download_, '')
+    file_name = str(query).replace(CallBackData.FILE_DOWNLOAD_, '')
     path = os.path.join(DOCUMENTS, file_name)
     if os.path.exists(path):
         file = FSInputFile(path, file_name)
@@ -31,11 +31,11 @@ async def download_file(callback_query: types.callback_query):
 
 
 @dp.callback_query(
-    F.data.startswith(CallBackData.file_delete_) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.startswith(CallBackData.FILE_DELETE_) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def delete_file(callback_query: types.callback_query):
     query = callback_query.data
-    file_name = str(query).replace(CallBackData.file_delete_, '')
+    file_name = str(query).replace(CallBackData.FILE_DELETE_, '')
     path = os.path.join(DOCUMENTS, file_name)
     if os.path.exists(path):
         os.remove(path)
@@ -46,7 +46,7 @@ async def delete_file(callback_query: types.callback_query):
                                reply_markup=get_list_files_keyboard())
 
 
-@dp.callback_query(F.data.in_({CallBackData.show_list_file}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+@dp.callback_query(F.data.in_({CallBackData.SHOW_LIST_FILE}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 async def show_list_files(callback_query: types.callback_query):
     await bot.send_message(
         chat_id=callback_query.from_user.id,

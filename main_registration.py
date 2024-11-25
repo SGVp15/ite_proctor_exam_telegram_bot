@@ -6,7 +6,7 @@ from config import LOG_FILE
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
 from parser import get_all_courses, get_all_users
-from ProctorEDU.csv_creator import create_csv
+from ProctorEDU.csv_creator import create_csv_files
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
 from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
@@ -19,7 +19,7 @@ async def registration(contacts: [Contact]) -> str:
     contacts_proctor = [c for c in contacts if c.proctor]
     if contacts_proctor:
         # Create CSV for ProctorEDU
-        await create_csv(contacts_proctor)
+        await create_csv_files(contacts_proctor)
 
         # Webdriver ProctorEDU
         drive = ProctorEduSelenium()
