@@ -2,7 +2,7 @@ import datetime
 import random
 
 from Utils.utils import to_md5, clean_string
-from Utils.translit import transliterate, transliterate_error
+from Utils.translit import transliterate, replace_ru_to_eng
 
 
 class Contact():
@@ -46,14 +46,14 @@ class Contact():
         if not self.first_name_eng:
             self.first_name_eng = transliterate(f'{self.first_name_rus}').capitalize()
         else:
-            self.first_name_eng = transliterate_error(self.first_name_eng)
+            self.first_name_eng = replace_ru_to_eng(self.first_name_eng)
 
         if not self.last_name_eng:
             self.last_name_eng = transliterate(f'{self.last_name_rus}').capitalize()
         else:
-            self.last_name_eng = transliterate_error(self.last_name_eng)
+            self.last_name_eng = replace_ru_to_eng(self.last_name_eng)
 
-        self.email = transliterate_error(self.email.strip())
+        self.email = replace_ru_to_eng(self.email.strip())
 
         self.name_eng = f'{self.first_name_eng} {self.last_name_eng}'
 

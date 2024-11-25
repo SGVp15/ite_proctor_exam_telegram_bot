@@ -21,7 +21,7 @@ def transliterate(string: str) -> str:
     return string
 
 
-def transliterate_error(string: str) -> str:
+def replace_ru_to_eng(string: str) -> str:
     # Dict for transliter
     abc = {'а': 'a', 'о': 'o', 'с': 'c', 'у': 'y',
            'и': 'u',
