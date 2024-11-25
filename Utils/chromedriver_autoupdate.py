@@ -57,7 +57,6 @@ class ChromedriverAutoupdate:
             return self.__errLog(e)
 
     def __update_driver(self, version):
-
         url = 'https://chromedriver.chromium.org/downloads'
         v = 0
 
@@ -96,3 +95,8 @@ class ChromedriverAutoupdate:
         with open(log_file_name, 'a', encoding='UTF-8') as f:
             traceback.print_exc(file=f)
         return f'{e}\nDetail: {log_file_name}'
+
+
+if __name__ == '__main__':
+    ChromedriverAutoupdate(operatingSystem="win").check()
+
