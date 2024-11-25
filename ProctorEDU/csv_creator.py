@@ -1,18 +1,18 @@
 import csv
 
-from ProctorEDU.config import csv_header_session, csv_header_user, SESSIONS_CSV_FILE, USERS_CSV_FILE
+from ProctorEDU.config import CSV_HEADER_SESSION, CSV_HEADER_USER, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Contact import Contact
 
 
 async def create_csv_files(contacts: list[Contact]):
     with open(SESSIONS_CSV_FILE, 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = csv_header_session.keys()
+        fieldnames = CSV_HEADER_SESSION.keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
 
         for contact in contacts:
-            csv_header_session.update({
+            CSV_HEADER_SESSION.update({
                 'student.username': contact.username,
                 'members': f'proctor-{contact.proctor}',
                 'subject': contact.subject,
@@ -22,18 +22,18 @@ async def create_csv_files(contacts: list[Contact]):
                 'removeAt': contact.remove_at,
             })
 
-            writer.writerow(csv_header_session)
+            writer.writerow(CSV_HEADER_SESSION)
 
     with open(USERS_CSV_FILE, 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = csv_header_user.keys()
+        fieldnames = CSV_HEADER_USER.keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
 
         for contact in contacts:
-            csv_header_user.update({
+            CSV_HEADER_USER.update({
                 'nickname': contact.email,
                 'username': contact.username,
                 'password': contact.password,
             })
-            writer.writerow(csv_header_user)
+            writer.writerow(CSV_HEADER_USER)
