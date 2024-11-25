@@ -91,6 +91,6 @@ class Contact():
         return self.s
 
     def __eq__(self, other):
-        if self.email == other.email and self.email and other.email:
+        if self.email == other.email and self.email:
             return True
         return False
