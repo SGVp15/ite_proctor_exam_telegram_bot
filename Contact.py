@@ -72,10 +72,10 @@ class Contact():
 
         self.username = self.name_eng.replace(' ', '_')
 
-        if self.proctor == '' or self.proctor is None:
+        if not self.proctor:
             self.proctor = None
 
-        if self.password == '' or self.password is None:
+        if not self.password:
             self.password = f'{self.username}_{random.randint(0, 9999):04d}'
 
         self.subject = f'{self.date_exam_for_subject}_{self.username}_' \

@@ -6,7 +6,7 @@ def to_md5(s: str):
     return hashlib.md5(s.encode()).hexdigest()
 
 
-def clean_string(s: str):
+def clean_string(s: str) -> str:
     if type(s) is str:
         s = s.replace(',', ', ')
         s = re.sub(r'\s{2,}', ' ', s)
