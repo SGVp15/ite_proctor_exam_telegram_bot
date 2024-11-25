@@ -81,6 +81,6 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):
     sheet_data = sheet_data.get(PAGE_NAME)
 
     contacts: list[Contact] = get_contact_from_array(sheet_data[1:])
-    if len(contacts) == 0:
+    if not contacts:
         return None
     return contacts

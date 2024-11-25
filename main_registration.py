@@ -53,12 +53,12 @@ async def registration(contacts: [Contact]) -> str:
     # Create ispring users with email <==> id_ispring and reset password if user exist
     for contact in contacts:
         contact.id_ispring = emails_user_id.get(contact.email, None)
-        if contact.id_ispring is None:
+        if not contact.id_ispring:
             for user in get_all_users(ispring_api.get_users()):
                 emails_user_id.update({user['EMAIL']: user['userId']})
         contact.id_ispring = emails_user_id.get(contact.email, None)
 
-        if contact.id_ispring is None:
+        if not contact.id_ispring:
             contact.id_ispring = ispring_api.create_user(contact)
         else:
             ispring_api.reset_password(contact)

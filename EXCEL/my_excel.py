@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 
 def read_excel_file(filename: str, sheet_names: tuple = None) -> {tuple}:
     workbook = load_workbook(filename=filename, read_only=True, data_only=True)
-    if sheet_names is None:
+    if not sheet_names:
         sheet_names = workbook.sheetnames
     all_data = {}
     for sheet_name in sheet_names:
