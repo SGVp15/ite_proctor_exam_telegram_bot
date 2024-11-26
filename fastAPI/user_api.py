@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, field_validator
 
-from config import allowed_exams
+from config import ALLOWED_EXAMS
 
 
 class User(BaseModel):
@@ -17,6 +17,6 @@ class User(BaseModel):
 
     @field_validator('exam')
     def validate_exam(exam):
-        if exam not in allowed_exams:
-            raise ValueError(f"Invalid exam: {exam}. Allowed exams are: {allowed_exams}")
+        if exam not in ALLOWED_EXAMS:
+            raise ValueError(f"Invalid exam: {exam}. Allowed exams are: {ALLOWED_EXAMS}")
         return exam
