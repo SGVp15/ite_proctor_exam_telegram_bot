@@ -41,7 +41,7 @@ ALLOWED_EXAMS: list = [
     'BAFC',
     'BASRMC',
     'CPIC',
-    'CobitC',
+    'Cobit2019C',
     'ICSC',
     'ITAMC',
     'ITHRC',
