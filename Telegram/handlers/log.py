@@ -4,7 +4,7 @@ from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
-from config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEMLOG
+from config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
@@ -38,7 +38,7 @@ async def get_file(callback_query: types.callback_query):
     query = callback_query.data
 
     if query == call_back.GET_LOG_PROGRAM:
-        file = FSInputFile(SYSTEMLOG, 'systemlog.txt')
+        file = FSInputFile(SYSTEM_LOG, 'systemlog.txt')
     elif query == call_back.GET_LOG:
         file = FSInputFile(LOG_FILE, 'log_file.txt')
     elif query == call_back.GET_TEMPLATE_FILE_XLSX:

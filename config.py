@@ -36,7 +36,7 @@ os.makedirs(os.path.join(os.getcwd(), 'data', 'input', 'documents'), exist_ok=Tr
 DOCUMENTS: str = os.path.join(os.getcwd(), 'data', 'input', 'documents')
 
 PATH_DOWNLOAD_FILE: str = os.path.join(os.getcwd(), 'data', 'input')
-SYSTEMLOG = os.path.join(os.getcwd(), 'data', 'systemlog.txt')
+SYSTEM_LOG = os.path.join(os.getcwd(), 'data', 'systemlog.txt')
 ALLOWED_EXAMS: list = [
     'BAFC',
     'BASRMC',
