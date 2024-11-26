@@ -110,7 +110,3 @@ async def registration(contacts: [Contact]) -> str:
         out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
                     f'{contact.email} {contact.exam} {contact.date_exam}\n')
     return out_str
-
-
-if __name__ == '__main__':
-    asyncio.run(registration())
