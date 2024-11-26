@@ -37,7 +37,7 @@ DOCUMENTS: str = os.path.join(os.getcwd(), 'data', 'input', 'documents')
 
 PATH_DOWNLOAD_FILE: str = os.path.join(os.getcwd(), 'data', 'input')
 SYSTEMLOG = os.path.join(os.getcwd(), 'data', 'systemlog.txt')
-allowed_exams: list = [
+ALLOWED_EXAMS: list = [
     'BAFC',
     'BASRMC',
     'CPIC',

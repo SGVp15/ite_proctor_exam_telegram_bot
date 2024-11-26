@@ -2,7 +2,7 @@ import asyncio
 from random import choice
 
 from Contact import Contact
-from config import LOG_FILE
+from config import LOG_FILE, ALLOWED_EXAMS
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
 from parser import get_all_courses, get_all_users
@@ -15,6 +15,11 @@ from Utils.log import log
 
 async def registration(contacts: [Contact]) -> str:
     out_str = ''
+    exams = [contact.exam for contact in contacts]
+    for exam in exams:
+        if exam not in ALLOWED_EXAMS:
+            return 'Проверьте курс'
+
     # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in contacts if c.proctor]
     if contacts_proctor:
