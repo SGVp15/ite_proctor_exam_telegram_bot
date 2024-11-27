@@ -16,12 +16,12 @@ from Utils.xml_to_dict import get_ispring_only_quiz
 
 class WebDriverIspring:
     def __init__(self):
-        ChromedriverAutoupdate(operatingSystem="win").check()
+        # ChromedriverAutoupdate(operatingSystem="win").check()
 
         options = webdriver.ChromeOptions()
-        options.add_argument("start-maximized")
+        # options.add_argument("start-maximized")
 
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
 
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
@@ -77,7 +77,7 @@ class WebDriverIspring:
     def check_(self):
         for url in self.urls:
             self.driver.get(url)
-            wait = WebDriverWait(self.driver, 10)
+            print(url)
             try:
                 check_box_send_email_to_user = self.get_(
                     By.XPATH,
