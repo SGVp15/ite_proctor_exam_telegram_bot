@@ -45,4 +45,5 @@ class Test(TestCase):
     def test_get_ispring_only_quiz(self):
         s = IspringApi().get_content()
         courses = get_ispring_only_quiz(s)
+        self.urls = [f'https://itexpert.ispringlearn.ru/app/admin-portal/content/{c.get('contentItemId')}/edit/notifications' for c in courses]
         print(courses)

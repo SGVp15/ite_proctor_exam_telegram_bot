@@ -1,17 +1,14 @@
-import re
 import time
 
-import pyautogui
-import pyperclip
 from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
     StaleElementReferenceException
-from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium_stealth import stealth
 
-from Ispring.config import LOGIN_ISPRING, PASSWORD_ISPRING
-from ProctorEDU.config import USERS_CSV_FILE
+from Ispring.config import PASSWORD_ISPRING
+from Ispring.ispring2 import IspringApi
+from Utils.xml_to_dict import get_ispring_only_quiz
 
 
 class WebDriverIspring:
@@ -42,8 +39,16 @@ class WebDriverIspring:
         self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
                           ElementNotInteractableException)
         self.authorization()
-        self.urls = ['']
+
+
+        s = IspringApi().get_content()
+        courses = get_ispring_only_quiz(s)
+        self.urls = [
+            f'https://itexpert.ispringlearn.ru/app/admin-portal/content/{c.get('contentItemId')}/edit/notifications' for
+            c in courses]
+
         self.check_()
+
 
     def authorization(self):
         self.driver.get('https://itexpert.ispringlearn.ru/')
