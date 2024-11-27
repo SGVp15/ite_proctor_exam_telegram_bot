@@ -19,9 +19,9 @@ class WebDriverIspring:
         ChromedriverAutoupdate(operatingSystem="win").check()
 
         options = webdriver.ChromeOptions()
-        # options.add_argument("start-maximized")
+        options.add_argument("start-maximized")
 
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
 
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
@@ -41,6 +41,7 @@ class WebDriverIspring:
                 )
         self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
                           ElementNotInteractableException)
+
         self.authorization()
 
         s = IspringApi().get_content()
@@ -49,7 +50,7 @@ class WebDriverIspring:
             f'https://itexpert.ispringlearn.ru/app/admin-portal/content/{c.get('contentItemId')}/edit/notifications' for
             c in courses]
 
-        self.check_()
+        self.clicker_check_box()
 
     def find(self, by, value, timeout=10):
         wait = WebDriverWait(self.driver, timeout)
@@ -74,7 +75,7 @@ class WebDriverIspring:
             except self.web_error:
                 pass
 
-    def check_(self):
+    def clicker_check_box(self):
         for url in self.urls:
             self.driver.get(url)
             print(url)
