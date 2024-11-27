@@ -1,8 +1,8 @@
 import datetime
 import random
 
-from Utils.utils import to_md5, clean_string
 from Utils.translit import transliterate, replace_ru_char_to_eng_char
+from Utils.utils import to_md5, clean_string
 
 
 class Contact():
