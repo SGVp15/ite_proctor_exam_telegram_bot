@@ -2,7 +2,7 @@ import datetime
 import random
 
 from Utils.utils import to_md5, clean_string
-from Utils.translit import transliterate, replace_ru_to_eng
+from Utils.translit import transliterate, replace_ru_char_to_eng_char
 
 
 class Contact():
@@ -40,20 +40,20 @@ class Contact():
         self.first_name_rus = clean_string(self.first_name_rus).capitalize()
         self.last_name_eng = clean_string(self.last_name_eng).capitalize()
         self.first_name_eng = clean_string(self.first_name_eng).capitalize()
-        self.email = clean_string(self.email).lower()
+        self.email = replace_ru_char_to_eng_char(clean_string(self.email).lower())
         self.date_from_file = clean_string(self.date_from_file).lower()
 
         if not self.first_name_eng:
             self.first_name_eng = transliterate(f'{self.first_name_rus}').capitalize()
         else:
-            self.first_name_eng = replace_ru_to_eng(self.first_name_eng)
+            self.first_name_eng = replace_ru_char_to_eng_char(self.first_name_eng)
 
         if not self.last_name_eng:
             self.last_name_eng = transliterate(f'{self.last_name_rus}').capitalize()
         else:
-            self.last_name_eng = replace_ru_to_eng(self.last_name_eng)
+            self.last_name_eng = replace_ru_char_to_eng_char(self.last_name_eng)
 
-        self.email = replace_ru_to_eng(self.email.strip())
+        self.email = replace_ru_char_to_eng_char(self.email.strip())
 
         self.name_eng = f'{self.first_name_eng} {self.last_name_eng}'
 
