@@ -16,7 +16,7 @@ from Utils.xml_to_dict import get_ispring_only_quiz
 
 class WebDriverIspring:
     def __init__(self):
-        # ChromedriverAutoupdate(operatingSystem="win").check()
+        ChromedriverAutoupdate(operatingSystem="win").check()
 
         options = webdriver.ChromeOptions()
         # options.add_argument("start-maximized")
