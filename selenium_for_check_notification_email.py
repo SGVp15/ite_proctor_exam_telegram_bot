@@ -2,8 +2,10 @@ import time
 
 from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
-    StaleElementReferenceException
+    StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium_stealth import stealth
 
 from Ispring.config import PASSWORD_ISPRING
@@ -40,7 +42,6 @@ class WebDriverIspring:
                           ElementNotInteractableException)
         self.authorization()
 
-
         s = IspringApi().get_content()
         courses = get_ispring_only_quiz(s)
         self.urls = [
@@ -48,7 +49,6 @@ class WebDriverIspring:
             c in courses]
 
         self.check_()
-
 
     def authorization(self):
         self.driver.get('https://itexpert.ispringlearn.ru/')
@@ -69,7 +69,6 @@ class WebDriverIspring:
                     By.CLASS_NAME,
                     value='submit_button'
                 )
-                print('find')
                 button_enter.click()
                 time.sleep(1)
                 break
@@ -79,7 +78,42 @@ class WebDriverIspring:
     def check_(self):
         for url in self.urls:
             self.driver.get(url)
-            time.sleep(3)
+            wait = WebDriverWait(self.driver, 10)
+            try:
+                check_box_send_email_to_user = wait.until(EC.presence_of_element_located(
+                    (By.XPATH,
+                     '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[3]/div[2]/div/div[1]/div/div/input'
+                     )))
+                check_box_send_email_to_admin_exam_ok = wait.until(EC.presence_of_element_located(
+                    (By.XPATH,
+                     '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[7]/div[2]/div[2]/div[1]/div/div/input'
+                     )))
+                check_box_send_email_to_admin_exam_not_ok = wait.until(EC.presence_of_element_located(
+                    (By.XPATH,
+                     '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[7]/div[2]/div[2]/div[2]/div/div/input'
+                     )))
+
+                save_button = wait.until(EC.presence_of_element_located(
+                    (By.XPATH, '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[1]/button')))
+            except TimeoutException:
+                continue
+
+            if check_box_send_email_to_user.get_attribute('data-at') == 'state=true':
+                check_box_send_email_to_user.click()
+                save_button.click()
+                print('send_email_to_user', url)
+
+            if check_box_send_email_to_admin_exam_ok.get_attribute('data-at') != 'state=true':
+                check_box_send_email_to_admin_exam_ok.click()
+                time.sleep(1)
+                save_button.click()
+                print('admin_exam_ok', url)
+
+            if check_box_send_email_to_admin_exam_not_ok.get_attribute('data-at') != 'state=true':
+                check_box_send_email_to_admin_exam_not_ok.click()
+                time.sleep(1)
+                save_button.click()
+                print('admin_exam_not_ok', url)
 
     def quit(self):
         self.driver.quit()
