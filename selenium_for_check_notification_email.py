@@ -19,7 +19,7 @@ class WebDriverIspring:
         # ChromedriverAutoupdate(operatingSystem="win").check()
 
         options = webdriver.ChromeOptions()
-        options.add_argument("start-maximized")
+        # options.add_argument("start-maximized")
 
         options.add_argument("--headless")
 
@@ -40,6 +40,7 @@ class WebDriverIspring:
         options.add_experimental_option("prefs", prefs)
 
         self.driver = webdriver.Chrome(options=options)
+        self.driver.minimize_window()
         stealth(self.driver,
                 languages=["ru-RU", "ru"],
                 vendor="Google Inc.",
@@ -56,8 +57,9 @@ class WebDriverIspring:
         s = IspringApi().get_content()
         courses = get_ispring_only_quiz(s)
         self.urls = [
-            f'https://itexpert.ispringlearn.ru/app/admin-portal/content/{c.get('contentItemId')}/edit/notifications' for
-            c in courses]
+            (f'https://itexpert.ispringlearn.ru/app/admin-portal/content/'
+             f'{c.get('contentItemId')}'
+             f'/edit/notifications') for c in courses]
         self.clicker_check_box()
 
     def find(self, by, value, timeout=10):
