@@ -21,7 +21,7 @@ class WebDriverIspring:
         options = webdriver.ChromeOptions()
         options.add_argument("start-maximized")
 
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
 
         os.makedirs("./Tutorial/down", exist_ok=True)
 
@@ -50,7 +50,6 @@ class WebDriverIspring:
                 )
         self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
                           ElementNotInteractableException)
-
 
         self.authorization()
 
@@ -88,9 +87,9 @@ class WebDriverIspring:
                 pass
 
     def clicker_check_box(self):
-        for url in self.urls:
+        for i, url in enumerate(self.urls):
             self.driver.get(url)
-            print(url)
+            print(i)
             try:
                 check_box_send_email_to_user = self.find(
                     By.XPATH,
