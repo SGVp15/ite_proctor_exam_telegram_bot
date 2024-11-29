@@ -1,3 +1,4 @@
+import os
 import time
 
 from selenium import webdriver
@@ -10,27 +11,35 @@ from selenium_stealth import stealth
 
 from Ispring.config import PASSWORD_ISPRING
 from Ispring.ispring2 import IspringApi
-from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.xml_to_dict import get_ispring_only_quiz
 
 
 class WebDriverIspring:
     def __init__(self):
-        ChromedriverAutoupdate(operatingSystem="win").check()
+        # ChromedriverAutoupdate(operatingSystem="win").check()
 
         options = webdriver.ChromeOptions()
         options.add_argument("start-maximized")
 
         # options.add_argument("--headless")
 
+        os.makedirs("./Tutorial/down", exist_ok=True)
+
+        prefs = {'download.default_directory': "./Tutorial/down",
+                 'download.prompt_for_download': False,
+                 'download.default_behavior': 'allow'}
+        options.add_experimental_option('prefs', prefs)
+
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--disable-notifications")
 
-        self.driver = webdriver.Chrome(
-            options=options
-        )
+        options = webdriver.ChromeOptions()
+        prefs = {"download.default_directory": "./Tutorial/down"}
+        options.add_experimental_option("prefs", prefs)
+
+        self.driver = webdriver.Chrome(options=options)
         stealth(self.driver,
                 languages=["ru-RU", "ru"],
                 vendor="Google Inc.",
@@ -42,6 +51,7 @@ class WebDriverIspring:
         self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
                           ElementNotInteractableException)
 
+
         self.authorization()
 
         s = IspringApi().get_content()
@@ -49,7 +59,6 @@ class WebDriverIspring:
         self.urls = [
             f'https://itexpert.ispringlearn.ru/app/admin-portal/content/{c.get('contentItemId')}/edit/notifications' for
             c in courses]
-
         self.clicker_check_box()
 
     def find(self, by, value, timeout=10):
@@ -71,6 +80,9 @@ class WebDriverIspring:
                 button_enter = self.find(By.CLASS_NAME, value='submit_button')
                 button_enter.click()
                 time.sleep(1)
+
+                cookies = self.driver.get_cookies()
+                print(cookies)
                 break
             except self.web_error:
                 pass
