@@ -105,6 +105,7 @@ async def registration(contacts: [Contact]) -> str:
             log.info(contact)
 
     for contact in contacts:
-        out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
-                    f'{contact.email} {contact.exam} {contact.date_exam}\n')
+        if contact.is_create_enrollment:
+            out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
+                        f'{contact.email} {contact.exam} {contact.date_exam}\n')
     return out_str
