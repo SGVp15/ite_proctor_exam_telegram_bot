@@ -79,8 +79,9 @@ async def registration(contacts: [Contact]) -> str:
         contact.is_create_enrollment = ispring_api.create_enrollment(learner_id=contact.id_ispring,
                                                                      course_id=course_id,
                                                                      access_date=contact.scheduled_at)
-        if contact.is_create_enrollment is False:
-            out_str += f'[Error] ISPRINT ENROLLMENT {contact}\n'
+        if not contact.is_create_enrollment:
+            out_str += f'[Error] ISPRINT not enrollment {contact}\n'
+            log.error(f'[Error] ISPRING not enrollment {contact}')
 
     # -------------- SEND EMAIL --------------
     for contact in contacts:
@@ -96,9 +97,6 @@ async def registration(contacts: [Contact]) -> str:
                 continue
             EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
             contact.status = 'Ok'
-        else:
-            out_str += f'[Error] ISPRING not enrollment {contact}\n'
-            log.error(f'[Error] ISPRING not enrollment {contact}')
 
     # Write Log
     with open(LOG_FILE, mode='a', encoding='utf-8') as f:
