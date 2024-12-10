@@ -88,7 +88,6 @@ class WebDriverIspring:
     def clicker_check_box(self):
         for i, url in enumerate(self.urls):
             self.driver.get(url)
-            print(i)
             try:
                 check_box_send_email_to_user = self.find_element(
                     By.XPATH,
