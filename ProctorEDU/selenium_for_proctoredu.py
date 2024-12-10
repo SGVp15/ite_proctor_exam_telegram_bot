@@ -9,11 +9,13 @@ from selenium.common import NoSuchElementException, ElementNotInteractableExcept
     StaleElementReferenceException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium_stealth import stealth
 
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.log import log
+from selenium.webdriver.support import expected_conditions as EC
 
 
 async def activate_windows():
@@ -61,29 +63,29 @@ class ProctorEduSelenium:
         self.web_error = (NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException,
                           ElementNotInteractableException)
 
+    def find_element(self, by, value, timeout=10):
+        wait = WebDriverWait(self.driver, timeout)
+        return wait.until(EC.presence_of_element_located((by, value)))
+
     async def authorization(self):
         self.driver.get('https://itexpert.proctoring.online/')
-
         for i in range(10):
             try:
-                await asyncio.sleep(0.2)
-                input_password = self.driver.find_element(
+                input_password = self.find_element(
                     By.XPATH,
                     value='/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
                 )
                 input_password.clear()
                 input_password.send_keys(PASSWORD_PROCTOREDU)
 
-                await asyncio.sleep(0.2)
-                input_login = self.driver.find_element(
+                input_login = self.find_element(
                     By.XPATH,
                     value='/html/body/div/div[2]/div[2]/div[2]/div/div[1]/div/input'
                 )
                 input_login.clear()
                 input_login.send_keys(LOGIN_PROCTOREDU)
 
-                await asyncio.sleep(0.2)
-                button_enter = self.driver.find_element(
+                button_enter = self.find_element(
                     By.XPATH,
                     value='//div[@class="webix_scroll_cont"]//button'
                 )
@@ -112,8 +114,7 @@ class ProctorEduSelenium:
         while True:
             try:
                 self.driver.get(url)
-                await asyncio.sleep(0.2)
-                button_upload = self.driver.find_element(By.XPATH, xpath)
+                button_upload = self.find_element(By.XPATH, xpath)
                 button_upload.click()
                 break
             except self.web_error:
@@ -134,9 +135,10 @@ class ProctorEduSelenium:
                 self.driver.get('https://itexpert.proctoring.online/#!/rooms')
                 await asyncio.sleep(1)
                 xpath = '//div[@class="webix_view webix_control webix_el_search"]/div/input'
-                self.driver.find_element(By.XPATH, xpath).clear()
-                self.driver.find_element(By.XPATH, xpath).send_keys(text_to_find)
-                self.driver.find_element(By.XPATH, xpath).send_keys(Keys.ENTER)
+                element = self.find_element(By.XPATH, xpath)
+                element.clear()
+                element.send_keys(text_to_find)
+                element.send_keys(Keys.ENTER)
                 await asyncio.sleep(1)
                 break
             except self.web_error:
@@ -156,12 +158,12 @@ class ProctorEduSelenium:
             try:
                 # Click first row
                 xpath = '//div[@column="1"][1]/div/a[1]'
-                self.driver.find_element(By.XPATH, xpath).click()
+                self.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
                 # Copy user link to clipboard
                 xpath = '//span[@class="webix_icon mdi mdi-link-variant"]//ancestor::button'
-                self.driver.find_element(By.XPATH, xpath).click()
+                self.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
                 buffer = ''
@@ -182,12 +184,12 @@ class ProctorEduSelenium:
         try:
             # Click to report
             xpath = '//a[@class="report_link webix_icon mdi mdi-file-video"]'
-            self.driver.find_element(By.XPATH, xpath).click()
+            self.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
 
             # Download PDF file
             xpath = '//span[@class="webix_icon_btn mdi mdi-file-pdf-box"]/ancestor::button'
-            self.driver.find_element(By.XPATH, xpath).click()
+            self.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
             return 'ok'
         except self.web_error:
@@ -197,7 +199,7 @@ class ProctorEduSelenium:
         await self.find_session(text_to_find)
         # Click first row
         xpath = '//div[@column="1"][1]/div/a[1]'
-        self.driver.find_element(By.XPATH, xpath).click()
+        self.find_element(By.XPATH, xpath).click()
         await asyncio.sleep(5)
 
         return ''

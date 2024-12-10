@@ -68,7 +68,6 @@ class WebDriverIspring:
 
     def authorization(self):
         self.driver.get('https://itexpert.ispringlearn.ru/')
-        wait = WebDriverWait(self.driver, 10)
         for i in range(10):
             try:
                 input_login = self.find(By.ID, value='loginField')
@@ -80,10 +79,8 @@ class WebDriverIspring:
                 input_password.send_keys(PASSWORD_ISPRING)
                 button_enter = self.find(By.CLASS_NAME, value='submit_button')
                 button_enter.click()
-                time.sleep(1)
-
-                cookies = self.driver.get_cookies()
-                print(cookies)
+                # cookies = self.driver.get_cookies()
+                # print(cookies)
                 break
             except self.web_error:
                 pass
