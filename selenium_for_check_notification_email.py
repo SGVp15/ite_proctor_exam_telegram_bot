@@ -62,7 +62,7 @@ class WebDriverIspring:
              f'/edit/notifications') for c in courses]
         self.clicker_check_box()
 
-    def find(self, by, value, timeout=10):
+    def find_element(self, by, value, timeout=10):
         wait = WebDriverWait(self.driver, timeout)
         return wait.until(EC.presence_of_element_located((by, value)))
 
@@ -70,14 +70,14 @@ class WebDriverIspring:
         self.driver.get('https://itexpert.ispringlearn.ru/')
         for i in range(10):
             try:
-                input_login = self.find(By.ID, value='loginField')
+                input_login = self.find_element(By.ID, value='loginField')
                 input_login.clear()
                 input_login.send_keys('ANO_UC_DPO')
 
-                input_password = self.find(By.ID, value='passwordField')
+                input_password = self.find_element(By.ID, value='passwordField')
                 input_password.clear()
                 input_password.send_keys(PASSWORD_ISPRING)
-                button_enter = self.find(By.CLASS_NAME, value='submit_button')
+                button_enter = self.find_element(By.CLASS_NAME, value='submit_button')
                 button_enter.click()
                 # cookies = self.driver.get_cookies()
                 # print(cookies)
@@ -90,20 +90,20 @@ class WebDriverIspring:
             self.driver.get(url)
             print(i)
             try:
-                check_box_send_email_to_user = self.find(
+                check_box_send_email_to_user = self.find_element(
                     By.XPATH,
                     '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[3]/div[2]/div/div[1]/div/div/input'
                 )
-                check_box_send_email_to_admin_exam_ok = self.find(
+                check_box_send_email_to_admin_exam_ok = self.find_element(
                     By.XPATH,
                     '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[7]/div[2]/div[2]/div[1]/div/div/input'
                 )
-                check_box_send_email_to_admin_exam_not_ok = self.find(
+                check_box_send_email_to_admin_exam_not_ok = self.find_element(
                     By.XPATH,
                     '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[7]/div[2]/div[2]/div[2]/div/div/input'
                 )
 
-                save_button = self.find(
+                save_button = self.find_element(
                     By.XPATH, '/html/body/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/div/div[1]/button')
             except TimeoutException:
                 continue
