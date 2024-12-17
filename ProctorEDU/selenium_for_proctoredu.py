@@ -1,7 +1,7 @@
 import asyncio
 import re
+
 import keyboard
-import pyautogui
 import pygetwindow as pg
 import pyperclip
 from selenium import webdriver
