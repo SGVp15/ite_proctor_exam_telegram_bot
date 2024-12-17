@@ -1,22 +1,21 @@
 import asyncio
 import re
-
+import keyboard
 import pyautogui
 import pygetwindow as pg
 import pyperclip
-from anyio.abc import value
 from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
     StaleElementReferenceException, TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium_stealth import stealth
 
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.log import log
-from selenium.webdriver.support import expected_conditions as EC
 
 
 async def activate_windows():
@@ -140,9 +139,9 @@ class ProctorEduSelenium:
         await activate_windows()
 
         await asyncio.sleep(0.5)
-        pyautogui.write(file_path, interval=0.01)
+        keyboard.write(file_path)
         await asyncio.sleep(0.5)
-        pyautogui.press('enter')
+        keyboard.press('enter')
         await asyncio.sleep(3)
 
     async def find_session(self, text_to_find: str):
