@@ -4,9 +4,10 @@ import re
 import pyautogui
 import pygetwindow as pg
 import pyperclip
+from anyio.abc import value
 from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
-    StaleElementReferenceException
+    StaleElementReferenceException, TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -65,7 +66,11 @@ class ProctorEduSelenium:
 
     def find_element(self, by, value, timeout=10):
         wait = WebDriverWait(self.driver, timeout)
-        return wait.until(EC.presence_of_element_located((by, value)))
+        try:
+            element = wait.until(EC.presence_of_element_located((by, value)))
+            return element
+        except TimeoutException:
+            return None
 
     async def authorization(self):
         self.driver.get('https://itexpert.proctoring.online/')
@@ -75,35 +80,35 @@ class ProctorEduSelenium:
                     By.XPATH,
                     value='/html/body/div/div[2]/div[2]/div[2]/div/div[2]/div/input'
                 )
-                input_password.clear()
-                input_password.send_keys(PASSWORD_PROCTOREDU)
-
                 input_login = self.find_element(
                     By.XPATH,
                     value='/html/body/div/div[2]/div[2]/div[2]/div/div[1]/div/input'
                 )
-                input_login.clear()
-                input_login.send_keys(LOGIN_PROCTOREDU)
 
                 button_enter = self.find_element(
                     By.XPATH,
                     value='//div[@class="webix_scroll_cont"]//button'
                 )
-                button_enter.click()
+
+                if input_password and input_login and button_enter:
+                    input_login.clear()
+                    input_login.send_keys(LOGIN_PROCTOREDU)
+                    input_password.clear()
+                    input_password.send_keys(PASSWORD_PROCTOREDU)
+                    button_enter.click()
+
                 await asyncio.sleep(0.2)
                 break
             except self.web_error:
                 pass
 
-    async def alert_message(self):
+    def alert_message(self):
         self.driver.get(url='https://itexpert.proctoring.online/#!/users')
         try:
             self.find_element(
-                By.CLASS_NAME,
-                value='webix_message_area'
-            )
-        except self.web_error:
-            pass
+                By.XPATH, value='//div[@class="webix_message webix_debug"]', timeout=3).click()
+        except (*self.web_error, TimeoutException):
+            log.info('No alert_message')
 
     def is_authorized(self):
         if self.driver.current_url != 'https://itexpert.proctoring.online/#!/rooms':
@@ -113,7 +118,7 @@ class ProctorEduSelenium:
 
     async def create_users_and_session(self):
         await self.authorization()
-        await self.alert_message()
+        self.alert_message()
         if self.is_authorized:
             await self.send_csv(url='https://itexpert.proctoring.online/#!/users',
                                 file_path=USERS_CSV_FILE)
