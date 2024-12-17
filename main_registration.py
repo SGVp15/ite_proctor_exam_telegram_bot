@@ -68,7 +68,7 @@ async def registration(contacts: [Contact]) -> str:
         else:
             ispring_api.reset_password(contact)
             log.info(f' {contact.email} [reset password]')
-        log.info(contact.id_ispring)
+        log.info(f'{contact.id_ispring=}')
 
     # Get all courses ispring
     courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
