@@ -74,7 +74,7 @@ class ProctorEduSelenium:
 
     async def authorization(self):
         self.driver.get('https://itexpert.proctoring.online/')
-        for i in range(10):
+        for i in range(2):
             try:
                 input_password = self.find_element(
                     By.XPATH,
