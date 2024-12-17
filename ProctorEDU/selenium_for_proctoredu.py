@@ -95,6 +95,16 @@ class ProctorEduSelenium:
             except self.web_error:
                 pass
 
+    async def alert_message(self):
+        self.driver.get(url='https://itexpert.proctoring.online/#!/users')
+        try:
+            self.find_element(
+                By.CLASS_NAME,
+                value='webix_message_area'
+            )
+        except self.web_error:
+            pass
+
     def is_authorized(self):
         if self.driver.current_url != 'https://itexpert.proctoring.online/#!/rooms':
             log.info('Error authorization')
@@ -103,6 +113,7 @@ class ProctorEduSelenium:
 
     async def create_users_and_session(self):
         await self.authorization()
+        await self.alert_message()
         if self.is_authorized:
             await self.send_csv(url='https://itexpert.proctoring.online/#!/users',
                                 file_path=USERS_CSV_FILE)
