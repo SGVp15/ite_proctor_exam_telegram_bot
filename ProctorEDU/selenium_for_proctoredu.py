@@ -146,20 +146,19 @@ class ProctorEduSelenium:
         await asyncio.sleep(3)
 
     async def find_session(self, text_to_find: str):
-        while True:
+        for _ in range(5):
             try:
                 self.driver.get('https://itexpert.proctoring.online/#!/rooms')
-                await asyncio.sleep(1)
-                xpath = '//div[@class="webix_view webix_control webix_el_search"]/div/input'
-                element = self.find_element(By.XPATH, xpath)
-                element.clear()
-                element.send_keys(text_to_find)
-                element.send_keys(Keys.ENTER)
+                element = self.find_element(By.XPATH,
+                                            '//div[@class="webix_view webix_control webix_el_search"]/div/input')
+                if element:
+                    element.clear()
+                    element.send_keys(text_to_find)
+                    element.send_keys(Keys.ENTER)
                 await asyncio.sleep(1)
                 break
             except self.web_error:
                 continue
-
         await asyncio.sleep(1)
 
     def get_urls_sessions(self, list_session: str):
