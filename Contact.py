@@ -1,5 +1,6 @@
 import datetime
 import random
+import re
 
 from Utils.translit import transliterate, replace_ru_char_to_eng_char
 from Utils.utils import to_md5, clean_string
@@ -70,10 +71,7 @@ class Contact():
         self.deadline = deadline.strftime(pattern_time)
         self.remove_at = remove_at.strftime(pattern_time)
 
-        self.username = self.name_eng.replace(' ', '_')
-
-        if not self.proctor:
-            self.proctor = None
+        self.username = re.sub(r'[ ]+', '_', self.name_eng.strip())
 
         if not self.password:
             self.password = f'{self.username}_{random.randint(0, 9999):04d}'

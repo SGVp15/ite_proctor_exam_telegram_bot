@@ -68,17 +68,18 @@ class WebDriverIspring:
 
     def authorization(self):
         self.driver.get('https://itexpert.ispringlearn.ru/')
-        for i in range(10):
+        for i in range(2):
             try:
                 input_login = self.find_element(By.ID, value='loginField')
-                input_login.clear()
-                input_login.send_keys('ANO_UC_DPO')
-
                 input_password = self.find_element(By.ID, value='passwordField')
-                input_password.clear()
-                input_password.send_keys(PASSWORD_ISPRING)
                 button_enter = self.find_element(By.CLASS_NAME, value='submit_button')
-                button_enter.click()
+                if input_password and input_login and button_enter:
+                    input_login.clear()
+                    input_login.send_keys('ANO_UC_DPO')
+
+                    input_password.clear()
+                    input_password.send_keys(PASSWORD_ISPRING)
+                    button_enter.click()
                 # cookies = self.driver.get_cookies()
                 # print(cookies)
                 break
