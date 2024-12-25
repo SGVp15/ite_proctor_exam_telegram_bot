@@ -71,13 +71,11 @@ async def show_exam_now(callback_query: types.callback_query):
     try:
         with open(LOG_FILE, 'r', encoding='utf-8') as f:
             s = f.read()
-        subjects = re.findall(r'\ssubject=([^\s]+)\s', s)
-
         now = datetime.now()
         now = now.strftime(f'%Y-%m-%d')
+        subjects = re.findall(rf'\ssubject=({now}[^\s]+)\s', s)
+
         subjects_now = '\n'.join([s for s in subjects if re.findall(now, s)])
-        await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=subjects_now,
-                                        reply_markup=inline_kb_main)
+        await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}', reply_markup=inline_kb_main)
     except Exception as e:
-        await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=e,
-                                        reply_markup=inline_kb_main)
+        await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)
