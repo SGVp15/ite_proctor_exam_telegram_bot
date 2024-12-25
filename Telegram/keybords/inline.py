@@ -20,6 +20,7 @@ def button_return_main_menu():
 
 
 inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Какие экзамены сегодня?', callback_data=CallBackData.SHOW_EXAM_NOW), ],
     [InlineKeyboardButton(text='📄 Скачать Логи 📄', callback_data=CallBackData.GET_LOG), ],
     [InlineKeyboardButton(text='📦 Скачать Шаблон 📦', callback_data=CallBackData.GET_TEMPLATE_FILE_XLSX), ],
     # [InlineKeyboardButton(text='📩 Скачать Поcледний excel', callback_data=CallBackData.get_last_excel_file), ],

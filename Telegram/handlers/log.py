@@ -1,4 +1,6 @@
 import os
+import re
+from datetime import datetime
 
 from aiogram import types, F
 from aiogram.filters import Command
@@ -59,3 +61,23 @@ async def get_file(callback_query: types.callback_query):
             await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
     except UnicodeDecodeError:
         log.error('UnicodeDecodeError')
+
+
+@dp.callback_query(
+    F.data.in_({call_back.SHOW_EXAM_NOW, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+)
+async def show_exam_now(callback_query: types.callback_query):
+    'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
+    try:
+        with open(LOG_FILE, 'r', encoding='utf-8') as f:
+            s = f.read()
+        subjects = re.findall(r'\ssubject=([^\s]+)\s', s)
+
+        now = datetime.now()
+        now = now.strftime(f'%Y-%m-%d')
+        subjects_now = '\n'.join([s for s in subjects if re.findall(now, s)])
+        await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=subjects_now,
+                                        reply_markup=inline_kb_main)
+    except Exception as e:
+        await bot.answer_callback_query(chat_id=callback_query.from_user.id, text=e,
+                                        reply_markup=inline_kb_main)
