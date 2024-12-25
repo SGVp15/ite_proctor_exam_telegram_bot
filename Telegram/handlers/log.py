@@ -76,6 +76,6 @@ async def show_exam_now(callback_query: types.callback_query):
         subjects = re.findall(rf'\ssubject=({now}[^\s]+)\s', s)
 
         subjects_now = '\n'.join([s for s in subjects if re.findall(now, s)])
-        await bot.answer_callback_query(callback_query_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}', reply_markup=inline_kb_main)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}', reply_markup=inline_kb_main)
     except Exception as e:
-        await bot.answer_callback_query(callback_query_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)
