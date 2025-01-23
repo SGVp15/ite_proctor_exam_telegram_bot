@@ -186,17 +186,19 @@ class IspringApi:
 
 
 def get_session_in_enrollments_users_contents() -> list[Session]:
-    users = get_ispring_users(IspringApi().get_users())
-    enrollments = get_ispring_enrollments(IspringApi().get_enrollments())
-    courses = get_ispring_contents(IspringApi().get_content())
-
-    sessions: list[Session] = []
-    for enrollment in enrollments:
-        for user in users:
-            if enrollment.get('learnerId') == user.get('userId'):
-                for course in courses:
-                    if enrollment.get('courseId') == course.get('contentItemId'):
-                        sessions.append(Session(enrollment_dict=enrollment, user_dict=user, course_dict=course))
-                        break
-                break
+    try:
+        users = get_ispring_users(IspringApi().get_users())
+        enrollments = get_ispring_enrollments(IspringApi().get_enrollments())
+        courses = get_ispring_contents(IspringApi().get_content())
+        sessions: list[Session] = []
+        for enrollment in enrollments:
+            for user in users:
+                if enrollment.get('learnerId') == user.get('userId'):
+                    for course in courses:
+                        if enrollment.get('courseId') == course.get('contentItemId'):
+                            sessions.append(Session(enrollment_dict=enrollment, user_dict=user, course_dict=course))
+                            break
+                    break
+    except AttributeError:
+        sessions = []
     return sessions

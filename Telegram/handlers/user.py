@@ -1,6 +1,7 @@
 import os.path
 
 from aiogram import types, F
+from aiogram.types import CallbackQuery, message
 
 from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
@@ -13,7 +14,7 @@ from parser import get_contact_from_excel
 
 
 @dp.message(F.document & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def download_document_handle(message: types.Message):
+async def download_document_handle(message: message):
     # Get the file ID from the document object
     file_id = message.document.file_id
     # Download the file
@@ -36,7 +37,7 @@ async def download_document_handle(message: types.Message):
 
 
 @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def show_registration(callback_query: types.callback_query):
+async def show_registration(callback_query: CallbackQuery):
     sessions = get_session_in_enrollments_users_contents()
     sessions = sorted(sessions)
     for session in sessions:
@@ -54,7 +55,7 @@ async def show_registration(callback_query: types.callback_query):
 
 
 @dp.callback_query(F.data.in_({CallBackData.SHOW_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def show_registration(callback_query: types.callback_query):
+async def show_registration(callback_query: CallbackQuery):
     sessions = get_session_in_enrollments_users_contents()
     sessions = sorted(sessions)
     text = ''
@@ -70,7 +71,7 @@ async def show_registration(callback_query: types.callback_query):
 @dp.callback_query(
     F.data.regexp(f'{CallBackData.DEL_REGISTRATION}' + r'.*')
     & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def del_registration(callback_query: types.callback_query):
+async def del_registration(callback_query: CallbackQuery):
     delete_id = callback_query.data.replace(CallBackData.DEL_REGISTRATION, '')
     log.info(f'{delete_id=}')
     if IspringApi().delete_enrollment(delete_id):
