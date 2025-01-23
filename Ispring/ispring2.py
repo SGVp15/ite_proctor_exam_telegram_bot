@@ -185,12 +185,12 @@ class IspringApi:
         return group_id
 
 
-def get_session_in_enrollments_users_contents() -> list[Session]:
+def get_session_in_enrollments_users_contents() -> list[Session] | None:
     try:
+        sessions: list[Session] = []
         users = get_ispring_users(IspringApi().get_users())
         enrollments = get_ispring_enrollments(IspringApi().get_enrollments())
         courses = get_ispring_contents(IspringApi().get_content())
-        sessions: list[Session] = []
         for enrollment in enrollments:
             for user in users:
                 if enrollment.get('learnerId') == user.get('userId'):
