@@ -58,7 +58,7 @@ async def show_registration(callback_query: CallbackQuery):
 async def show_registration(callback_query: CallbackQuery):
     sessions = get_session_in_enrollments_users_contents()
     sessions = sorted(sessions)
-    text = ''
+    text = 'Регистрация:'
     for session in sessions:
         text += f'{session}\n'
     await bot.send_message(
