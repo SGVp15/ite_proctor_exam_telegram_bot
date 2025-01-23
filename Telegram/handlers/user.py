@@ -40,12 +40,17 @@ async def download_document_handle(message: message):
 async def show_registration(callback_query: CallbackQuery):
     sessions = get_session_in_enrollments_users_contents()
     sessions = sorted(sessions)
-    for session in sessions:
-        await bot.send_message(
-            chat_id=callback_query.from_user.id,
-            text=f'[{session}]',
-            reply_markup=del_enrollment(session.enrollment_id),
-        )
+    text = 'Ругистрация Ispring:\n'
+    if sessions:
+        for session in sessions:
+            await bot.send_message(
+                chat_id=callback_query.from_user.id,
+                text=f'{session}',
+                reply_markup=del_enrollment(session.enrollment_id),
+            )
+    else:
+        text = 'Никого нет.'
+
 
     await bot.send_message(
         chat_id=callback_query.from_user.id,
@@ -58,8 +63,8 @@ async def show_registration(callback_query: CallbackQuery):
 async def show_registration(callback_query: CallbackQuery):
     sessions = get_session_in_enrollments_users_contents()
     sessions = sorted(sessions)
-    text = 'Ругистрация:\n'
-    if not sessions:
+    text = 'Ругистрация Ispring:\n'
+    if sessions:
         for session in sessions:
             text += f'{session}\n'
     else:
