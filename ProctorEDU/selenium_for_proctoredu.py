@@ -109,11 +109,11 @@ class ProctorEduSelenium:
         except Exception:
             log.info('No alert_message')
 
-    def is_authorized(self):
+    def is_authorized(self) -> bool:
         if self.driver.current_url != 'https://itexpert.proctoring.online/#!/rooms':
             log.info('Error authorization')
-            return 0
-        return 1
+            return False
+        return True
 
     async def create_users_and_session(self):
         await self.authorization()
