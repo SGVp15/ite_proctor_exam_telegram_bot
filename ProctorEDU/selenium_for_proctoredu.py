@@ -125,8 +125,8 @@ class ProctorEduSelenium:
                                 file_path=SESSIONS_CSV_FILE)
 
     async def send_csv(self, url='https://itexpert.proctoring.online/#!/users', file_path=USERS_CSV_FILE):
-        xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
-        xpath = "//button[.//span[@class='webix_icon mdi mdi-upload']]"
+        _class = 'webix_icon mdi mdi-upload'
+        xpath = f"//button[.//span[@class={_class}]]"
         while True:
             try:
                 self.driver.get(url)
@@ -177,7 +177,8 @@ class ProctorEduSelenium:
                 await asyncio.sleep(1)
 
                 # Copy user link to clipboard
-                xpath = "//button[.//span[@class='webix_icon mdi mdi-link-variant']]"
+                _class = 'webix_icon mdi mdi-link-variant'
+                xpath = f"//button[.//span[@class={_class}]]"
                 self.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
@@ -203,7 +204,8 @@ class ProctorEduSelenium:
             await asyncio.sleep(1)
 
             # Download PDF file
-            xpath = '//span[@class="webix_icon_btn mdi mdi-file-pdf-box"]/ancestor::button'
+            _class = 'webix_icon_btn mdi mdi-file-pdf-box'
+            xpath = f"//button[.//span[@class={_class}]]"
             self.find_element(By.XPATH, xpath).click()
             await asyncio.sleep(1)
             return 'ok'
