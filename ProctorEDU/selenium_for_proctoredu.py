@@ -106,7 +106,7 @@ class ProctorEduSelenium:
         try:
             self.find_element(
                 By.XPATH, value='//div[@class="webix_message webix_debug"]', timeout=3).click()
-        except (*self.web_error, TimeoutException):
+        except (*self.web_error, TimeoutException, AttributeError):
             log.info('No alert_message')
 
     def is_authorized(self):
