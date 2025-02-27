@@ -126,6 +126,7 @@ class ProctorEduSelenium:
 
     async def send_csv(self, url='https://itexpert.proctoring.online/#!/users', file_path=USERS_CSV_FILE):
         xpath = '//span[@class="webix_icon mdi mdi-upload"]/ancestor::button'
+        xpath = "//button[.//span[@class='webix_icon mdi mdi-upload']]"
         while True:
             try:
                 self.driver.get(url)
