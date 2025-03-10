@@ -182,7 +182,7 @@ class ProctorEduSelenium:
 
                 # Copy user link to clipboard
                 _class = 'webix_icon mdi mdi-link-variant'
-                xpath = f"//button[.//span[@class="{_class}"]]"
+                xpath = f'//button[.//span[@class="{_class}"]]'
                 self.find_element(By.XPATH, xpath).click()
                 await asyncio.sleep(1)
 
