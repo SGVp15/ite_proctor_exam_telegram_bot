@@ -16,7 +16,6 @@ from selenium_stealth import stealth
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.log import log
-from Utils.Page import save_page
 
 
 async def activate_windows():
@@ -228,3 +227,15 @@ class ProctorEduSelenium:
 
     def quit(self):
         self.driver.quit()
+
+
+def save_page(html):
+    import os
+    from datetime import datetime
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    current_time = datetime.now().strftime("%H-%M-%S")
+    file = f"./logs/{current_date}/{current_time}.html"
+    os.makedirs(os.path.dirname(file), exist_ok=True)
+
+    with open(file, 'w') as f:
+        f.write(html)
