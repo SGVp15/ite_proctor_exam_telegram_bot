@@ -16,6 +16,7 @@ from selenium_stealth import stealth
 from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.log import log
+from Utils.save_page import save_page
 
 
 async def activate_windows():
@@ -135,6 +136,8 @@ class ProctorEduSelenium:
                 break
             except self.web_error:
                 await asyncio.sleep(0.2)
+                log.error(f'{xpath=}')
+                save_page(self.driver.page_source)
                 continue
 
         await activate_windows()
@@ -158,6 +161,7 @@ class ProctorEduSelenium:
                 await asyncio.sleep(1)
                 break
             except self.web_error:
+                save_page(self.driver.page_source)
                 continue
         await asyncio.sleep(1)
 
@@ -192,6 +196,7 @@ class ProctorEduSelenium:
                 else:
                     continue
             except self.web_error:
+                save_page(self.driver.page_source)
                 log.error('NoSuchElement')
         return ''
 
