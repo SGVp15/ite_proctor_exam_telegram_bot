@@ -23,6 +23,8 @@ class Contact():
         self.date_from_file = None
         self.date_exam = None
         self.date_exam_connect: str | None = None
+        self.openAt: str | None = None
+        self.closeAt: str | None = None
         self.remove_at: str | None = None
         self.deadline: str | None = None
         self.scheduled_at: str | None = None
@@ -65,10 +67,14 @@ class Contact():
         self.scheduled_at = self.date_exam + datetime.timedelta(hours=-3)
         deadline = self.scheduled_at + datetime.timedelta(hours=2)
         remove_at = self.scheduled_at + datetime.timedelta(days=90)
+        open_at = self.scheduled_at - datetime.timedelta(minutes=20)
+        close_at = self.scheduled_at + datetime.timedelta(hours=2,minutes=20)
 
         pattern_time = "%Y-%m-%dT%H:%M:%SZ"
         self.date_exam_for_subject = self.date_exam.strftime(pattern_time)
         self.deadline = deadline.strftime(pattern_time)
+        self.openAt = open_at.strftime(pattern_time)
+        self.closeAt = close_at.strftime(pattern_time)
         self.remove_at = remove_at.strftime(pattern_time)
 
         self.username = re.sub(r'[ ]+', '_', self.name_eng.strip())

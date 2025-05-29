@@ -18,6 +18,8 @@ async def create_csv_files(contacts: list[Contact]):
                 'subject': contact.subject,
                 'identifier': contact.identifier,
                 'scheduledAt': contact.scheduled_at,
+                'openAt': contact.scheduled_at,
+                'closeAt': contact.scheduled_at,
                 'deadline': contact.deadline,
                 'removeAt': contact.remove_at,
             })
