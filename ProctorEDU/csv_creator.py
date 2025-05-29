@@ -20,7 +20,7 @@ async def create_csv_files(contacts: list[Contact]):
                 'removeAt': contact.remove_at,
             })
         rows_field = [row.keys() for row in rows]
-        field_names = list(set(CSV_HEADER_SESSION.keys() + rows_field))
+        field_names = list(set(list(CSV_HEADER_SESSION.keys()) + list(rows_field)))
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
 
