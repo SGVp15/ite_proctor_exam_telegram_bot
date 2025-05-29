@@ -8,7 +8,6 @@ async def create_csv_files(contacts: list[Contact]):
     with open(SESSIONS_CSV_FILE, 'w', encoding='utf-8', newline='') as csvfile:
         fieldnames = CSV_HEADER_SESSION.keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        print(fieldnames)
         writer.writeheader()
 
         for contact in contacts:
