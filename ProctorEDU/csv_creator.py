@@ -6,13 +6,9 @@ from Contact import Contact
 
 async def create_csv_files(contacts: list[Contact]):
     with open(SESSIONS_CSV_FILE, 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = CSV_HEADER_SESSION.keys()
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        print(fieldnames)
-        writer.writeheader()
-
+        rows = []
         for contact in contacts:
-            CSV_HEADER_SESSION.update({
+            rows.append({
                 'student.username': contact.username,
                 'members': f'proctor-{contact.proctor}',
                 'subject': contact.subject,
@@ -23,12 +19,17 @@ async def create_csv_files(contacts: list[Contact]):
                 'deadline': contact.deadline,
                 'removeAt': contact.remove_at,
             })
+        rows_field = [row.keys() for row in rows]
+        field_names = list(set(CSV_HEADER_SESSION.keys() + rows_field))
+        writer = csv.DictWriter(csvfile, fieldnames=field_names)
+        writer.writeheader()
 
-            writer.writerow(CSV_HEADER_SESSION)
+        for row in rows:
+            writer.writerow(row)
 
     with open(USERS_CSV_FILE, 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = CSV_HEADER_USER.keys()
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        field_names = CSV_HEADER_USER.keys()
+        writer = csv.DictWriter(csvfile, fieldnames=field_names)
 
         writer.writeheader()
 
