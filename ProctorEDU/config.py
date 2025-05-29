@@ -48,6 +48,7 @@ CSV_HEADER_SESSION = {
     # 'stoppedAt': '',
     'openAt': '',
     'closeAt': '',
+
     # 'pausedAt': '',
     # 'signedAt': '',
     # 'error': '',
