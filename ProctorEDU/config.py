@@ -19,7 +19,7 @@ CSV_HEADER_SESSION = {
     'deadline': '',
     # 'rules': '',
     # 'url': 'https://itexpert.ispringlearn.ru/',
-    'url': 'https://ururulol.space/',
+    'url': 'https://exam.itexpert.ru/',
     'api': '',
     # 'addons': 'check,face,ready,track,record,screen,webrtc,content,preview,chat,finish,toolbox,shared',
     'addons': 'check,face,ready,track,record,screen,webrtc,content,preview,finish,toolbox,shared',
