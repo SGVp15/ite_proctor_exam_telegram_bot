@@ -40,48 +40,48 @@ async def registration(contacts: [Contact]) -> str:
         drive.quit()
 
     # -------------- ISPRING --------------
-    ispring_api = IspringApi()
-
-    emails_user_id = {}
-
-    for user in get_all_users(ispring_api.get_users()):
-        emails_user_id.update({user['EMAIL']: user['userId']})
-
-    # # delete contact ispring
+    # ispring_api = IspringApi()
+    #
+    # emails_user_id = {}
+    #
+    # for user in get_all_users(ispring_api.get_users()):
+    #     emails_user_id.update({user['EMAIL']: user['userId']})
+    #
+    # # # delete contact ispring
+    # # for contact in contacts:
+    # #     contact.id_ispring = emails_user_id.get(contact.email, None)
+    # #     if contact.id_ispring:
+    # #         ispring_api.delete_user(contact.id_ispring)
+    # #         log.warning(contact.email, ' - deleted')
+    # #         contact.id_ispring = None
+    #
+    # # Create ispring users with email <==> id_ispring and reset password if user exist
     # for contact in contacts:
     #     contact.id_ispring = emails_user_id.get(contact.email, None)
-    #     if contact.id_ispring:
-    #         ispring_api.delete_user(contact.id_ispring)
-    #         log.warning(contact.email, ' - deleted')
-    #         contact.id_ispring = None
-
-    # Create ispring users with email <==> id_ispring and reset password if user exist
-    for contact in contacts:
-        contact.id_ispring = emails_user_id.get(contact.email, None)
-        if not contact.id_ispring:
-            for user in get_all_users(ispring_api.get_users()):
-                emails_user_id.update({user['EMAIL']: user['userId']})
-        contact.id_ispring = emails_user_id.get(contact.email, None)
-
-        if not contact.id_ispring:
-            contact.id_ispring = ispring_api.create_user(contact)
-        else:
-            ispring_api.reset_password(contact)
-            log.info(f' {contact.email} [reset password]')
-        log.info(f'{contact.id_ispring=}')
-
-    # Get all courses ispring
-    courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
-
-    # User registration for the exam in ISPRING
-    for contact in contacts:
-        course_id = choice(courses_content_item_id[contact.exam])
-        contact.is_create_enrollment = ispring_api.create_enrollment(learner_id=contact.id_ispring,
-                                                                     course_id=course_id,
-                                                                     access_date=contact.scheduled_at)
-        if not contact.is_create_enrollment:
-            out_str += f'[Error] ISPRINT not enrollment {contact}\n'
-            log.error(f'[Error] ISPRING not enrollment {contact}')
+    #     if not contact.id_ispring:
+    #         for user in get_all_users(ispring_api.get_users()):
+    #             emails_user_id.update({user['EMAIL']: user['userId']})
+    #     contact.id_ispring = emails_user_id.get(contact.email, None)
+    #
+    #     if not contact.id_ispring:
+    #         contact.id_ispring = ispring_api.create_user(contact)
+    #     else:
+    #         ispring_api.reset_password(contact)
+    #         log.info(f' {contact.email} [reset password]')
+    #     log.info(f'{contact.id_ispring=}')
+    #
+    # # Get all courses ispring
+    # courses_content_item_id: dict = get_all_courses(ispring_api.get_content())
+    #
+    # # User registration for the exam in ISPRING
+    # for contact in contacts:
+    #     course_id = choice(courses_content_item_id[contact.exam])
+    #     contact.is_create_enrollment = ispring_api.create_enrollment(learner_id=contact.id_ispring,
+    #                                                                  course_id=course_id,
+    #                                                                  access_date=contact.scheduled_at)
+    #     if not contact.is_create_enrollment:
+    #         out_str += f'[Error] ISPRINT not enrollment {contact}\n'
+    #         log.error(f'[Error] ISPRING not enrollment {contact}')
 
     # -------------- SEND EMAIL --------------
     for contact in contacts:
