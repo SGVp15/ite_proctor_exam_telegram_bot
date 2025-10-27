@@ -77,10 +77,11 @@ class Contact:
         self.close_at = close_at.strftime(pattern_time)
         self.remove_at = remove_at.strftime(pattern_time)
 
-        self.username = re.sub(r'[ ]+', '_', self.name_eng.strip())
+        # self.username = re.sub(r'[ ]+', '_', self.name_eng.strip())
+        self.username = re.sub(r'[ ]+', '_', self.name_eng.strip().lower())
 
         if not self.password:
-            self.password = f'{self.username}_{random.randint(0, 9999):04d}'
+            self.password = f'{self.username}_P{random.randint(0, 9999):04d}'
 
         self.subject = f'{self.date_exam_for_subject}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'
