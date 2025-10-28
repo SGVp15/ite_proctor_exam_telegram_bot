@@ -1,5 +1,5 @@
-/data/
 /venv/
 /.env
 /chromedriver.exe
 /.idea/
+/data/output/csv/
