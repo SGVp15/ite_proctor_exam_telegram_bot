@@ -9,15 +9,12 @@
 Пароль: {{ user.password }}
 
 
-Перед началом экзамена выполните следующие действия:
-1. Установите расширение. https://chrome.google.com/webstore/detail/ignore-x-frame-headers/gleekbfjekiniecknbkamfmkohkpodhe
-2. Пройдите проверку правильной работы расширения. https://webbrowsertools.com/test-x-frame-options/
-3. Пройдите проверку оборудования. https://proctoredu.ru/check
+Перед началом экзамена пройдите проверку оборудования. https://proctoredu.ru/check
 
 Вся необходимая информация и инструкции доступны по ссылке. https://www.itexpert.ru/rus/about/instruction/
 Дополнительно вы можете посмотреть короткий видеоролик о прохождении экзамена. https://files.proctoring.online/rules/video-ru/v4/
 
-В случае возникновения сложностей вы можете обратиться к нам по адресу exam_support@itexpert.ru моб.+79269680854
+В случае возникновения сложностей вы можете обратиться к нам по адресу exam@itexpert.ru тел.+7 (495) 981-57-10 доб. 110
 Просим Вас подтвердить участие ответом на это письмо.
 
 
