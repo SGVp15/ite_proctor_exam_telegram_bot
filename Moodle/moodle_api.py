@@ -172,6 +172,8 @@ class MOODLE_API:
         4. Зачисляет пользователя на выбранный курс.
         '''
         requested_shortname = contact.course_small
+        print(contact)
+        print(type(contact.course_small))
         log.info(
             f"--- Запуск процесса для пользователя: {contact.email} и запрошенного курса: {requested_shortname} ---")
 
