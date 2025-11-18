@@ -2,6 +2,7 @@ import asyncio
 from random import choice
 
 from Contact import Contact
+from Moodle.moodle_api import MOODLE_API
 from config import LOG_FILE, ALLOWED_EXAMS
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
@@ -23,10 +24,8 @@ async def registration(contacts: [Contact]) -> str:
     # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in contacts if c.proctor]
     if contacts_proctor:
-        # Create CSV for ProctorEDU
         await create_csv_files(contacts_proctor)
 
-        # Webdriver ProctorEDU
         drive = ProctorEduSelenium()
         await drive.create_users_and_session()
 
@@ -82,6 +81,11 @@ async def registration(contacts: [Contact]) -> str:
     #     if not contact.is_create_enrollment:
     #         out_str += f'[Error] ISPRINT not enrollment {contact}\n'
     #         log.error(f'[Error] ISPRING not enrollment {contact}')
+
+
+    # -------------- Moodle --------------
+    moodle_api = MOODLE_API()
+    moodle_api.create_users_and_registration()
 
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')

@@ -1,0 +1,21 @@
+from pprint import pprint
+from unittest import TestCase
+
+from Moodle.moodle_api import MOODLE_API
+
+
+class TestMOODLE_API(TestCase):
+    # def test_core_user_create_users(self):
+    #     api = MOODLE_API()
+    #     api.core_user_create_users()
+    #     self.fail()
+
+    # def test_core_course_get_courses(self):
+    #     api = MOODLE_API()
+    #     courses = api.core_course_get_courses()
+    #     pprint(courses)
+
+    def test__get_id_shortname_course(self):
+        api = MOODLE_API()
+        courses = api._get_id_shortname_course()
+        pprint(courses)

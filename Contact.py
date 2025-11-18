@@ -34,6 +34,7 @@ class Contact:
         self.url_proctor: str | None = None
         self.url_course: str | None = None
         self.id_ispring: str | None = None
+        self.id_moodle: str | None = None
         self.status_ispring: str | None = None
         self.identifier: str | None = None
         self.is_create_enrollment: bool = False
