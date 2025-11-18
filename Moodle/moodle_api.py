@@ -171,9 +171,7 @@ class MOODLE_API:
         3. Случайным образом выбирает курс, если указан только префикс (например, 'BAFC').
         4. Зачисляет пользователя на выбранный курс.
         '''
-        requested_shortname = contact.course_small
-        print(contact)
-        print(type(contact.course_small))
+        requested_shortname = contact.exam
         log.info(
             f"--- Запуск процесса для пользователя: {contact.email} и запрошенного курса: {requested_shortname} ---")
 
