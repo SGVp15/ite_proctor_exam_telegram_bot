@@ -18,4 +18,9 @@ class TestMOODLE_API(TestCase):
     def test__get_id_shortname_course(self):
         api = MOODLE_API()
         courses = api._get_id_shortname_course()
-        pprint(courses)
+        requested_shortname='BAF'
+        possible_courses = [
+            shortname for shortname in courses.keys()
+            if shortname.startswith(requested_shortname)
+        ]
+        pprint(possible_courses)

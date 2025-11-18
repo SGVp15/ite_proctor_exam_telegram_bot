@@ -21,6 +21,11 @@ async def registration(contacts: [Contact]) -> str:
         if exam not in ALLOWED_EXAMS:
             return 'Проверьте курс'
 
+    # -------------- Moodle --------------
+    moodle_api = MOODLE_API()
+    for contact in contacts:
+        moodle_api.process_user_and_enrollment(contact=contact)
+
     # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in contacts if c.proctor]
     if contacts_proctor:
@@ -81,12 +86,6 @@ async def registration(contacts: [Contact]) -> str:
     #     if not contact.is_create_enrollment:
     #         out_str += f'[Error] ISPRINT not enrollment {contact}\n'
     #         log.error(f'[Error] ISPRING not enrollment {contact}')
-
-
-    # -------------- Moodle --------------
-    moodle_api = MOODLE_API()
-    for contact in contacts:
-        moodle_api.process_user_and_enrollment(contact=contact)
 
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')
