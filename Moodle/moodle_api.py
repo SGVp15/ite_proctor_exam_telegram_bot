@@ -1,6 +1,6 @@
 import urllib.parse
-from pprint import pprint
 from random import choice
+from pprint import pprint
 
 import requests
 
@@ -14,49 +14,64 @@ class MOODLE_API:
     RESPONSE_FORMAT = 'json'
     API_URL = f'{MOODLE_URL}/webservice/rest/server.php'
 
-    def core_user_get_users_by_field(self, value: str, field='email') -> dict:
-        """ - field can be 'id' or 'idnumber' or 'username' or 'email'"""
-        FUNCTION_NAME = "core_user_get_users_by_field"
-        # ... (Содержимое метода core_user_get_users_by_field) ...
-        # Кодирование параметров для URL
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
+    # --- ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ---
 
-        # --- 3. Параметры, передаваемые в теле POST (Данные функции) ---
+    def __get_url_with_params(self, function_name: str):
+        """Формирует полный URL с токеном и функцией Moodle."""
+        url_params = {
+            'wstoken': MOODLE_TOKEN,
+            'wsfunction': function_name,
+            'moodlewsrestformat': self.RESPONSE_FORMAT
+        }
+        url_with_params = self.API_URL + '?' + urllib.parse.urlencode(url_params)
+        return url_with_params
 
-        post_data_dict = {
-            'field': field,  # Поле, по которому ищем
-            'values[0]': value
+    @staticmethod
+    def __format_post_array(data: dict, array_name: str = 'users') -> dict:
+        """
+        Преобразует словарь в формат POST-данных Moodle-массива:
+        {'username': 'test'} -> {'users[0][username]': 'test'}
+        """
+        return {
+            f'{array_name}[0][{key}]': value
+            for key, value in data.items()
         }
 
-        # --- 4. Выполнение POST-запроса ---
-        try:
-            response = requests.post(
-                url_with_params,
-                data=post_data_dict
-            )
+    def _get_id_shortname_course(self) -> dict:
+        d = {}
+        for course in self.core_course_get_courses():
+            d[course.get('shortname')] = course.get('id')
+        return d
 
+    # --- ОСНОВНЫЕ МЕТОДЫ API ---
+
+    def core_user_get_users_by_field(self, value: str, field='email') -> dict:
+        """
+        Ищет пользователя по полю (email, username и т.д.).
+        Возвращает словарь с данными пользователя или пустой словарь {}.
+        """
+        FUNCTION_NAME = "core_user_get_users_by_field"
+        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
+
+        post_data_dict = {'field': field, 'values[0]': value}
+
+        try:
+            response = requests.post(url_with_params, data=post_data_dict)
             response.raise_for_status()
             data = response.json()
-            user = {}
-            # --- 5. Обработка ответа ---
-            if data and isinstance(data, list):
-                users_list = data
-                # Возвращаем первого пользователей (может быть пустым)
-                if users_list:
-                    user = users_list[0]
-                    return user
 
-            # --- 6. Обработка ошибок Moodle API ---
+            if data and isinstance(data, list) and data:
+                # Возвращаем первый найденный элемент
+                return data[0]
+
             elif isinstance(data, dict) and 'exception' in data:
-                log.error(
-                    f"\n❌ Ошибка Moodle API при поиске: {data.get('errorcode')}. Сообщение: {data.get('message')}")
-                return {}  # Возвращаем пустой список при ошибке
+                log.error(f"❌ Ошибка Moodle API при поиске: {data.get('errorcode')}. Сообщение: {data.get('message')}")
+                return {}
             else:
-                log.error(f"\n⚠️ Получен неожиданный формат ответа при поиске: {data}")
                 return {}
 
         except requests.exceptions.RequestException as e:
-            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP) при поиске: {e}")
+            log.error(f"❌ Произошла ошибка запроса (Сеть/HTTP) при поиске: {e}")
             return {}
 
     def core_user_create_users(self, user: Contact):
@@ -64,9 +79,6 @@ class MOODLE_API:
         FUNCTION_NAME = "core_user_create_users"
         url_with_params = self.__get_url_with_params(FUNCTION_NAME)
 
-        # ... (Остальной код core_user_create_users) ...
-        # --- 3. Параметры, передаваемые в теле POST (Данные нового пользователя) ---
-        # Функция core_user_create_users ожидает массив 'users'.
         NEW_USER_DATA = {
             'username': f'{user.username}',
             'password': f'{user.password}',
@@ -75,50 +87,73 @@ class MOODLE_API:
             'email': f'{user.email}',
         }
 
-        # Формируем словарь для POST-запроса, используя синтаксис массива Moodle: users[0][поле]
-        post_data_dict = {
-            f'users[0][{key}]': value
-            for key, value in NEW_USER_DATA.items()
-        }
+        # Используем вспомогательный метод для форматирования
+        post_data_dict = self.__format_post_array(NEW_USER_DATA, array_name='users')
 
-        log.info(f"Отправка POST запроса к: {url_with_params}")
         log.info(f"Попытка создать пользователя: {NEW_USER_DATA['username']}")
 
-        # --- 4. Выполнение POST-запроса ---
         try:
-            response = requests.post(
-                url_with_params,
-                data=post_data_dict
-            )
-
+            response = requests.post(url_with_params, data=post_data_dict)
             response.raise_for_status()
             data = response.json()
 
-            # --- 5. Обработка ответа ---
             if data and isinstance(data, list) and len(data) > 0 and 'id' in data[0]:
-                log.info("\n✅ Пользователь успешно создан! ")
                 new_user_info = data[0]
-                log.info(f"  Новый ID пользователя: {new_user_info.get('id')}")
+                log.info(f"✅ Пользователь успешно создан! ID: {new_user_info.get('id')}")
                 return new_user_info.get('id')
 
-            # --- 6. Обработка ошибок Moodle API ---
             elif isinstance(data, dict) and 'exception' in data:
-                log.error("\n❌ Ошибка Moodle API при создании:")
-                log.error(f"  Код ошибки: {data.get('errorcode')}")
-                log.error(f"  Сообщение: {data.get('message')}")
+                log.error(
+                    f"❌ Ошибка Moodle API при создании: {data.get('errorcode')}. Сообщение: {data.get('message')}")
                 return None
 
             else:
-                log.error(f"\n⚠️ Получен неожиданный формат ответа при создании: {data}")
+                log.error(f"⚠️ Получен неожиданный формат ответа при создании: {data}")
                 return None
 
         except requests.exceptions.RequestException as e:
-            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP) при создании: {e}")
+            log.error(f"❌ Произошла ошибка запроса (Сеть/HTTP) при создании: {e}")
             return None
 
+    def core_user_update_password(self, user_id: int, new_password: str) -> bool:
+        '''Обновляет пароль существующего пользователя по его ID (core_user_update_users).'''
+        FUNCTION_NAME = "core_user_update_users"
+        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
+
+        UPDATE_DATA = {
+            'id': user_id,
+            'password': new_password
+        }
+
+        # Используем вспомогательный метод для форматирования
+        post_data_dict = self.__format_post_array(UPDATE_DATA, array_name='users')
+
+        log.info(f"Попытка обновить пароль для пользователя ID: {user_id}")
+
+        try:
+            response = requests.post(url_with_params, data=post_data_dict)
+            response.raise_for_status()
+            data = response.json() if response.text else []
+
+            # core_user_update_users при успехе возвращает пустой список []
+            if isinstance(data, list) and not data:
+                return True
+
+            elif isinstance(data, dict) and 'exception' in data:
+                log.error(
+                    f"❌ Ошибка Moodle API при обновлении пароля: {data.get('errorcode')}. Сообщение: {data.get('message')}")
+                return False
+
+            else:
+                log.error(f"⚠️ Получен неожиданный формат ответа при обновлении пароля: {data}")
+                return False
+
+        except requests.exceptions.RequestException as e:
+            log.error(f"❌ Произошла ошибка запроса (Сеть/HTTP) при обновлении пароля: {e}")
+            return False
+
     def enrol_manual_enrol_users(self, COURSE_ID: int, USER_ID_TO_ENROL: int):
-        '''Зачисляет пользователя на курс и возвращает True в случае успеха.'''
-        # ... (Содержимое метода enrol_manual_enrol_users, измененное для логирования) ...
+        '''Зачисляет пользователя на курс (enrol_manual_enrol_users).'''
         FUNCTION_NAME = "enrol_manual_enrol_users"
         ROLE_ID_STUDENT = 5
         url_with_params = self.__get_url_with_params(FUNCTION_NAME)
@@ -129,19 +164,13 @@ class MOODLE_API:
             'courseid': COURSE_ID
         }
 
-        post_data_dict = {
-            f'enrolments[0][{key}]': value
-            for key, value in ENROLMENT_RECORD.items()
-        }
+        # Используем вспомогательный метод для форматирования, array_name='enrolments'
+        post_data_dict = self.__format_post_array(ENROLMENT_RECORD, array_name='enrolments')
 
         log.info(f"Попытка зачислить пользователя (ID: {USER_ID_TO_ENROL}) на курс (ID: {COURSE_ID})")
 
         try:
-            response = requests.post(
-                url_with_params,
-                data=post_data_dict
-            )
-
+            response = requests.post(url_with_params, data=post_data_dict)
             response.raise_for_status()
             data = response.json() if response.text else []
 
@@ -150,36 +179,19 @@ class MOODLE_API:
                 return True
 
             elif isinstance(data, dict) and 'exception' in data:
-                log.error("\n❌ Ошибка Moodle API при зачислении:")
-                log.error(f"  Код ошибки: {data.get('errorcode')}")
-                log.error(f"  Сообщение: {data.get('message')}")
+                log.error(
+                    f"❌ Ошибка Moodle API при зачислении: {data.get('errorcode')}. Сообщение: {data.get('message')}")
                 return False
 
             else:
-                log.error(f"\n⚠️ Получен неожиданный формат ответа при зачислении: {data}")
+                log.error(f"⚠️ Получен неожиданный формат ответа при зачислении: {data}")
                 return False
 
         except requests.exceptions.RequestException as e:
-            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP) при зачислении: {e}")
+            log.error(f"❌ Произошла ошибка запроса (Сеть/HTTP) при зачислении: {e}")
             return False
 
-    def core_user_update_password(self, user_id: int, new_password: str):
-        '''
-        *** ЭТОТ МЕТОД НУЖНО РЕАЛИЗОВАТЬ ***
-
-        Использует Moodle API функцию 'core_user_update_users'
-        для обновления пароля существующего пользователя.
-
-        Возвращает True в случае успеха.
-        '''
-        log.warning(f"!!! ФУНКЦИЯ ОБНОВЛЕНИЯ ПАРОЛЯ НЕ РЕАЛИЗОВАНА. Выполняется имитация успеха.")
-        # Тут должен быть POST-запрос к core_user_update_users
-        # с параметрами users[0][id]=user_id и users[0][password]=new_password
-        # ... Реализация ...
-        return True  # Имитация успеха для продолжения логики
-
     def core_course_get_courses(self):
-        # ... (Содержимое метода core_course_get_courses) ...
         FUNCTION_NAME = "core_course_get_courses"
         url_with_params = self.__get_url_with_params(FUNCTION_NAME)
 
@@ -191,35 +203,19 @@ class MOODLE_API:
             if data and isinstance(data, list):
                 return data
             elif isinstance(data, dict) and 'exception' in data:
-                log.error(f"\n❌ Ошибка Moodle API: {data.get('errorcode')}")
+                log.error(f"❌ Ошибка Moodle API: {data.get('errorcode')}")
             else:
-                log.error(f"\n⚠️ Неожиданный формат ответа: {data}")
+                log.error(f"⚠️ Неожиданный формат ответа: {data}")
 
         except requests.exceptions.RequestException as err:
-            log.error(f"\n❌ Произошла ошибка: {err}")
+            log.error(f"❌ Произошла ошибка: {err}")
         return []
 
-    def __get_url_with_params(self, function_name: str):
-        # Кодирование параметров для URL
-        url_params = {
-            'wstoken': MOODLE_TOKEN,
-            'wsfunction': function_name,
-            'moodlewsrestformat': self.RESPONSE_FORMAT
-        }
-        url_with_params = self.API_URL + '?' + urllib.parse.urlencode(url_params)
-        return url_with_params
-
-    def _get_id_shortname_course(self) -> dict:
-        d = {}
-        for course in self.core_course_get_courses():
-            d[course.get('shortname')] = course.get('id')
-        return d
-
+    # --- ОСНОВНАЯ ЛОГИКА ---
     def process_user_and_enrollment(self, contact: Contact):
         '''
-        Выполняет три шага:
         1. Поиск пользователя по email.
-        2. Если найден - обновляет пароль (требуется реализация core_user_update_password).
+        2. Если найден - обновляет пароль.
            Если не найден - создает пользователя.
         3. Зачисляет пользователя на указанный курс.
         '''
@@ -231,26 +227,23 @@ class MOODLE_API:
         course_id = course_map.get(course_shortname)
 
         if not course_id:
-            log.error(f"❌ Курс с коротким именем '{course_shortname}' не найден.")
+            log.error(f"❌ Курс с коротким именем '{course_shortname}' не найден. Процесс остановлен.")
             return False
 
-        # 2. Проверка существования пользователя
-        user_list = self.core_user_get_users_by_field(contact.email, field='email')
+        # 2. Проверка существования пользователя (возвращает dict или {})
+        user_data = self.core_user_get_users_by_field(contact.email, field='email')
         user_id = None
 
-        if user_list:
-            # 2.1. Если он есть, то Обнови пароль (и получаем ID)
-            user_data = user_list[0]
+        if user_data:
+            # 2.1. Если он есть, то Обнови пароль
             user_id = user_data.get('id')
             log.info(f"✅ Пользователь {contact.email} найден (ID: {user_id}).")
 
-            # ВАЖНО: Требуется реализация core_user_update_password
             update_success = self.core_user_update_password(user_id, contact.password)
             if update_success:
-                log.info("✅ Пароль успешно обновлен (или имитировано обновление).")
+                log.info("✅ Пароль успешно обновлен.")
             else:
-                log.error("❌ Не удалось обновить пароль. Продолжение процесса зачисления...")
-                # Решение: продолжить зачисление, даже если пароль не обновился.
+                log.error("❌ Не удалось обновить пароль.")
 
         else:
             # 2.2. Если его нет, то он создаётся.
@@ -271,62 +264,3 @@ class MOODLE_API:
             return enrollment_successful
 
         return False
-
-    def core_user_update_users(self, password, email):
-
-        # --- 1. Входные данные (Настройки) ---
-        # Настройки запроса
-        FUNCTION_NAME = "core_user_update_users"  # <-- ИЗМЕНЕНИЕ: функция для создания пользователя
-        # --- 2. Формирование URL с мета-параметрами ---
-
-        # Кодирование параметров для URL
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
-
-        # --- 3. Параметры, передаваемые в теле POST (Данные нового пользователя) ---
-        # Функция core_user_create_users ожидает массив 'users'.
-        USER_DATA = self.core_user_get_users_by_field(field='email', value=email)
-        NEW_USER_DATA = USER_DATA
-        NEW_USER_DATA['password'] = password
-
-        # Формируем словарь для POST-запроса, используя синтаксис массива Moodle: users[0][поле]
-        post_data_dict = {
-            f'users[0][{key}]': value
-            for key, value in NEW_USER_DATA.items()
-        }
-
-        # --- 4. Выполнение POST-запроса ---
-        try:
-            response = requests.post(
-                url_with_params,
-                data=post_data_dict
-            )
-
-            # Проверка статуса HTTP (200 - OK)
-            response.raise_for_status()
-            data = response.json()
-
-            # --- 5. Обработка ответа ---
-            # При успешном создании возвращается список созданных пользователей с их ID
-            if data and isinstance(data, list) and len(data) > 0 and 'id' in data[0]:
-                print("\n✅ Пользователь успешно создан!")
-                new_user_info = data[0]
-                print(f"  Новый ID пользователя: {new_user_info.get('id')}")
-                print(f"  Имя: {NEW_USER_DATA['firstname']} {NEW_USER_DATA['lastname']}")
-                print(f"  Username: {NEW_USER_DATA['username']}")
-
-            # --- 6. Обработка ошибок Moodle API ---
-            elif isinstance(data, dict) and 'exception' in data:
-                print("\n❌ Ошибка Moodle API:")
-                print(f"  Код ошибки: {data.get('errorcode')}")
-                print(f"  Сообщение: {data.get('message')}")
-                print("\nПолный ответ Moodle (для отладки):")
-                pprint(data)
-
-            else:
-                # Обработка неожиданных ответов
-                print(f"\n⚠️ Получен неожиданный формат ответа.")
-                pprint(data)
-
-        except requests.exceptions.RequestException as e:
-            # Обработка сетевых ошибок
-            print(f"\n❌ Произошла ошибка запроса (Сеть/HTTP): {e}")
