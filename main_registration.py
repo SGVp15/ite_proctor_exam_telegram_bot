@@ -85,7 +85,8 @@ async def registration(contacts: [Contact]) -> str:
 
     # -------------- Moodle --------------
     moodle_api = MOODLE_API()
-    moodle_api.create_users_and_registration()
+    for contact in contacts:
+        moodle_api.process_user_and_enrollment(contact=contact)
 
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')

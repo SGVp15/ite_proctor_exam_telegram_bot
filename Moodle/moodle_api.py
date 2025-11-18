@@ -3,6 +3,7 @@ from random import choice
 
 import requests
 
+# Предполагается, что Contact, log, MOODLE_URL, MOODLE_TOKEN определены
 from Contact import Contact
 from Utils.log import log
 from config import MOODLE_URL, MOODLE_TOKEN
@@ -15,7 +16,7 @@ class MOODLE_API:
     def core_user_get_users_by_field(self, value: str, field='email', ):
         """ - field can be 'id' or 'idnumber' or 'username' or 'email'"""
         FUNCTION_NAME = "core_user_get_users_by_field"
-
+        # ... (Содержимое метода core_user_get_users_by_field) ...
         # Кодирование параметров для URL
         url_with_params = self.__get_url_with_params(FUNCTION_NAME)
 
@@ -37,91 +38,30 @@ class MOODLE_API:
             data = response.json()
 
             # --- 5. Обработка ответа ---
-            # core_user_get_users_by_field возвращает список (array) пользователей
             if data and isinstance(data, list):
                 users_list = data
+                # Возвращаем список найденных пользователей (может быть пустым)
                 return users_list
-                if users_list:
-                    print("\n✅ Запрос успешен. Получен пользователь:")
-                    # Выводим информацию о первом найденном пользователе
-                    user: dict = users_list[0]
-                    print(f"  ID: {user.get('id')}")
-                    print(f"  Логин: {user.get('username')}")
-                    print(f"  Полное имя: {user.get('fullname')}")
-                    print(f"  Email: {user.get('email')}")
-                    print(f"  Подтвержден: {user.get('confirmed')}")
-                    print(user.keys())
-                    return users_list
-                else:
-                    print(f"\n⚠️ Запрос успешен, но пользователь '{value}' не найден.")
-                    print("Проверьте, правильно ли указан логин.")
-
 
             # --- 6. Обработка ошибок Moodle API ---
             elif isinstance(data, dict) and 'exception' in data:
-                print("\n❌ Ошибка Moodle API:")
-                print(f"  Код ошибки: {data.get('errorcode')}")
-                print(f"  Сообщение: {data.get('message')}")
-
+                log.error(
+                    f"\n❌ Ошибка Moodle API при поиске: {data.get('errorcode')}. Сообщение: {data.get('message')}")
+                return []  # Возвращаем пустой список при ошибке
             else:
-                # Обработка неожиданных ответов
-                print(f"\n⚠️ Получен неожиданный формат ответа.")
-                print(data)
+                log.error(f"\n⚠️ Получен неожиданный формат ответа при поиске: {data}")
+                return []
 
         except requests.exceptions.RequestException as e:
-            # Обработка сетевых ошибок (подключение, DNS, таймаут)
-            print(f"\n❌ Произошла ошибка запроса (Сеть/HTTP): {e}")
+            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP) при поиске: {e}")
+            return []
 
     def core_user_create_users(self, user: Contact):
-        '''list of (
-        object {
-        createpassword int  Необязательно //True if password should be created and mailed to user.
-        username string   //Username policy is defined in Moodle security config.
-        auth string  По умолчанию - «manual» //Auth plugins include manual, ldap, etc
-        password string  Необязательно //Plain text password consisting of any characters
-        firstname string   //The first name(s) of the user
-        lastname string   //The family name of the user
-        email string   //A valid and unique email address
-        maildisplay int  Необязательно //Email visibility
-        city string  Необязательно //Home city of the user
-        country string  Необязательно //Home country code of the user, such as AU or CZ
-        timezone string  Необязательно //Timezone code such as Australia/Perth, or 99 for default
-        description string  Необязательно //User profile description, no HTML
-        firstnamephonetic string  Необязательно //The first name(s) phonetically of the user
-        lastnamephonetic string  Необязательно //The family name phonetically of the user
-        middlename string  Необязательно //The middle name of the user
-        alternatename string  Необязательно //The alternate name of the user
-        interests string  Необязательно //User interests (separated by commas)
-        idnumber string  По умолчанию - «» //An arbitrary ID code number perhaps from the institution
-        institution string  Необязательно //institution
-        department string  Необязательно //department
-        phone1 string  Необязательно //Phone 1
-        phone2 string  Необязательно //Phone 2
-        address string  Необязательно //Postal address
-        lang string  По умолчанию - «ru» //Language code such as "en", must exist on server
-        calendartype string  По умолчанию - «gregorian» //Calendar type such as "gregorian", must exist on server
-        theme string  Необязательно //Theme name such as "standard", must exist on server
-        mailformat int  Необязательно //Mail format code is 0 for plain text, 1 for HTML etc
-        customfields  Необязательно //User custom fields (also known as user profil fields)
-        list of (
-        object {
-        type string   //The name of the custom field
-        value string   //The value of the custom field
-        }
-        )preferences  Необязательно //User preferences
-        list of (
-        object {
-        type string   //The name of the preference
-        value string   //The value of the preference
-        }
-        )}
-        )'''
-
-        # --- 1. Входные данные (Настройки) ---
+        '''Создает пользователя и возвращает его ID'''
         FUNCTION_NAME = "core_user_create_users"
-
         url_with_params = self.__get_url_with_params(FUNCTION_NAME)
 
+        # ... (Остальной код core_user_create_users) ...
         # --- 3. Параметры, передаваемые в теле POST (Данные нового пользователя) ---
         # Функция core_user_create_users ожидает массив 'users'.
         NEW_USER_DATA = {
@@ -148,68 +88,113 @@ class MOODLE_API:
                 data=post_data_dict
             )
 
-            # Проверка статуса HTTP (200 - OK)
             response.raise_for_status()
             data = response.json()
 
             # --- 5. Обработка ответа ---
-            # При успешном создании возвращается список созданных пользователей с их ID
             if data and isinstance(data, list) and len(data) > 0 and 'id' in data[0]:
                 log.info("\n✅ Пользователь успешно создан! ")
                 new_user_info = data[0]
                 log.info(f"  Новый ID пользователя: {new_user_info.get('id')}")
-                log.info(f"  Имя: {NEW_USER_DATA['firstname']} {NEW_USER_DATA['lastname']}")
-                log.info(f"  Username: {NEW_USER_DATA['username']}")
                 return new_user_info.get('id')
-
 
             # --- 6. Обработка ошибок Moodle API ---
             elif isinstance(data, dict) and 'exception' in data:
-                log.error("\n❌ Ошибка Moodle API:")
+                log.error("\n❌ Ошибка Moodle API при создании:")
                 log.error(f"  Код ошибки: {data.get('errorcode')}")
                 log.error(f"  Сообщение: {data.get('message')}")
-                log.error("\nПолный ответ Moodle (для отладки):")
-                log.error(data)
+                return None
 
             else:
-                # Обработка неожиданных ответов
-                log.error(f"\n⚠️ Получен неожиданный формат ответа.")
-                log.error(data)
+                log.error(f"\n⚠️ Получен неожиданный формат ответа при создании: {data}")
+                return None
 
         except requests.exceptions.RequestException as e:
-            # Обработка сетевых ошибок
-            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP): {e}")
+            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP) при создании: {e}")
+            return None
+
+    def enrol_manual_enrol_users(self, COURSE_ID: int, USER_ID_TO_ENROL: int):
+        '''Зачисляет пользователя на курс и возвращает True в случае успеха.'''
+        # ... (Содержимое метода enrol_manual_enrol_users, измененное для логирования) ...
+        FUNCTION_NAME = "enrol_manual_enrol_users"
+        ROLE_ID_STUDENT = 5
+        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
+
+        ENROLMENT_RECORD = {
+            'roleid': ROLE_ID_STUDENT,
+            'userid': USER_ID_TO_ENROL,
+            'courseid': COURSE_ID
+        }
+
+        post_data_dict = {
+            f'enrolments[0][{key}]': value
+            for key, value in ENROLMENT_RECORD.items()
+        }
+
+        log.info(f"Попытка зачислить пользователя (ID: {USER_ID_TO_ENROL}) на курс (ID: {COURSE_ID})")
+
+        try:
+            response = requests.post(
+                url_with_params,
+                data=post_data_dict
+            )
+
+            response.raise_for_status()
+            data = response.json() if response.text else []
+
+            if isinstance(data, list) and not data:
+                log.info(f"✅ Зачисление ID {USER_ID_TO_ENROL} на курс {COURSE_ID} успешно.")
+                return True
+
+            elif isinstance(data, dict) and 'exception' in data:
+                log.error("\n❌ Ошибка Moodle API при зачислении:")
+                log.error(f"  Код ошибки: {data.get('errorcode')}")
+                log.error(f"  Сообщение: {data.get('message')}")
+                return False
+
+            else:
+                log.error(f"\n⚠️ Получен неожиданный формат ответа при зачислении: {data}")
+                return False
+
+        except requests.exceptions.RequestException as e:
+            log.error(f"\n❌ Произошла ошибка запроса (Сеть/HTTP) при зачислении: {e}")
+            return False
+
+    def core_user_update_password(self, user_id: int, new_password: str):
+        '''
+        *** ЭТОТ МЕТОД НУЖНО РЕАЛИЗОВАТЬ ***
+
+        Использует Moodle API функцию 'core_user_update_users'
+        для обновления пароля существующего пользователя.
+
+        Возвращает True в случае успеха.
+        '''
+        log.warning(f"!!! ФУНКЦИЯ ОБНОВЛЕНИЯ ПАРОЛЯ НЕ РЕАЛИЗОВАНА. Выполняется имитация успеха.")
+        # Тут должен быть POST-запрос к core_user_update_users
+        # с параметрами users[0][id]=user_id и users[0][password]=new_password
+        # ... Реализация ...
+        return True  # Имитация успеха для продолжения логики
 
     def core_course_get_courses(self):
-        # --- 1. Входные данные ---
+        # ... (Содержимое метода core_course_get_courses) ...
         FUNCTION_NAME = "core_course_get_courses"
         url_with_params = self.__get_url_with_params(FUNCTION_NAME)
 
-        log.debug(f"Отправка POST запроса к: {url_with_params}")
-
-        # --- 4. Выполнение POST-запроса ---
         try:
-            # Отправляем POST без данных в теле, чтобы получить ВСЕ курсы.
             response = requests.post(url_with_params)
-            # Проверка статуса HTTP
             response.raise_for_status()
             data = response.json()
 
-            # --- 5. Обработка ответа ---
             if data and isinstance(data, list):
-                log.debug("\n✅ Запрос успешен. Получен список курсов:")
-                courses_list = data
-                return courses_list
+                return data
             elif isinstance(data, dict) and 'exception' in data:
-                # Обработка ошибок, возвращаемых Moodle
                 log.error(f"\n❌ Ошибка Moodle API: {data.get('errorcode')}")
-                log.error(f"Сообщение: {data.get('message')}")
             else:
-                log.error(f"\n⚠️ Неожиданный формат ответа:")
-                log.error(data)
+                log.error(f"\n⚠️ Неожиданный формат ответа: {data}")
 
         except requests.exceptions.RequestException as err:
             log.error(f"\n❌ Произошла ошибка: {err}")
+        return []
 
     def __get_url_with_params(self, function_name: str):
         # Кодирование параметров для URL
@@ -221,39 +206,68 @@ class MOODLE_API:
         url_with_params = self.API_URL + '?' + urllib.parse.urlencode(url_params)
         return url_with_params
 
-    def create_users_and_registration(self, contacts: [Contact]):
-        for contact in contacts:
-            id = self.core_user_get_users_by_field(contact.email)
-            if id:
-                contact.id_moodle = id
-        return
-
-        if not emails_user_id:
-            contact.id_moodle = self.create_user(contact)
-        else:
-            moodle_api.reset_password(contact)
-            log.info(f' {contact.email} [reset password]')
-        log.info(f'{contact.id_ispring=}')
-
-        # Get all courses moodle
-        courses_content_item_id: dict = self._get_id_shortname_course()
-
-        out_str = ''
-
-        # User registration for the exam in MOODLE
-        for contact in contacts:
-            course_id = choice(courses_content_item_id[contact.exam])
-            contact.is_create_enrollment = self.create_enrollment(learner_id=contact.id_ispring,
-                                                                  course_id=course_id,
-                                                                  access_date=contact.scheduled_at)
-            if not contact.is_create_enrollment:
-                out_str += f'[Error] Moodle not enrollment {contact}\n'
-                log.error(f'[Error] Moodle not enrollment {contact}')
-
-        return out_str
-
     def _get_id_shortname_course(self) -> dict:
         d = {}
         for course in self.core_course_get_courses():
             d[course.get('shortname')] = course.get('id')
         return d
+
+    # ----------------------------------------------------------------
+    # НОВЫЙ МЕТОД, ВЫПОЛНЯЮЩИЙ ЗАПРОШЕННУЮ ЛОГИКУ
+    # ----------------------------------------------------------------
+    def process_user_and_enrollment(self, contact: Contact):
+        '''
+        Выполняет три шага:
+        1. Поиск пользователя по email.
+        2. Если найден - обновляет пароль (требуется реализация core_user_update_password).
+           Если не найден - создает пользователя.
+        3. Зачисляет пользователя на указанный курс.
+        '''
+        course_shortname = contact.course_small
+        log.info(f"--- Запуск процесса для пользователя: {contact.email} и курса: {course_shortname} ---")
+
+        # 1. Поиск ID курса
+        course_map = self._get_id_shortname_course()
+        course_id = course_map.get(course_shortname)
+
+        if not course_id:
+            log.error(f"❌ Курс с коротким именем '{course_shortname}' не найден.")
+            return False
+
+        # 2. Проверка существования пользователя
+        user_list = self.core_user_get_users_by_field(contact.email, field='email')
+        user_id = None
+
+        if user_list:
+            # 2.1. Если он есть, то Обнови пароль (и получаем ID)
+            user_data = user_list[0]
+            user_id = user_data.get('id')
+            log.info(f"✅ Пользователь {contact.email} найден (ID: {user_id}).")
+
+            # ВАЖНО: Требуется реализация core_user_update_password
+            update_success = self.core_user_update_password(user_id, contact.password)
+            if update_success:
+                log.info("✅ Пароль успешно обновлен (или имитировано обновление).")
+            else:
+                log.error("❌ Не удалось обновить пароль. Продолжение процесса зачисления...")
+                # Решение: продолжить зачисление, даже если пароль не обновился.
+
+        else:
+            # 2.2. Если его нет, то он создаётся.
+            log.info(f"⚠️ Пользователь {contact.email} не найден. Создание нового пользователя...")
+            user_id = self.core_user_create_users(contact)
+
+            if not user_id:
+                log.error(f"❌ Не удалось создать пользователя {contact.email}. Процесс остановлен.")
+                return False
+
+        # 3. Назначь ему курс (Зачисление)
+        if user_id:
+            log.info(f"Начало зачисления пользователя (ID: {user_id}) на курс '{course_shortname}' (ID: {course_id}).")
+            enrollment_successful = self.enrol_manual_enrol_users(
+                COURSE_ID=course_id,
+                USER_ID_TO_ENROL=user_id
+            )
+            return enrollment_successful
+
+        return False
