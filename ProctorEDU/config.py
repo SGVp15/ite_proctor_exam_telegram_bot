@@ -18,7 +18,6 @@ CSV_HEADER_SESSION = {
     'lifetime': '120',
     'deadline': '',
     # 'rules': '',
-    # 'url': 'https://itexpert.ispringlearn.ru/',
     'url': 'https://exam.itexpert.ru/',
     'api': '',
     # 'addons': 'check,face,ready,track,record,screen,webrtc,content,preview,chat,finish,toolbox,shared',
@@ -28,7 +27,6 @@ CSV_HEADER_SESSION = {
     'threshold': '70',
     'scheduledAt': '',
     'removeAt': '',
-
     # 'expires': '',
     # 'status': '',
     # 'tags': '',
@@ -50,7 +48,6 @@ CSV_HEADER_SESSION = {
     # 'stoppedAt': '',
     'openAt': '',
     'closeAt': '',
-
     # 'pausedAt': '',
     # 'signedAt': '',
     # 'error': '',
