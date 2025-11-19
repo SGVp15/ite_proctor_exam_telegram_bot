@@ -5,7 +5,7 @@ import requests
 
 from Contact import Contact
 from Utils.log import log
-from config import MOODLE_URL, MOODLE_TOKEN
+from .config import MOODLE_URL, MOODLE_TOKEN
 
 
 class MOODLE_API:
