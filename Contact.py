@@ -17,9 +17,10 @@ class Contact:
         self.username: str | None = None
         self.password: str | None = None
         self.exam: str | None = None
-        self.course: str | None = None
-        self.course_small: str | None = None
-        self.lector: str | None = None
+
+        # self.course: str | None = None
+        # self.course_small: str | None = None
+        # self.lector: str | None = None
         self.date_from_file = None
         self.date_exam = None
         self.date_exam_connect: str | None = None
@@ -32,13 +33,18 @@ class Contact:
         self.subject: str | None = None
         self.date_exam_for_subject = None
         self.url_proctor: str | None = None
-        self.url_course: str | None = None
-        self.id_ispring: str | None = None
-        self.id_moodle: str | None = None
-        self.status_ispring: str | None = None
+        # self.url_course: str | None = None
+
         self.identifier: str | None = None
-        self.is_create_enrollment: bool = False
+        # self.is_create_enrollment: bool = False
         self.status = 'Error'
+
+        self.ispring_id: str | None = None
+        self.ispring_status: str | None = None
+
+        self.id_moodle: str | None = None
+        self.moolde_id_exam: str | None = None
+        self.moolde_id_user = None
 
     def normalize(self) -> bool:
         self.first_name_rus = clean_string(self.first_name_rus).capitalize()
@@ -93,10 +99,13 @@ class Contact:
         self.s = f'{self.status}\t{datetime.datetime.now()}\tsubject={self.subject}\t' \
                  f'lastName={self.last_name_rus}\tfirstName={self.first_name_rus}\t' \
                  f'email={self.email}\tusername={self.username}\tpassword={self.password}\t' \
-                 f'url={self.url_proctor}\n'
+                 f'url={self.url_proctor}\n' \
+                 f'moolde_id_exam={self.moolde_id_exam}\n' \
+                 f'moolde_id_user={self.moolde_id_user}\n'
         return self.s
 
-    def __eq__(self, other):
-        if self.email == other.email and self.email:
-            return True
-        return False
+
+def __eq__(self, other):
+    if self.email == other.email and self.email:
+        return True
+    return False

@@ -8,9 +8,6 @@ BOT_TOKEN: str | None = config.get('BOT_TOKEN')
 ADMIN_ID: list[int] = [int(x) for x in config['ADMIN_ID'].split(',')]
 USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 
-MOODLE_TOKEN = config.get('MOODLE_TOKEN')
-MOODLE_URL = config.get('MOODLE_URL')
-
 os.makedirs(os.path.join(os.getcwd(), 'data'), exist_ok=True)
 LOG_FILE: str = os.path.join(os.getcwd(), 'data', 'log.txt')
 

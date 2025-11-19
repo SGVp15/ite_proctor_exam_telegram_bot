@@ -63,7 +63,7 @@ class IspringApi:
             return response.status_code
 
     def reset_password(self, user: Contact):
-        url = '/'.join([self.url_base, 'user', user.id_ispring, 'password'])
+        url = '/'.join([self.url_base, 'user', user.ispring_id, 'password'])
         xml = f'<?xml version="1.0" encoding="UTF-8"?>' \
               f'<request>' \
               f'    <password>{user.password}</password>' \
@@ -130,7 +130,7 @@ class IspringApi:
         url = '/'.join([self.url_base, 'users', 'deactivate'])
         ids = ''
         for user in users:
-            ids += f"<userIds>{user.id_ispring}</userIds>\n"
+            ids += f"<userIds>{user.ispring_id}</userIds>\n"
         xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <request>
     {ids}

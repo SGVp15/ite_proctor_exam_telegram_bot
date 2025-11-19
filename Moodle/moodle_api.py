@@ -1,10 +1,8 @@
 import urllib.parse
 from random import choice
-from pprint import pprint
 
 import requests
 
-# Предполагается, что Contact, log, MOODLE_URL, MOODLE_TOKEN определены
 from Contact import Contact
 from Utils.log import log
 from config import MOODLE_URL, MOODLE_TOKEN
@@ -13,8 +11,6 @@ from config import MOODLE_URL, MOODLE_TOKEN
 class MOODLE_API:
     RESPONSE_FORMAT = 'json'
     API_URL = f'{MOODLE_URL}/webservice/rest/server.php'
-
-    # --- ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ (Без изменений) ---
 
     def __get_url_with_params(self, function_name: str):
         """Формирует полный URL с токеном и функцией Moodle."""
@@ -43,12 +39,12 @@ class MOODLE_API:
             d[course.get('shortname')] = course.get('id')
         return d
 
-    # --- ОСНОВНЫЕ МЕТОДЫ API (Без изменений) ---
+    # --- ОСНОВНЫЕ МЕТОДЫ API ---
 
     def core_user_get_users_by_field(self, value: str, field='email') -> dict:
         # ... (Код core_user_get_users_by_field без изменений) ...
-        FUNCTION_NAME = "core_user_get_users_by_field"
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
+        function_name = "core_user_get_users_by_field"
+        url_with_params = self.__get_url_with_params(function_name)
         post_data_dict = {'field': field, 'values[0]': value}
         try:
             response = requests.post(url_with_params, data=post_data_dict)
@@ -66,16 +62,15 @@ class MOODLE_API:
             return {}
 
     def core_user_create_users(self, user: Contact):
-        # ... (Код core_user_create_users без изменений) ...
-        FUNCTION_NAME = "core_user_create_users"
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
-        NEW_USER_DATA = {
+        function_name = "core_user_create_users"
+        url_with_params = self.__get_url_with_params(function_name)
+        new_user_data = {
             'username': f'{user.username}', 'password': f'{user.password}',
             'firstname': f'{user.first_name_rus}', 'lastname': f'{user.last_name_eng}',
             'email': f'{user.email}',
         }
-        post_data_dict = self.__format_post_array(NEW_USER_DATA, array_name='users')
-        log.info(f"Попытка создать пользователя: {NEW_USER_DATA['username']}")
+        post_data_dict = self.__format_post_array(new_user_data, array_name='users')
+        log.info(f"Попытка создать пользователя: {new_user_data['username']}")
         try:
             response = requests.post(url_with_params, data=post_data_dict)
             response.raise_for_status()
@@ -96,11 +91,10 @@ class MOODLE_API:
             return None
 
     def core_user_update_password(self, user_id: int, new_password: str) -> bool:
-        # ... (Код core_user_update_password без изменений) ...
-        FUNCTION_NAME = "core_user_update_users"
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
-        UPDATE_DATA = {'id': user_id, 'password': new_password}
-        post_data_dict = self.__format_post_array(UPDATE_DATA, array_name='users')
+        function_name = "core_user_update_users"
+        url_with_params = self.__get_url_with_params(function_name)
+        update_data = {'id': user_id, 'password': new_password}
+        post_data_dict = self.__format_post_array(update_data, array_name='users')
         log.info(f"Попытка обновить пароль для пользователя ID: {user_id}")
         try:
             response = requests.post(url_with_params, data=post_data_dict)
@@ -119,20 +113,19 @@ class MOODLE_API:
             log.error(f"❌ Произошла ошибка запроса (Сеть/HTTP) при обновлении пароля: {e}")
             return False
 
-    def enrol_manual_enrol_users(self, COURSE_ID: int, USER_ID_TO_ENROL: int):
-        # ... (Код enrol_manual_enrol_users без изменений) ...
-        FUNCTION_NAME = "enrol_manual_enrol_users"
+    def enrol_manual_enrol_users(self, course_id: int, user_id_to_enrol: int) -> bool:
+        function_name = "enrol_manual_enrol_users"
         ROLE_ID_STUDENT = 5
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
-        ENROLMENT_RECORD = {'roleid': ROLE_ID_STUDENT, 'userid': USER_ID_TO_ENROL, 'courseid': COURSE_ID}
-        post_data_dict = self.__format_post_array(ENROLMENT_RECORD, array_name='enrolments')
-        log.info(f"Попытка зачислить пользователя (ID: {USER_ID_TO_ENROL}) на курс (ID: {COURSE_ID})")
+        url_with_params = self.__get_url_with_params(function_name)
+        enrolment_record = {'roleid': ROLE_ID_STUDENT, 'userid': user_id_to_enrol, 'courseid': course_id}
+        post_data_dict = self.__format_post_array(enrolment_record, array_name='enrolments')
+        log.info(f"Попытка зачислить пользователя (ID: {user_id_to_enrol}) на курс (ID: {course_id})")
         try:
             response = requests.post(url_with_params, data=post_data_dict)
             response.raise_for_status()
             data = response.json() if response.text else []
             if isinstance(data, list) and not data:
-                log.info(f"✅ Зачисление ID {USER_ID_TO_ENROL} на курс {COURSE_ID} успешно.")
+                log.info(f"✅ Зачисление ID {user_id_to_enrol} на курс {course_id} успешно.")
                 return True
             elif isinstance(data, dict) and 'exception' in data:
                 log.error(
@@ -145,10 +138,10 @@ class MOODLE_API:
             log.error(f"❌ Произошла ошибка запроса (Сеть/HTTP) при зачислении: {e}")
             return False
 
-    def core_course_get_courses(self):
+    def core_course_get_courses(self) -> []:
         # ... (Код core_course_get_courses без изменений) ...
-        FUNCTION_NAME = "core_course_get_courses"
-        url_with_params = self.__get_url_with_params(FUNCTION_NAME)
+        function_name = "core_course_get_courses"
+        url_with_params = self.__get_url_with_params(function_name)
         try:
             response = requests.post(url_with_params)
             response.raise_for_status()
@@ -192,6 +185,7 @@ class MOODLE_API:
         # 1.2. Случайный выбор одного короткого имени курса
         final_shortname = choice(possible_courses)
         course_id = course_map[final_shortname]
+        contact.moolde_id_exam = course_id
 
         log.info(f"✨ Выбран случайный курс для зачисления: '{final_shortname}' (ID: {course_id}).")
 
@@ -220,12 +214,13 @@ class MOODLE_API:
                 log.error(f"❌ Не удалось создать пользователя {contact.email}. Процесс остановлен.")
                 return False
 
+        contact.moolde_id_user = user_id
         # 3. ЗАЧИСЛЕНИЕ
         if user_id:
             log.info(f"Начало зачисления пользователя (ID: {user_id}) на курс '{final_shortname}' (ID: {course_id}).")
             enrollment_successful = self.enrol_manual_enrol_users(
-                COURSE_ID=course_id,
-                USER_ID_TO_ENROL=user_id
+                course_id=course_id,
+                user_id_to_enrol=user_id
             )
             return enrollment_successful
 
