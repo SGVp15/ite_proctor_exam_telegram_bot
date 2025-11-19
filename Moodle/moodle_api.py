@@ -156,7 +156,7 @@ class MOODLE_API:
             log.error(f"❌ Произошла ошибка: {err}")
         return []
 
-    # --- ОСНОВНАЯ ЛОГИКА (С ИЗМЕНЕНИЯМИ) ---
+    # --- ОСНОВНАЯ ЛОГИКА ---
     def process_user_and_enrollment(self, contact: Contact):
         '''
         1. Поиск пользователя по email.
