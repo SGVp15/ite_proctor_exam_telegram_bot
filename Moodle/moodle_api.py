@@ -65,8 +65,8 @@ class MOODLE_API:
         function_name = "core_user_create_users"
         url_with_params = self.__get_url_with_params(function_name)
         new_user_data = {
-            'username': f'{user.username}', 'password': f'{user.password}',
-            'firstname': f'{user.first_name_rus}', 'lastname': f'{user.last_name_rus}',
+            'username': f'{user.username.strip()}', 'password': f'{user.password}',
+            'firstname': f'{user.first_name_rus.strip()}', 'lastname': f'{user.last_name_rus.strip()}',
             'email': f'{user.email}',
         }
         post_data_dict = self.__format_post_array(new_user_data, array_name='users')
