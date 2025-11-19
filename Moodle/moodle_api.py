@@ -123,7 +123,16 @@ class MOODLE_API:
                 timeend int  Необязательно //Timestamp when the enrolment end
                 suspend int  Необязательно //set to 1 to suspend the enrolment
                 }
-        )"""
+        )
+
+        enrolments[0][roleid]= int
+        enrolments[0][userid]= int
+        enrolments[0][courseid]= int
+        enrolments[0][timestart]= int
+        enrolments[0][timeend]= int
+        enrolments[0][suspend]= int
+
+        """
         function_name = "enrol_manual_enrol_users"
         ROLE_ID_STUDENT = 5
         url_with_params = self.__get_url_with_params(function_name)

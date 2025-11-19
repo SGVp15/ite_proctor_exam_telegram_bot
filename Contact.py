@@ -42,8 +42,8 @@ class Contact:
         self.ispring_id: str | None = None
         self.ispring_status: str | None = None
 
-        self.id_moodle: str | None = None
-        self.moolde_id_exam: str | None = None
+        self.id_moodle = None
+        self.moolde_id_exam = None
         self.moolde_id_user = None
 
     def normalize(self) -> bool:
