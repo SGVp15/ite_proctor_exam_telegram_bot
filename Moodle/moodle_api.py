@@ -114,6 +114,16 @@ class MOODLE_API:
             return False
 
     def enrol_manual_enrol_users(self, course_id: int, user_id_to_enrol: int) -> bool:
+        """list of (
+            object {
+                roleid int   //Role to assign to the user
+                userid int   //The user that is going to be enrolled
+                courseid int   //The course to enrol the user role in
+                timestart int  Необязательно //Timestamp when the enrolment start
+                timeend int  Необязательно //Timestamp when the enrolment end
+                suspend int  Необязательно //set to 1 to suspend the enrolment
+                }
+        )"""
         function_name = "enrol_manual_enrol_users"
         ROLE_ID_STUDENT = 5
         url_with_params = self.__get_url_with_params(function_name)
@@ -139,7 +149,6 @@ class MOODLE_API:
             return False
 
     def core_course_get_courses(self) -> []:
-        # ... (Код core_course_get_courses без изменений) ...
         function_name = "core_course_get_courses"
         url_with_params = self.__get_url_with_params(function_name)
         try:
