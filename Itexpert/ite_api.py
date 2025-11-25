@@ -126,6 +126,67 @@ class ITEXPERT_API:
                 print(f"Ответ сервера: {response.text}")
             return None
 
+    def update_exam_by_id(self, user: Contact, id) -> Optional[requests.Response]:
+        """Создает новый экзамен, используя данные из объекта Contact."""
+
+        # Полный URL для создания экзамена
+        url = self._get_full_url(EXAM_ENDPOINT)
+
+        # Формирование тела запроса (Payload)
+        exam_data = {
+            "id": id,
+            "name": "Экзамен ITIL Foundation",
+            "active": True,
+            # Внимание: 'exam_in' обычно - ID элемента/курса, не 'ID' как строка
+            "exam_in": "Элемент экзамена ID",
+            "exam_date": "15.11.2025",
+            # Предполагается, что эти поля доступны в объекте Contact
+            "exam_time": user.date_exam_connect,
+            "exam_type": "Online",
+            "insurance_certificate": True,
+            "link": user.url_proctor,
+            # Используйте реальные base64 данные здесь
+            "certificate": {
+                "base64": "base64_encoded_file_content_CERT",
+                "name": "certificate.pdf",
+                "type": "application/pdf"
+            },
+            "result": {
+                "base64": "base64_encoded_file_content_RESULT",
+                "name": "result.pdf",
+                "type": "application/pdf"
+            }
+        }
+
+        print(f"Выполняется POST-запрос: {url=}")
+
+        try:
+            # Отправка POST-запроса с автоматической сериализацией JSON
+            response = requests.put(url, headers=self.headers, json=exam_data)
+
+            # Проверяем статус ответа
+            response.raise_for_status()
+
+            print(f"✅ Успешный ответ. Статус код: {response.status_code}")
+
+            # Попытка вывода JSON-ответа
+            try:
+                print("Тело ответа (JSON):")
+                print(json.dumps(response.json(), indent=2, ensure_ascii=False))
+            except json.JSONDecodeError:
+                print("Тело ответа не является JSON-объектом или пустое.")
+                print(f"Текстовый ответ: {response.text}")
+
+            return response
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Ошибка при выполнении запроса: {e}")
+            # Переменная response может быть не определена в случае ошибки DNS/соединения
+            if 'response' in locals() and response is not None:
+                print(f"Статус код ошибки: {response.status_code}")
+                print(f"Ответ сервера: {response.text}")
+            return None
+
     def delete_exam_by_id(self, exam_id: str) -> requests.Response:
         """Удаляет экзамен по его ID."""
         # Полный URL для удаления экзамена
