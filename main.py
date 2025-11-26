@@ -1,6 +1,7 @@
 import asyncio
 
 from Telegram.main import start_bot
+from Utils.check_log_send_email import check_log_and_send_email
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log
@@ -12,6 +13,7 @@ async def main():
     tasks = [
         start_bot(),
         git_update(),
+        check_log_and_send_email(),
     ]
     await asyncio.gather(*tasks)
 

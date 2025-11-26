@@ -37,8 +37,6 @@ class ITEXPERT_API:
         print(f'Выполняется GET запрос: {url=}')
         return requests.get(url=url, headers=self.headers)
 
-    # --- Методы GET ---
-
     def get_exam_by_id(self, exam_id: Optional[str]) -> Optional[requests.Response]:
         """Получает информацию об экзамене по его ID."""
         if not exam_id:
@@ -140,7 +138,6 @@ class ITEXPERT_API:
             # Внимание: 'exam_in' обычно - ID элемента/курса, не 'ID' как строка
             "exam_in": "Элемент экзамена ID",
             "exam_date": "15.11.2025",
-            # Предполагается, что эти поля доступны в объекте Contact
             "exam_time": user.date_exam_connect,
             "exam_type": "Online",
             "insurance_certificate": True,

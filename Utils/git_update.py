@@ -29,4 +29,4 @@ async def git_update():
             log.info('BOT UPDATE')
             pull_updates()
             restart_script()
-        await sleep(20)  # Проверка каждые 60 секунд
+        await sleep(60)
