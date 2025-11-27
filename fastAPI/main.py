@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 
-from config import LOG_FILE, ALLOWED_EXAMS
+from root_config import LOG_FILE, ALLOWED_EXAMS
 from fastAPI.user_api import User
 
 app = FastAPI()

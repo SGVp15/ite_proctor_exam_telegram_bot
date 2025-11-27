@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 from Contact import Contact
 from EXCEL.my_excel import read_excel_file
-from config import TEMPLATE_FILE_XLSX, PAGE_NAME
+from root_config import TEMPLATE_FILE_XLSX, PAGE_NAME
 
 
 def get_all_courses(xml: str) -> dict:
@@ -61,7 +61,7 @@ def get_contact_from_array(data_list) -> list[Contact]:
         user.email = data[4]
         user.password = data[5]
         user.exam = data[6]
-        user.date_from_file = data[7].lower().strip()
+        user.date_from_file = data[7].strip()
         hour = int(data[8])
         minute = int(data[9])
         user.proctor = data[10]

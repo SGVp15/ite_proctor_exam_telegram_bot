@@ -1,7 +1,7 @@
 import asyncio
 
 from Telegram.main import start_bot
-from Utils.check_log_send_email import check_log_and_send_email
+from Itexpert.check_log_send_email import check_log_and_send_email
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log

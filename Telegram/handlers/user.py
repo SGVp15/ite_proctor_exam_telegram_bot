@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, message
 
 from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
-from config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
+from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
 from Telegram.keybords.inline import inline_kb_main, del_enrollment
 from Telegram.main import bot, dp, loop
 from Utils.log import log

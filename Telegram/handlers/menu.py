@@ -1,6 +1,6 @@
 from aiogram import types, F
 
-from config import ADMIN_ID
+from root_config import ADMIN_ID
 from Telegram.keybords.inline import k_admin_menu, inline_kb_main
 from Telegram.main import bot, dp
 from Telegram.Call_Back_Data import CallBackData

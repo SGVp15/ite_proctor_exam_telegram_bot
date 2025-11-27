@@ -22,7 +22,7 @@ class Contact:
         # self.course_small: str | None = None
         # self.lector: str | None = None
         self.date_from_file = None
-        self.date_exam = None
+        self.date_exam: datetime.datetime | None = None
         self.date_exam_connect: str | None = None
         self.open_at: str | None = None
         self.close_at: str | None = None
@@ -96,16 +96,90 @@ class Contact:
         return True
 
     def __str__(self) -> str:
-        self.s = f'{self.status}\t{datetime.datetime.now()}\tsubject={self.subject}\t' \
-                 f'lastName={self.last_name_rus}\tfirstName={self.first_name_rus}\t' \
-                 f'email={self.email}\tusername={self.username}\tpassword={self.password}\t' \
-                 f'url={self.url_proctor}\n' \
-                 f'moolde_id_exam={self.moolde_id_exam}\n' \
-                 f'moolde_id_user={self.moolde_id_user}\n'
+        self.s = (
+            f'{self.status}\t'
+            f'{datetime.datetime.now()}\t'
+            f'subject={self.subject}\t'
+            f'last_name_rus={self.last_name_rus}\t'
+            f'first_name_rus={self.first_name_rus}\t'
+            f'email={self.email}\t'
+            f'date_from_file={self.date_from_file}\t'
+            f'username={self.username}\t'
+            f'password={self.password}\t'
+            f'url={self.url_proctor}\t'
+            f'exam={self.exam}\t'
+            f'moolde_id_exam={self.moolde_id_exam}\t'
+            f'moolde_id_user={self.moolde_id_user}\t'
+            f'\n'
+        )
         return self.s
 
 
-def __eq__(self, other):
-    if self.email == other.email and self.email:
-        return True
-    return False
+    def __eq__(self, other):
+        if self.email == other.email and self.email:
+            return True
+        return False
+
+
+def parser_str_contact(log_string: str):
+    """
+    Парсит строку лога прокторинга, извлекая статус, дату/время и все пары ключ=значение.
+
+    :param log_string: Строка для парсинга.
+    :return: Словарь с извлеченными данными.
+    """
+    if not log_string:
+        return {}
+
+    # 1. Разделяем строку по пробелам или табуляциям, сохраняя все части.
+    # Используем регулярное выражение для разделения, которое учитывает несколько пробелов/табуляций
+    # и не ломается, если URL содержит знаки '='.
+    parts = re.split(r'\s+', log_string, maxsplit=2)
+
+    # Инициализация результата
+    result = {}
+
+    # 2. Обработка первых двух полей: Статус и Дата/Время
+    if len(parts) >= 1:
+        result['status'] = parts[0]
+    if len(parts) >= 2:
+        result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
+        # Переопределяем parts для правильного парсинга полей ключ=значение
+        # parts[1] - время, parts[2] - остаток строки.
+        # Мы знаем, что после времени идут поля ключ=значение, разделенные пробелами.
+        key_value_string = ' '.join(parts[2:])
+    else:
+        # Если есть только статус, остальное пусто
+        return result
+
+    # 3. Парсинг пар ключ=значение
+    # Снова разделяем строку, которая содержит только пары 'ключ=значение',
+    # но только по пробелам, чтобы не испортить URL.
+    key_value_pairs = key_value_string.split()
+
+    for item in key_value_pairs:
+        # Ищем первое вхождение знака '='
+        if '=' in item:
+            try:
+                # Разделяем строку только по первому знаку '='
+                key, value = item.split('=', 1)
+                result[key.strip()] = value.strip()
+            except ValueError:
+                # Пропускаем, если строка не является парой ключ=значение
+                continue
+        # Если это часть URL или последнего поля (которое может быть без '='),
+        # оно будет обработано вместе с предыдущим полем (например, url=...)
+        # Благодаря 'split('=', 1)' URL будет корректно разобран.
+    c = Contact()
+    if result.get('status', '').lower() == 'ok':
+        attributes = c.__dict__
+        for attr_name in attributes:
+            if attr_name in result.keys():
+                setattr(c, attr_name, result.get(attr_name, ''))
+        date_str = re.findall(r'([\d-]+T[\d:]+)Z', c.subject)[0]
+        c.date_exam = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+        if not c.url_proctor:
+            c.url_proctor = result.get('url', '')
+        if not c.exam:
+            c.exam = re.findall(r'_([A-Z0-9]+)_', c.subject)[0]
+    return c

@@ -1,6 +1,6 @@
 from aiogram import types
 
-from config import LOG_FILE
+from root_config import LOG_FILE
 from Telegram.main import dp
 
 

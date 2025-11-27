@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 
 from aiogram.filters import Command
 
-from config import ADMIN_ID, USERS_ID
+from root_config import ADMIN_ID, USERS_ID
 from Telegram.keybords import inline
 from Telegram.main import dp
 

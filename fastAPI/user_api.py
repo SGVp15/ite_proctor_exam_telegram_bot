@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, field_validator
 
-from config import ALLOWED_EXAMS
+from root_config import ALLOWED_EXAMS
 
 
 class User(BaseModel):

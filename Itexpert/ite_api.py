@@ -1,3 +1,4 @@
+import datetime
 import json
 from pprint import pprint
 from typing import Optional
@@ -5,7 +6,7 @@ from typing import Optional
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from Contact import Contact
+from Contact import Contact, parser_str_contact
 from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
@@ -48,6 +49,17 @@ class ITEXPERT_API:
         url = self._get_full_url(path)
         return self._send_request_get(url)
 
+    def get_exam_by_email(self, email: Optional[str]) -> Optional[requests.Response]:
+        """Получает информацию об экзамене по его ID."""
+        if not email:
+            print("❌ email не предоставлен.")
+            return None
+
+        # Предполагаем, что запрос для получения по ID выглядит так: /rus/tools/api/exam/?id=...
+        path = f'{EXAM_ENDPOINT}?name={email}'
+        url = self._get_full_url(path)
+        return self._send_request_get(url)
+
     def get_list_exams(self, active: Optional[bool] = None) -> requests.Response:
         """
         Получает список экзаменов.
@@ -64,39 +76,42 @@ class ITEXPERT_API:
 
     # --- Методы POST/DELETE ---
 
-    def create_exam(self, user: Contact) -> Optional[requests.Response]:
+    def create_exam(self, user: Contact, id_exam) -> Optional[requests.Response]:
         """Создает новый экзамен, используя данные из объекта Contact."""
 
         # Полный URL для создания экзамена
         url = self._get_full_url(EXAM_ENDPOINT)
 
+        print(f'{user.date_exam.strftime("%d.%m.%Y")}')
+        print(f'{user.url_proctor=}')
         # Формирование тела запроса (Payload)
         exam_data = {
-            "name": "Экзамен ITIL Foundation",
+            "name": user.email,
+            "login": user.username,
+            "pass": user.password,
             "active": True,
-            # Внимание: 'exam_in' обычно - ID элемента/курса, не 'ID' как строка
-            "exam_in": "Элемент экзамена ID",
-            "exam_date": "15.11.2025",
-            # Предполагается, что эти поля доступны в объекте Contact
-            "exam_time": user.date_exam_connect,
+            # Экзамен ID из списка услуг
+            "exam_in": str(id_exam),
+            "exam_date": f'{user.date_exam.strftime("%d.%m.%Y")}',
+            "exam_time": f'{user.date_exam.strftime("%H:%M")}',
+            # Proctor
             "exam_type": "Online",
-            "insurance_certificate": True,
+            # "insurance_certificate": "false",
             "link": user.url_proctor,
-            # Используйте реальные base64 данные здесь
-            "certificate": {
-                "base64": "base64_encoded_file_content_CERT",
-                "name": "certificate.pdf",
-                "type": "application/pdf"
-            },
-            "result": {
-                "base64": "base64_encoded_file_content_RESULT",
-                "name": "result.pdf",
-                "type": "application/pdf"
-            }
+            # "certificate": {
+            #     "base64": "base64_encoded_file_content_CERT",
+            #     "name": "certificate.pdf",
+            #     "type": "application/pdf"
+            # },
+            # "result": {
+            #     "base64": "base64_encoded_file_content_RESULT",
+            #     "name": "result.pdf",
+            #     "type": "application/pdf"
+            # }
         }
 
         print(f"Выполняется POST-запрос: {url=}")
-
+        print(exam_data)
         try:
             # Отправка POST-запроса с автоматической сериализацией JSON
             response = requests.post(url, headers=self.headers, json=exam_data)
@@ -196,17 +211,12 @@ class ITEXPERT_API:
 # --- Пример использования (блок if __name__ == '__main__':) ---
 
 if __name__ == '__main__':
-    # --- Фиктивные данные для тестирования (для демонстрации) ---
-    class MockContact:
-        def __init__(self):
-            self.date_exam_connect = "14:30"
-            self.url_proctor = "https://proctoring.link/user/12345"
 
+    s = '''Ok	2025-11-19 15:26:10.781356	subject=2025-12-02T11:00:00Z_olga_rybkina_ICSC_proctor-1	lastName=Рыбкина 	
+    firstName=Ольга	email=g.savushkin@itexpert.ru	username=olga_rybkina	password=olga_rybkina_P2178	
+    url=https://itexpert.proctoring.online?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDMxY2RlOTM3MTgxYzI0OTdmNjZmNCIsImV4cCI6MTc2MzU3Njc2NSwiaG9zdCI6Iml0ZXhwZXJ0LnByb2N0b3Jpbmcub25saW5lIiwidXNlcm5hbWUiOiJPbGdhX0t1cHJpZW5rbyIsIm5pY2tuYW1lIjoiby5rdXByaWVua29AaXRleHBlcnQucnUiLCJyb2xlIjoic3R1ZGVudCIsInJvb20iOiI2NWQzMWNlNDkzNzE4MWMyNDk3ZjY3MDUiLCJpYXQiOjE3NjM1NTUxNjV9.3XPJ6hSykTOBL7eYwGbUoBe8ipb6igEursSV3lShk6Q'''
 
-    # Присвойте фиктивные значения (для демонстрации работы без реальных импортов)
-    if 'ITEXPERT_URL' not in locals():
-        ITEXPERT_URL = "https://example.com/api"
-        ITEXPERT_API_SECRET_KEY = "mock_secret_key"
+    contact = parser_str_contact(s)
 
     print(f"\n--- Тестирование API с базовым URL: {ITEXPERT_URL} ---")
 
@@ -222,21 +232,32 @@ if __name__ == '__main__':
         print("Не удалось получить список экзаменов.")
 
     # 2. Тестирование получения экзамена по ID
-    print("\n[2. get_exam_by_id('27613')]")
-    r_id = ite_api.get_exam_by_id('27613')
+    id_exam = 28271
+    print(f"\n[2. get_exam_by_id({id_exam})]")
+    r_id = ite_api.get_exam_by_id(id_exam)
     if r_id and r_id.ok:
         pprint(json.loads(r_id.text))
     else:
         print("Не удалось получить экзамен по ID.")
 
-    # 3. Тестирование создания экзамена (потребует MockContact)
-    # print("\n[3. create_exam()]")
-    # mock_user = MockContact()
-    # r_create = ite_api.create_exam(mock_user)
-    # if r_create:
-    #     print("Результат создания:", r_create.status_code)
 
-    # 4. Тестирование удаления экзамена
-    # print("\n[4. delete_exam_by_id('12345')]")
-    # r_delete = ite_api.delete_exam_by_id('12345')
-    # print("Результат удаления:", r_delete.status_code)
+    # 3. Тестирование создания экзамена
+    print(f"\n[3. create_exam({contact})]")
+    r_create = ite_api.create_exam(contact, id_exam=19691)
+    if r_create:
+        print("Результат создания:", r_create.status_code)
+
+
+    # # 4. Тестирование удаления экзамена
+    # for id_exam_delete in [28267,]:#[28270,28269,28268,28263]:
+    #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
+    #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
+    #     print("Результат удаления:", r_delete.status_code)
+
+    email = 'g.savushkin@itexpert.ru'
+    print(f"\n[get_exam_by_email({email})]")
+    r_id = ite_api.get_exam_by_email(email)
+    if r_id and r_id.ok:
+        pprint(json.loads(r_id.text))
+    else:
+        print("Не удалось получить экзамен по ID.")

@@ -3,7 +3,7 @@ from random import choice
 
 from Contact import Contact
 from Moodle.moodle_api import MOODLE_API
-from config import LOG_FILE, ALLOWED_EXAMS
+from root_config import LOG_FILE, ALLOWED_EXAMS
 from Email.config import EMAIL_BCC
 from Ispring.ispring2 import IspringApi
 from parser import get_all_courses, get_all_users

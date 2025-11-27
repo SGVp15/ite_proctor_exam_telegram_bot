@@ -6,7 +6,7 @@ from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
-from config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
+from root_config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
 from Telegram.Call_Back_Data import CallBackData as call_back
