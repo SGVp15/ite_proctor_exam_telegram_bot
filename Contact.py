@@ -114,7 +114,6 @@ class Contact:
         )
         return self.s
 
-
     def __eq__(self, other):
         if self.email == other.email and self.email:
             return True
@@ -176,10 +175,13 @@ def parser_str_contact(log_string: str):
         for attr_name in attributes:
             if attr_name in result.keys():
                 setattr(c, attr_name, result.get(attr_name, ''))
-        date_str = re.findall(r'([\d-]+T[\d:]+)Z', c.subject)[0]
-        c.date_exam = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
-        if not c.url_proctor:
-            c.url_proctor = result.get('url', '')
-        if not c.exam:
-            c.exam = re.findall(r'_([A-Z0-9]+)_', c.subject)[0]
+        try:
+            date_str = re.findall(r'([\d-]+T[\d:]+)Z', c.subject)[0]
+            c.date_exam = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+            if not c.url_proctor:
+                c.url_proctor = result.get('url', '')
+            if not c.exam:
+                c.exam = re.findall(r'_([A-Z0-9]+)_', c.subject)[0]
+        except IndexError:
+            pass
     return c
