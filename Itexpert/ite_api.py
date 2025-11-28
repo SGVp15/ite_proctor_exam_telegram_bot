@@ -79,18 +79,14 @@ class ITEXPERT_API:
     def create_exam(self, user: Contact, id_exam) -> Optional[requests.Response]:
         """Создает новый экзамен, используя данные из объекта Contact."""
 
-        # Полный URL для создания экзамена
         url = self._get_full_url(EXAM_ENDPOINT)
 
-        print(f'{user.date_exam.strftime("%d.%m.%Y")}')
-        print(f'{user.url_proctor=}')
-        # Формирование тела запроса (Payload)
         exam_data = {
             "name": user.email,
             "login": user.username,
             "pass": user.password,
             "active": True,
-            # Экзамен ID из списка услуг
+            # Экзамен id из списка экзаменов
             "exam_in": str(id_exam),
             "exam_date": f'{user.date_exam.strftime("%d.%m.%Y")}',
             "exam_time": f'{user.date_exam.strftime("%H:%M")}',
@@ -139,35 +135,35 @@ class ITEXPERT_API:
                 print(f"Ответ сервера: {response.text}")
             return None
 
-    def update_exam_by_id(self, user: Contact, id) -> Optional[requests.Response]:
+    def update_exam_by_id(self, user: Contact, id, id_exam) -> Optional[requests.Response]:
         """Создает новый экзамен, используя данные из объекта Contact."""
 
         # Полный URL для создания экзамена
         url = self._get_full_url(EXAM_ENDPOINT)
 
-        # Формирование тела запроса (Payload)
         exam_data = {
-            "id": id,
-            "name": "Экзамен ITIL Foundation",
+            "name": user.email,
+            "login": user.username,
+            "pass": user.password,
             "active": True,
-            # Внимание: 'exam_in' обычно - ID элемента/курса, не 'ID' как строка
-            "exam_in": "Элемент экзамена ID",
-            "exam_date": "15.11.2025",
-            "exam_time": user.date_exam_connect,
+            # Экзамен id из списка экзаменов
+            "exam_in": str(id_exam),
+            "exam_date": f'{user.date_exam.strftime("%d.%m.%Y")}',
+            "exam_time": f'{user.date_exam.strftime("%H:%M")}',
+            # Proctor
             "exam_type": "Online",
-            "insurance_certificate": True,
+            # "insurance_certificate": "false",
             "link": user.url_proctor,
-            # Используйте реальные base64 данные здесь
-            "certificate": {
-                "base64": "base64_encoded_file_content_CERT",
-                "name": "certificate.pdf",
-                "type": "application/pdf"
-            },
-            "result": {
-                "base64": "base64_encoded_file_content_RESULT",
-                "name": "result.pdf",
-                "type": "application/pdf"
-            }
+            # "certificate": {
+            #     "base64": "base64_encoded_file_content_CERT",
+            #     "name": "certificate.pdf",
+            #     "type": "application/pdf"
+            # },
+            # "result": {
+            #     "base64": "base64_encoded_file_content_RESULT",
+            #     "name": "result.pdf",
+            #     "type": "application/pdf"
+            # }
         }
 
         print(f"Выполняется POST-запрос: {url=}")
@@ -240,19 +236,17 @@ if __name__ == '__main__':
     else:
         print("Не удалось получить экзамен по ID.")
 
+    # # 3. Тестирование создания экзамена
+    # print(f"\n[3. create_exam({contact})]")
+    # r_create = ite_api.create_exam(contact, id_exam=19691)
+    # if r_create:
+    #     print("Результат создания:", r_create.status_code)
 
-    # 3. Тестирование создания экзамена
-    print(f"\n[3. create_exam({contact})]")
-    r_create = ite_api.create_exam(contact, id_exam=19691)
-    if r_create:
-        print("Результат создания:", r_create.status_code)
-
-
-    # # 4. Тестирование удаления экзамена
-    # for id_exam_delete in [28267,]:#[28270,28269,28268,28263]:
-    #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
-    #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
-    #     print("Результат удаления:", r_delete.status_code)
+    # 4. Тестирование удаления экзамена
+    for id_exam_delete in [28290, ]:  # ,28288,28287,28271]:#[28270,28269,28268,28263]:
+        print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
+        r_delete = ite_api.delete_exam_by_id(id_exam_delete)
+        print("Результат удаления:", r_delete.status_code)
 
     email = 'g.savushkin@itexpert.ru'
     print(f"\n[get_exam_by_email({email})]")
