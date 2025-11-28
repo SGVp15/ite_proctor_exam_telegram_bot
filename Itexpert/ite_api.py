@@ -90,6 +90,11 @@ class ITEXPERT_API:
         """Создает новый экзамен, используя данные из объекта Contact."""
         id_exam = self.get_exam_dict_code_id().get(contact.exam)
         url = self._get_full_url(EXAM_ENDPOINT)
+
+        exam_type = "Offline"
+        if contact.proctor:
+            exam_type = "Online"
+
         exam_data = {
             "name": user.email,
             "login": user.username,
@@ -100,7 +105,7 @@ class ITEXPERT_API:
             "exam_date": f'{user.date_exam.strftime("%d.%m.%Y")}',
             "exam_time": f'{user.date_exam.strftime("%H:%M")}',
             # Proctor
-            "exam_type": "Online",
+            "exam_type": exam_type,
             # "insurance_certificate": "false",
             "link": user.url_proctor,
             # "certificate": {
