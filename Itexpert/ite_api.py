@@ -222,8 +222,7 @@ class ITEXPERT_API:
 
 if __name__ == '__main__':
 
-    s = '''Ok	2025-11-19 15:26:10.781356	subject=2025-12-02T11:00:00Z_olga_rybkina_ICSC_proctor-1	lastName=Рыбкина 	firstName=Ольга	email=olga.n.ribkina@bspb.ru	username=olga_rybkina	password=olga_rybkina_P2178	url=https://itexpert.proctoring.online?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDMxY2RlOTM3MTgxYzI0OTdmNjZmNCIsImV4cCI6MTc2MzU3Njc2NSwiaG9zdCI6Iml0ZXhwZXJ0LnByb2N0b3Jpbmcub25saW5lIiwidXNlcm5hbWUiOiJPbGdhX0t1cHJpZW5rbyIsIm5pY2tuYW1lIjoiby5rdXByaWVua29AaXRleHBlcnQucnUiLCJyb2xlIjoic3R1ZGVudCIsInJvb20iOiI2NWQzMWNlNDkzNzE4MWMyNDk3ZjY3MDUiLCJpYXQiOjE3NjM1NTUxNjV9.3XPJ6hSykTOBL7eYwGbUoBe8ipb6igEursSV3lShk6Q	moolde_id_exam=25	moolde_id_user=22
-    '''
+    s = ''''''
 
     contact = parser_str_to_contact(s)
 
