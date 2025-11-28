@@ -86,9 +86,9 @@ class ITEXPERT_API:
 
     # --- Методы POST/DELETE ---
 
-    def create_exam(self, user: Contact) -> Optional[requests.Response]:
+    def create_exam(self, contact: Contact) -> Optional[requests.Response]:
         """Создает новый экзамен, используя данные из объекта Contact."""
-        id_exam = self.get_exam_dict_code_id().get(user.exam)
+        id_exam = self.get_exam_dict_code_id().get(contact.exam)
         url = self._get_full_url(EXAM_ENDPOINT)
 
         exam_type = "Offline"
@@ -96,18 +96,18 @@ class ITEXPERT_API:
             exam_type = "Online"
 
         exam_data = {
-            "name": user.email,
-            "login": user.username,
-            "pass": user.password,
+            "name": contact.email,
+            "login": contact.username,
+            "pass": contact.password,
             "active": True,
             # Экзамен id из списка экзаменов
             "exam_in": str(id_exam),
-            "exam_date": f'{user.date_exam.strftime("%d.%m.%Y")}',
-            "exam_time": f'{user.date_exam.strftime("%H:%M")}',
+            "exam_date": f'{contact.date_exam.strftime("%d.%m.%Y")}',
+            "exam_time": f'{contact.date_exam.strftime("%H:%M")}',
             # Proctor
             "exam_type": exam_type,
             # "insurance_certificate": "false",
-            "link": user.url_proctor,
+            "link": contact.url_proctor,
             # "certificate": {
             #     "base64": "base64_encoded_file_content_CERT",
             #     "name": "certificate.pdf",
