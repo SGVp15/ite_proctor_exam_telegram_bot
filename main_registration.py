@@ -2,6 +2,7 @@ import asyncio
 from random import choice
 
 from Contact import Contact
+from Itexpert.ite_api import ITEXPERT_API
 from Moodle.moodle_api import MOODLE_API
 from root_config import LOG_FILE, ALLOWED_EXAMS
 from Email.config import EMAIL_BCC
@@ -67,6 +68,11 @@ async def registration(contacts: [Contact]) -> str:
             f.write(str(contact))
             log.info(contact)
 
+    # ITEXPERT
+    for contact in contacts:
+        ITEXPERT_API.create_exam(contact)
+
+    # OUT STRING
     for contact in contacts:
         # if contact.is_create_enrollment:
         out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '

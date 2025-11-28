@@ -86,10 +86,10 @@ class ITEXPERT_API:
 
     # --- Методы POST/DELETE ---
 
-    def create_exam(self, user: Contact, id_exam) -> Optional[requests.Response]:
+    def create_exam(self, user: Contact) -> Optional[requests.Response]:
         """Создает новый экзамен, используя данные из объекта Contact."""
+        id_exam = self.get_exam_dict_code_id().get(contact.exam)
         url = self._get_full_url(EXAM_ENDPOINT)
-
         exam_data = {
             "name": user.email,
             "login": user.username,
@@ -217,9 +217,8 @@ class ITEXPERT_API:
 
 if __name__ == '__main__':
 
-    s = '''Ok	2025-11-19 15:26:10.781356	subject=2025-12-02T11:00:00Z_olga_rybkina_ICSC_proctor-1	lastName=Рыбкина 	
-    firstName=Ольга	email=g.savushkin@itexpert.ru	username=olga_rybkina	password=olga_rybkina_P2178	
-    url=https://itexpert.proctoring.online?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDMxY2RlOTM3MTgxYzI0OTdmNjZmNCIsImV4cCI6MTc2MzU3Njc2NSwiaG9zdCI6Iml0ZXhwZXJ0LnByb2N0b3Jpbmcub25saW5lIiwidXNlcm5hbWUiOiJPbGdhX0t1cHJpZW5rbyIsIm5pY2tuYW1lIjoiby5rdXByaWVua29AaXRleHBlcnQucnUiLCJyb2xlIjoic3R1ZGVudCIsInJvb20iOiI2NWQzMWNlNDkzNzE4MWMyNDk3ZjY3MDUiLCJpYXQiOjE3NjM1NTUxNjV9.3XPJ6hSykTOBL7eYwGbUoBe8ipb6igEursSV3lShk6Q'''
+    s = '''Ok	2025-11-19 15:26:10.781356	subject=2025-12-02T11:00:00Z_olga_rybkina_ICSC_proctor-1	lastName=Рыбкина 	firstName=Ольга	email=olga.n.ribkina@bspb.ru	username=olga_rybkina	password=olga_rybkina_P2178	url=https://itexpert.proctoring.online?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDMxY2RlOTM3MTgxYzI0OTdmNjZmNCIsImV4cCI6MTc2MzU3Njc2NSwiaG9zdCI6Iml0ZXhwZXJ0LnByb2N0b3Jpbmcub25saW5lIiwidXNlcm5hbWUiOiJPbGdhX0t1cHJpZW5rbyIsIm5pY2tuYW1lIjoiby5rdXByaWVua29AaXRleHBlcnQucnUiLCJyb2xlIjoic3R1ZGVudCIsInJvb20iOiI2NWQzMWNlNDkzNzE4MWMyNDk3ZjY3MDUiLCJpYXQiOjE3NjM1NTUxNjV9.3XPJ6hSykTOBL7eYwGbUoBe8ipb6igEursSV3lShk6Q	moolde_id_exam=25	moolde_id_user=22
+    '''
 
     contact = parser_str_to_contact(s)
 
@@ -247,20 +246,20 @@ if __name__ == '__main__':
 
     # 3. Тестирование создания экзамена
     print(f"\n[3. create_exam({contact})]")
-    r_create = ite_api.create_exam(contact, id_exam=ite_api.get_exam_dict_code_id().get(contact.exam))
+    r_create = ite_api.create_exam(contact)
     if r_create:
         print("Результат создания:", r_create.status_code)
 
     # 4. Тестирование удаления экзамена
-    for id_exam_delete in [28290, ]:  # ,28288,28287,28271]:#[28270,28269,28268,28263]:
+    for id_exam_delete in [28295, 28293, 28272]:  # ,28288,28287,28271]:#[28270,28269,28268,28263]:
         print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
         r_delete = ite_api.delete_exam_by_id(id_exam_delete)
         print("Результат удаления:", r_delete.status_code)
     #
-    # email = 'g.savushkin@itexpert.ru'
-    # print(f"\n[get_exam_by_email({email})]")
-    # r_id = ite_api.get_exam_by_email(email)
-    # if r_id and r_id.ok:
-    #     pprint(json.loads(r_id.text))
-    # else:
-    #     print("Не удалось получить экзамен по ID.")
+    email = 'olga.n.ribkina@bspb.ru'
+    print(f"\n[get_exam_by_email({email})]")
+    r_id = ite_api.get_exam_by_email(email)
+    if r_id and r_id.ok:
+        pprint(json.loads(r_id.text))
+    else:
+        print("Не удалось получить экзамен по ID.")
