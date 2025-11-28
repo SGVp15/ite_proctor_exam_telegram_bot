@@ -1,6 +1,7 @@
 import time
+from asyncio import sleep
 
-from Contact import parser_str_contact
+from Contact import parser_str_to_contact
 
 
 # from Email import EmailSending
@@ -13,13 +14,13 @@ def exam_date():
         rows = f.read()
     contacts = []
     for row in rows.split('\n'):
-        c = parser_str_contact(row)
+        c = parser_str_to_contact(row)
         contacts.append(c)
     return contacts
 
 
-# async def check_log_and_send_email():
-def check_log_and_send_email():
+async def check_log_and_send_email():
+# def check_log_and_send_email():
     while True:
         text = exam_date()
         if text:
@@ -29,8 +30,8 @@ def check_log_and_send_email():
             #     text=text, html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
             #     login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None)
             # email.send_email()
-        time.sleep(60)
-        # await sleep(60)
+        # time.sleep(60)
+        await sleep(60)
 
 if __name__ == '__main__':
     check_log_and_send_email()

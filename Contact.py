@@ -120,7 +120,7 @@ class Contact:
         return False
 
 
-def parser_str_contact(log_string: str):
+def parser_str_to_contact(log_string: str):
     """
     Парсит строку лога прокторинга, извлекая статус, дату/время и все пары ключ=значение.
 
@@ -157,18 +157,13 @@ def parser_str_contact(log_string: str):
     key_value_pairs = key_value_string.split()
 
     for item in key_value_pairs:
-        # Ищем первое вхождение знака '='
         if '=' in item:
             try:
-                # Разделяем строку только по первому знаку '='
                 key, value = item.split('=', 1)
                 result[key.strip()] = value.strip()
             except ValueError:
-                # Пропускаем, если строка не является парой ключ=значение
                 continue
-        # Если это часть URL или последнего поля (которое может быть без '='),
-        # оно будет обработано вместе с предыдущим полем (например, url=...)
-        # Благодаря 'split('=', 1)' URL будет корректно разобран.
+
     c = Contact()
     if result.get('status', '').lower() == 'ok':
         attributes = c.__dict__

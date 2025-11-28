@@ -13,7 +13,7 @@ async def main():
     tasks = [
         start_bot(),
         git_update(),
-        check_log_and_send_email(),
+        # check_log_and_send_email(),
     ]
     await asyncio.gather(*tasks)
 
