@@ -69,8 +69,9 @@ async def registration(contacts: [Contact]) -> str:
             log.info(contact)
 
     # ITEXPERT
+    ite_api = ITEXPERT_API()
     for contact in contacts:
-        ITEXPERT_API.create_exam(contact)
+        ite_api.create_exam(contact)
 
     # OUT STRING
     for contact in contacts:
