@@ -6,6 +6,12 @@ config = dotenv_values(find_dotenv())
 
 EMAIL_PASSWORD = config.get('EMAIL_PASSWORD')
 EMAIL_LOGIN = config.get('EMAIL_LOGIN')
+
+if not EMAIL_PASSWORD:
+    raise f'ERROR .ENV {EMAIL_PASSWORD=}'
+if not EMAIL_LOGIN:
+    raise f'ERROR .ENV {EMAIL_LOGIN=}'
+
 SMTP_SERVER = 'smtp.yandex.ru'
 SMTP_PORT = 465
 EMAIL_BCC = ['exam@itexpert.ru',]
