@@ -88,7 +88,7 @@ class ITEXPERT_API:
 
     def create_exam(self, user: Contact) -> Optional[requests.Response]:
         """Создает новый экзамен, используя данные из объекта Contact."""
-        id_exam = self.get_exam_dict_code_id().get(contact.exam)
+        id_exam = self.get_exam_dict_code_id().get(user.exam)
         url = self._get_full_url(EXAM_ENDPOINT)
 
         exam_type = "Offline"
