@@ -255,7 +255,7 @@ if __name__ == '__main__':
         print("Результат создания:", r_create.status_code)
 
     # 4. Тестирование удаления экзамена
-    for id_exam_delete in [28295, 28293, 28272]:  # ,28288,28287,28271]:#[28270,28269,28268,28263]:
+    for id_exam_delete in [28295, 28293, 28272]:
         print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
         r_delete = ite_api.delete_exam_by_id(id_exam_delete)
         print("Результат удаления:", r_delete.status_code)
