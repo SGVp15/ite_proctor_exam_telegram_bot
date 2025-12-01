@@ -6,12 +6,13 @@ from Contact import parser_str_to_contact, Contact
 
 from Email import EmailSending
 from Email.config import EMAIL_LOGIN, SMTP_SERVER, SMTP_PORT, EMAIL_PASSWORD, EMAIL_BCC
+from root_config import LOG_FILE
 
 
 def get_contacts_from_logs() -> [Contact]:
     rows = ''
     try:
-        with open('./data/log.txt', 'r', encoding='utf-8') as f:
+        with open(LOG_FILE, 'r', encoding='utf-8') as f:
             rows = f.read()
     except Exception as e:
         print(e)
@@ -35,11 +36,10 @@ async def check_log_and_send_email():
         contact_for_email_ = []
         for c in get_contacts_from_logs():
             c: Contact
-            interval_duration = datetime.timedelta(hours=1)
             if check_time_interval(
-                    c.date_exam - interval_duration,
-                    datetime.datetime.now(),
-                    datetime.timedelta(minutes=1)
+                    check_dt=datetime.datetime.now(),
+                    start_dt=c.date_exam - datetime.timedelta(hours=1),
+                    delta_dt=datetime.timedelta(minutes=1)
             ):
                 contact_for_email_.append(c)
                 hour_contacts.append(c)
@@ -59,7 +59,7 @@ async def check_log_and_send_email():
                     f'url={c.url_proctor}\n'
                     f'\n-----------------------------------\n'
                 )
-                subject+=f'{c.exam} {c.date_exam} '
+                subject += f'{c.exam} {c.date_exam} '
 
             email = EmailSending(
                 subject=f'Экзамен {subject}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
