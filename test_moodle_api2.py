@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from MOODLE_API import MOODLE_API  # Предполагаем, что класс MOODLE_API находится в MOODLE_API.py
+
+from Moodle.moodle_api import MOODLE_API
 
 
 # --- 1. МОК-КЛАСС Contact ---

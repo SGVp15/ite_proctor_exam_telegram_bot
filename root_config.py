@@ -29,6 +29,7 @@ Date_column: str = 'H'
 Hour_column: str = 'I'
 Minute_column: str = 'J'
 Proctor_column: str = 'K'
+Certificate_insurance_column: str = 'L'
 
 #  == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL
 #  ====================================================================================================================

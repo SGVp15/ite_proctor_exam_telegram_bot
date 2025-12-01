@@ -38,14 +38,13 @@ class ITEXPERT_API:
         print(f'Выполняется GET запрос: {url=}')
         return requests.get(url=url, headers=self.headers)
 
-    def get_exam_by_id(self, exam_id: Optional[str]) -> Optional[requests.Response]:
+    def get_exam_by_id(self, id_exam: Optional[str]) -> Optional[requests.Response]:
         """Получает информацию об экзамене по его ID."""
-        if not exam_id:
+        if not id_exam:
             print("❌ ID экзамена не предоставлен.")
             return None
 
-        # Предполагаем, что запрос для получения по ID выглядит так: /rus/tools/api/exam/?id=...
-        path = f'{EXAM_ENDPOINT}?id={exam_id}'
+        path = f'{EXAM_ENDPOINT}?id={id_exam}'
         url = self._get_full_url(path)
         return self._send_request_get(url)
 
@@ -240,30 +239,31 @@ if __name__ == '__main__':
         print("Не удалось получить список экзаменов.")
 
     # 2. Тестирование получения экзамена по ID
-    id_exam = 28271
-    print(f"\n[2. get_exam_by_id({id_exam})]")
-    r_id = ite_api.get_exam_by_id(id_exam)
-    if r_id and r_id.ok:
-        pprint(json.loads(r_id.text))
-    else:
-        print("Не удалось получить экзамен по ID.")
+    for id_exam in [28312, 28313]:
+        print(f"\n[2. get_exam_by_id({id_exam})]")
+        r_id = ite_api.get_exam_by_id(id_exam)
+        if r_id and r_id.ok:
+            pprint(json.loads(r_id.text))
+        else:
+            print("Не удалось получить экзамен по ID.")
 
-    # 3. Тестирование создания экзамена
-    print(f"\n[3. create_exam({contact})]")
-    r_create = ite_api.create_exam(contact)
-    if r_create:
-        print("Результат создания:", r_create.status_code)
+    # # 3. Тестирование создания экзамена
+    # print(f"\n[3. create_exam({contact})]")
+    # r_create = ite_api.create_exam(contact)
+    # if r_create:
+    #     print("Результат создания:", r_create.status_code)
 
-    # 4. Тестирование удаления экзамена
-    for id_exam_delete in [28295, 28293, 28272]:
-        print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
-        r_delete = ite_api.delete_exam_by_id(id_exam_delete)
-        print("Результат удаления:", r_delete.status_code)
+    # # 4. Тестирование удаления экзамена
+    # for id_exam_delete in [28296, ]:
+    #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
+    #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
+    #     print("Результат удаления:", r_delete.status_code)
+    # #
     #
-    email = 'olga.n.ribkina@bspb.ru'
-    print(f"\n[get_exam_by_email({email})]")
-    r_id = ite_api.get_exam_by_email(email)
-    if r_id and r_id.ok:
-        pprint(json.loads(r_id.text))
-    else:
-        print("Не удалось получить экзамен по ID.")
+    # email = 'g.savushkin@itexpert.ru'
+    # print(f"\n[get_exam_by_email({email})]")
+    # r_id = ite_api.get_exam_by_email(email)
+    # if r_id and r_id.ok:
+    #     pprint(json.loads(r_id.text))
+    # else:
+    #     print("Не удалось получить экзамен по ID.")
