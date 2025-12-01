@@ -36,26 +36,33 @@ async def check_log_and_send_email():
         for c in get_contacts_from_logs():
             c: Contact
             interval_duration = datetime.timedelta(hours=1)
-            if check_time_interval(c.date_exam - interval_duration, datetime.datetime.now(),
-                                   datetime.timedelta(minutes=1)):
+            if check_time_interval(
+                    c.date_exam - interval_duration,
+                    datetime.datetime.now(),
+                    datetime.timedelta(minutes=1)
+            ):
                 contact_for_email_.append(c)
                 hour_contacts.append(c)
-        text = ''
+
         if contact_for_email_:
+            text = ''
+            subject = ''
             for c in contact_for_email_:
+                if c.proctor:
+                    text += 'Online '
                 text += (
-                    f'date={c.date_exam}\t'
-                    f'exam={c.exam}\t'
-                    f'last_name_rus={c.last_name_rus}\t'
-                    f'first_name_rus={c.first_name_rus}\t'
-                    f'email={c.email}\t'
-                    f'username={c.username}\t'
-                    f'password={c.password}\t'
-                    f'url={c.url_proctor}\t'
-                    f'\n\n'
+                    f'{c.date_exam}\n'
+                    f'{c.exam}\n'
+                    f'{c.last_name_rus} {c.first_name_rus} {c.email}\n'
+                    f'Логин={c.username}\n'
+                    f'Пароль={c.password}\n'
+                    f'url={c.url_proctor}\n'
+                    f'\n-----------------------------------\n'
                 )
+                subject+=f'{c.exam} {c.date_exam} '
+
             email = EmailSending(
-                subject=f'Экзамены {text}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
+                subject=f'Экзамен {subject}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
                 text=text, html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
                 login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None)
             email.send_email()
