@@ -203,7 +203,7 @@ class MOODLE_API:
         # 1.2. Случайный выбор одного короткого имени курса
         final_shortname = choice(possible_courses)
         course_id = course_map[final_shortname]
-        contact.moolde_id_exam = course_id
+        contact.moodle_id_exam = course_id
 
         log.info(f"✨ Выбран случайный курс для зачисления: '{final_shortname}' (ID: {course_id}).")
 
@@ -232,7 +232,7 @@ class MOODLE_API:
                 log.error(f"❌ Не удалось создать пользователя {contact.email}. Процесс остановлен.")
                 return False
 
-        contact.moolde_id_user = user_id
+        contact.moodle_id_user = user_id
         # 3. ЗАЧИСЛЕНИЕ
         if user_id:
             log.info(f"Начало зачисления пользователя (ID: {user_id}) на курс '{final_shortname}' (ID: {course_id}).")

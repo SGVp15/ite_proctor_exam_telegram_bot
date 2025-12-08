@@ -43,8 +43,8 @@ class Contact:
         self.ispring_status: str | None = None
 
         self.id_moodle = None
-        self.moolde_id_exam = None
-        self.moolde_id_user = None
+        self.moodle_id_exam = None
+        self.moodle_id_user = None
 
     def normalize(self) -> bool:
         self.first_name_rus = clean_string(self.first_name_rus).capitalize()
@@ -70,7 +70,7 @@ class Contact:
         if datetime.datetime.now() > self.date_exam:
             return False
 
-        self.date_exam_connect = self.date_exam - datetime.timedelta(minutes=5)
+        self.date_exam_connect = self.date_exam + datetime.timedelta(minutes=-5)
         self.scheduled_at = self.date_exam + datetime.timedelta(hours=-3)
         deadline = self.scheduled_at + datetime.timedelta(hours=2)
         remove_at = self.scheduled_at + datetime.timedelta(days=90)
@@ -84,14 +84,14 @@ class Contact:
         self.close_at = close_at.strftime(pattern_time)
         self.remove_at = remove_at.strftime(pattern_time)
 
-        # self.username = re.sub(r'[ ]+', '_', self.name_eng.strip())
-        self.username = re.sub(r'[ ]+', '_', self.name_eng.strip().lower())
+        self.username = re.sub(r'\s+', '_', self.name_eng.strip().lower())
 
         if not self.password:
             self.password = f'{self.username}_P{random.randint(0, 9999):04d}'
 
         self.subject = f'{self.date_exam_for_subject}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'
+
         self.identifier = to_md5(f'{self.date_from_file.replace(".", "-")}_{self.username}_{self.exam}')
         return True
 
@@ -108,8 +108,8 @@ class Contact:
             f'password={self.password}\t'
             f'url={self.url_proctor}\t'
             f'exam={self.exam}\t'
-            f'moolde_id_exam={self.moolde_id_exam}\t'
-            f'moolde_id_user={self.moolde_id_user}\t'
+            f'moodle_id_exam={self.moodle_id_exam}\t'
+            f'moodle_id_user={self.moodle_id_user}\t'
             f'\n'
         )
         return self.s
