@@ -24,7 +24,7 @@ def get_contacts_from_logs() -> [Contact]:
     return contacts
 
 
-def check_time_interval(check_dt: datetime.datetime, start_dt: datetime.datetime, delta_dt: datetime.datetime) -> bool:
+def check_time_interval(check_dt: datetime.datetime, start_dt: datetime.datetime, delta_dt: datetime.timedelta) -> bool:
     end_dt = start_dt + delta_dt
     return start_dt <= check_dt <= end_dt
 
@@ -35,18 +35,17 @@ async def check_log_and_send_email():
         contact_for_email_ = []
         for c in get_contacts_from_logs():
             c: Contact
+            if datetime.time(hour=9, minute=0) <= datetime.datetime.now().time() <= datetime.time(hour=9, minute=1,
+                                                                                                  second=0):
+                if datetime.datetime.now().date() == c.date_exam.date():
+                    contact_for_email_.append(c)
+                    continue
             if check_time_interval(
                     check_dt=datetime.datetime.now(),
                     start_dt=c.date_exam - datetime.timedelta(hours=1),
                     delta_dt=datetime.timedelta(minutes=1)
             ):
                 contact_for_email_.append(c)
-
-            current_time = datetime.datetime.now().time()
-            current_date = datetime.datetime.now().date()
-            if datetime.time(hour=9, minute=0) <= current_time <= datetime.time(hour=9, minute=1, second=0):
-                if current_date == c.date_exam.date():
-                    contact_for_email_.append(c)
 
         subject = 'Экзамен '
         if contact_for_email_:
