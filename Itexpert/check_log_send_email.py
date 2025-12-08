@@ -31,7 +31,6 @@ def check_time_interval(check_dt: datetime.datetime, start_dt: datetime.datetime
 
 async def check_log_and_send_email():
     # def check_log_and_send_email():
-    hour_contacts = []
     while True:
         contact_for_email_ = []
         for c in get_contacts_from_logs():
@@ -42,11 +41,16 @@ async def check_log_and_send_email():
                     delta_dt=datetime.timedelta(minutes=1)
             ):
                 contact_for_email_.append(c)
-                hour_contacts.append(c)
 
+            current_time = datetime.datetime.now().time()
+            current_date = datetime.datetime.now().date()
+            if datetime.time(hour=9, minute=0) <= current_time <= datetime.time(hour=9, minute=1, second=0):
+                if current_date == c.date_exam.date():
+                    contact_for_email_.append(c)
+
+        subject = 'Экзамен '
         if contact_for_email_:
             text = ''
-            subject = ''
             for c in contact_for_email_:
                 if c.proctor:
                     text += 'Online '
@@ -62,7 +66,7 @@ async def check_log_and_send_email():
                 subject += f'{c.exam} {c.date_exam} '
 
             email = EmailSending(
-                subject=f'Экзамен {subject}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
+                subject=f'{subject}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
                 text=text, html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
                 login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None)
             email.send_email()
