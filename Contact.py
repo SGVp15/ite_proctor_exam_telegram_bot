@@ -139,16 +139,19 @@ def parser_str_to_contact(log_string: str):
     result = {}
 
     # 2. Обработка первых двух полей: Статус и Дата/Время
-    if len(parts) >= 1:
-        result['status'] = parts[0]
-    if len(parts) >= 2:
-        result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
-        # Переопределяем parts для правильного парсинга полей ключ=значение
-        # parts[1] - время, parts[2] - остаток строки.
-        key_value_string = ' '.join(parts[2:])
-    else:
-        # Если есть только статус, остальное пусто
-        return result
+    try:
+        if len(parts) >= 1:
+            result['status'] = parts[0]
+        if len(parts) >= 2:
+            result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
+            # Переопределяем parts для правильного парсинга полей ключ=значение
+            # parts[1] - время, parts[2] - остаток строки.
+            key_value_string = ' '.join(parts[2:])
+        else:
+            # Если есть только статус, остальное пусто
+            return result
+    except IndexError:
+        return {}
 
     # 3. Парсинг пар ключ=значение
     # Снова разделяем строку, которая содержит только пары 'ключ=значение',

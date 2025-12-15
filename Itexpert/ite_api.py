@@ -1,5 +1,6 @@
-import datetime
+import base64
 import json
+from pathlib import Path
 from pprint import pprint
 from typing import Optional
 
@@ -148,35 +149,65 @@ class ITEXPERT_API:
                 print(f"Ответ сервера: {response.text}")
             return None
 
-    def update_exam_by_id(self, user: Contact, id, id_exam) -> Optional[requests.Response]:
-        """Создает новый экзамен, используя данные из объекта Contact."""
-
-        # Полный URL для создания экзамена
+    def add_review_to_exam_by_id(
+            self,
+            id,
+            file_path: str,
+            name: str
+    ) -> Optional[requests.Response]:
         url = self._get_full_url(EXAM_ENDPOINT)
 
         exam_data = {
-            "name": user.email,
-            "login": user.username,
-            "pass": user.password,
-            "active": True,
-            # Экзамен id из списка экзаменов
-            "exam_in": str(id_exam),
-            "exam_date": f'{user.date_exam.strftime("%d.%m.%Y")}',
-            "exam_time": f'{user.date_exam.strftime("%H:%M")}',
-            # Proctor
-            "exam_type": "Online",
-            # "insurance_certificate": "false",
-            "link": user.url_proctor,
-            # "certificate": {
-            #     "base64": "base64_encoded_file_content_CERT",
-            #     "name": "certificate.pdf",
-            #     "type": "application/pdf"
-            # },
-            # "result": {
-            #     "base64": "base64_encoded_file_content_RESULT",
-            #     "name": "result.pdf",
-            #     "type": "application/pdf"
-            # }
+            'id': id,
+            "result": {
+                "base64": file_to_base64(file_path),
+                "name": name,
+            }
+        }
+
+        print(f"Выполняется POST-запрос: {url=}")
+
+        try:
+            # Отправка POST-запроса с автоматической сериализацией JSON
+            response = requests.put(url, headers=self.headers, json=exam_data)
+
+            # Проверяем статус ответа
+            response.raise_for_status()
+
+            print(f"✅ Успешный ответ. Статус код: {response.status_code}")
+
+            # Попытка вывода JSON-ответа
+            try:
+                print("Тело ответа (JSON):")
+                print(json.dumps(response.json(), indent=2, ensure_ascii=False))
+            except json.JSONDecodeError:
+                print("Тело ответа не является JSON-объектом или пустое.")
+                print(f"Текстовый ответ: {response.text}")
+
+            return response
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Ошибка при выполнении запроса: {e}")
+            # Переменная response может быть не определена в случае ошибки DNS/соединения
+            if 'response' in locals() and response is not None:
+                print(f"Статус код ошибки: {response.status_code}")
+                print(f"Ответ сервера: {response.text}")
+            return None
+
+    def add_cert_to_exam_by_id(
+            self,
+            id,
+            name: str,
+            file_path
+    ) -> Optional[requests.Response]:
+        url = self._get_full_url(EXAM_ENDPOINT)
+
+        exam_data = {
+            'id': id,
+            "certificate": {
+                "base64": file_to_base64(file_path),
+                "name": name,
+            },
         }
 
         print(f"Выполняется POST-запрос: {url=}")
@@ -219,9 +250,36 @@ class ITEXPERT_API:
 
 # --- Пример использования (блок if __name__ == '__main__':) ---
 
+
+def file_to_base64(file_path_str: str) -> str:
+    path = Path(file_path_str)
+
+    if not path.exists():
+        print(f"Ошибка: Путь '{path}' не существует.")
+        return None
+    if not path.is_file():
+        print(f"Ошибка: '{path}' не является файлом.")
+        return None
+
+    try:
+        file_bytes_data = path.read_bytes()
+
+        # Кодируем в Base64
+        base64_bytes = base64.b64encode(file_bytes_data)
+
+        # Возвращаем строку
+        return base64_bytes.decode('utf-8')
+
+    except Exception as e:
+        print(f"Произошла ошибка при обработке файла: {e}")
+        return None
+
+
 if __name__ == '__main__':
 
-    s = ''''''
+    s = '''
+    
+    '''
 
     contact = parser_str_to_contact(s)
 
@@ -238,14 +296,14 @@ if __name__ == '__main__':
     else:
         print("Не удалось получить список экзаменов.")
 
-    # 2. Тестирование получения экзамена по ID
-    for id_exam in [28312, 28313]:
-        print(f"\n[2. get_exam_by_id({id_exam})]")
-        r_id = ite_api.get_exam_by_id(id_exam)
-        if r_id and r_id.ok:
-            pprint(json.loads(r_id.text))
-        else:
-            print("Не удалось получить экзамен по ID.")
+    # # 2. Тестирование получения экзамена по ID
+    # for id_exam in [28312, 28313]:
+    #     print(f"\n[2. get_exam_by_id({id_exam})]")
+    #     r_id = ite_api.get_exam_by_id(id_exam)
+    #     if r_id and r_id.ok:
+    #         pprint(json.loads(r_id.text))
+    #     else:
+    #         print("Не удалось получить экзамен по ID.")
 
     # # 3. Тестирование создания экзамена
     # print(f"\n[3. create_exam({contact})]")
@@ -260,7 +318,34 @@ if __name__ == '__main__':
     #     print("Результат удаления:", r_delete.status_code)
     # #
     #
+    email = 'olga.n.ribkina@bspb.ru'
+    email = 'observer3d@gmail.com'
     # email = 'g.savushkin@itexpert.ru'
+    print(f"\n[get_exam_by_email({email})]")
+    r_id = ite_api.get_exam_by_email(email)
+    if r_id and r_id.ok:
+        pprint(json.loads(r_id.text))
+    else:
+        print("Не удалось получить экзамен по ID.")
+
+    # 3. Добавление сертификата в ЛК
+    id = 28297
+    print(f"\n[5. add_cert_to_exam_by_id()]")
+    r_update = ite_api.add_cert_to_exam_by_id(
+        id=id,
+        file_path='data/cert/Сертификат_OPSC_2025.12.13_Исаев Денис_262_observer3d@gmail.com.png',
+        name='OPSC_2025.12.13_262_observer3d@gmail.com.png',
+    )
+    if r_update:
+        print("Результат:", r_update.status_code)
+    r_update = ite_api.add_review_to_exam_by_id(
+        id=id,
+        file_path='data/reports/r_45.html',
+        name='r_45.html',
+    )
+    if r_update:
+        print("Результат:", r_update.status_code)
+
     # print(f"\n[get_exam_by_email({email})]")
     # r_id = ite_api.get_exam_by_email(email)
     # if r_id and r_id.ok:
