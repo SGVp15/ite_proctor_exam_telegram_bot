@@ -1,9 +1,7 @@
-import time
-from asyncio import sleep
 import datetime
+from asyncio import sleep
 
 from Contact import parser_str_to_contact, Contact
-
 from Email import EmailSending
 from Email.config import EMAIL_LOGIN, SMTP_SERVER, SMTP_PORT, EMAIL_PASSWORD, EMAIL_BCC
 from root_config import LOG_FILE
@@ -30,22 +28,25 @@ def check_time_interval(check_dt: datetime.datetime, start_dt: datetime.datetime
 
 
 async def check_log_and_send_email():
-    # def check_log_and_send_email():
     while True:
         contact_for_email_ = []
-        for c in get_contacts_from_logs():
+        contacts = get_contacts_from_logs()
+        for c in contacts:
             c: Contact
             if datetime.time(hour=9, minute=0) <= datetime.datetime.now().time() <= datetime.time(hour=9, minute=1,
                                                                                                   second=0):
                 if datetime.datetime.now().date() == c.date_exam.date():
                     contact_for_email_.append(c)
                     continue
-            if check_time_interval(
-                    check_dt=datetime.datetime.now(),
-                    start_dt=c.date_exam - datetime.timedelta(hours=1),
-                    delta_dt=datetime.timedelta(minutes=1)
-            ):
-                contact_for_email_.append(c)
+            try:
+                if check_time_interval(
+                        check_dt=datetime.datetime.now(),
+                        start_dt=c.date_exam - datetime.timedelta(hours=1),
+                        delta_dt=datetime.timedelta(minutes=1)
+                ):
+                    contact_for_email_.append(c)
+            except TypeError:
+                pass
 
         subject = 'Экзамен '
         if contact_for_email_:
@@ -73,7 +74,7 @@ async def check_log_and_send_email():
 
 
 if __name__ == '__main__':
-    # check_log_and_send_email()
+    contacts = get_contacts_from_logs()
     # 1. Создание интервала
     start_time = datetime.datetime(2025, 12, 1, 16, 30, 0)
     # Продолжительность: 1 час 30 минут

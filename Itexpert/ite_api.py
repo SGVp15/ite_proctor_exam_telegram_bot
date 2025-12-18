@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 from pathlib import Path
 from pprint import pprint
 from typing import Optional
@@ -153,10 +154,11 @@ class ITEXPERT_API:
             self,
             id,
             file_path: str,
-            name: str
+            name: str = ''
     ) -> Optional[requests.Response]:
         url = self._get_full_url(EXAM_ENDPOINT)
-
+        if not name:
+            name = Path(file_path).name
         exam_data = {
             'id': id,
             "result": {
@@ -197,11 +199,12 @@ class ITEXPERT_API:
     def add_cert_to_exam_by_id(
             self,
             id,
-            name: str,
-            file_path
+            file_path,
+            name: str = '',
     ) -> Optional[requests.Response]:
         url = self._get_full_url(EXAM_ENDPOINT)
-
+        if not name:
+            name = Path(file_path).name
         exam_data = {
             'id': id,
             "certificate": {
@@ -292,7 +295,8 @@ if __name__ == '__main__':
     print("\n[1. get_list_exams(active=True)]")
     r_list = ite_api.get_list_exams(active=True)
     if r_list and r_list.ok:
-        pprint(json.loads(r_list.text))
+        list_exams = json.loads(r_list.text)['data']
+        pprint(list_exams)
     else:
         print("Не удалось получить список экзаменов.")
 
@@ -317,31 +321,36 @@ if __name__ == '__main__':
     #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
     #     print("Результат удаления:", r_delete.status_code)
     # #
-    #
-    email = 'olga.n.ribkina@bspb.ru'
-    email = 'observer3d@gmail.com'
-    # email = 'g.savushkin@itexpert.ru'
+
+    email = 'g.savushkin@itexpert.ru'
     print(f"\n[get_exam_by_email({email})]")
     r_id = ite_api.get_exam_by_email(email)
     if r_id and r_id.ok:
-        pprint(json.loads(r_id.text))
+        obj = json.loads(r_id.text)['data']
+        pprint(obj)
     else:
         print("Не удалось получить экзамен по ID.")
 
     # 3. Добавление сертификата в ЛК
-    id = 28297
+    id = 28312
+    cert_path = 'data/cert/Сертификат_OPSC_2025.12.16_Блинников Михаил_263_m.blinnikov@gpi-sakhalin.ru.png'
+
+    cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
+    cert_name = re.sub('^_', '', cert_name)
+
     print(f"\n[5. add_cert_to_exam_by_id()]")
     r_update = ite_api.add_cert_to_exam_by_id(
         id=id,
-        file_path='data/cert/Сертификат_OPSC_2025.12.13_Исаев Денис_262_observer3d@gmail.com.png',
-        name='OPSC_2025.12.13_262_observer3d@gmail.com.png',
+        file_path=cert_path,
+        name=cert_name,
     )
     if r_update:
         print("Результат:", r_update.status_code)
+
     r_update = ite_api.add_review_to_exam_by_id(
         id=id,
-        file_path='data/reports/r_45.html',
-        name='r_45.html',
+        file_path='data/reports/r_46.html',
+        name='r_46.html',
     )
     if r_update:
         print("Результат:", r_update.status_code)

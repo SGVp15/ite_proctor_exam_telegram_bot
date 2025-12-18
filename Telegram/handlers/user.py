@@ -19,7 +19,7 @@ async def download_document_handle(message: message):
     file_id = message.document.file_id
     # Download the file
     file = await bot.get_file(file_id)
-    file_path = file.file_path
+    file_path = file.cert_path
     path = os.path.join(PATH_DOWNLOAD_FILE, file_path)
 
     # Read the contents of the file

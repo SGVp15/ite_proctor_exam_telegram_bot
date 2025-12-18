@@ -1,13 +1,8 @@
-import asyncio
-from random import choice
-
 from Contact import Contact
 from Itexpert.ite_api import ITEXPERT_API
-from Moodle.moodle_api import MOODLE_API
+from Moodle.API.moodle_api import MOODLE_API
 from root_config import LOG_FILE, ALLOWED_EXAMS
 from Email.config import EMAIL_BCC
-from Ispring.ispring2 import IspringApi
-from parser import get_all_courses, get_all_users
 from ProctorEDU.csv_creator import create_csv_files
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
