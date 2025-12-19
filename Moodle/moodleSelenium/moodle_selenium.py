@@ -19,7 +19,7 @@ class MoodleSelenium:
 
         options = webdriver.ChromeOptions()
         # Чтобы запускался в свернутом виде, как вы просили ранее:
-        options.add_argument("--start-minimized")
+        options.add_argument("--headless")
 
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)

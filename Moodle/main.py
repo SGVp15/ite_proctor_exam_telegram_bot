@@ -2,9 +2,6 @@ import asyncio
 import re
 from asyncio import sleep
 
-import keyboard
-import pygetwindow as pg
-
 from Moodle.config import DIR_HTML_DOWNLOAD
 from Moodle.moodleSelenium.moodle_selenium import MoodleSelenium
 from Utils.log import log
