@@ -1,16 +1,6 @@
 import xmltodict
 
 
-def get_ispring_users(s: str) -> list[dict]:
-    my_dict = xmltodict.parse(s)
-    users_ispring: list = my_dict.get('response').get('userProfile')
-    for user in users_ispring:
-        fields: list = user.get('fields').get('field')
-        for field in fields:
-            user[field.get('name')] = field.get('value')
-    return users_ispring
-
-
 def get_ispring_only_quiz(s: str) -> list[dict]:
     out_list = []
     my_dict = xmltodict.parse(s)
