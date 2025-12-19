@@ -1,16 +1,16 @@
-import os.path
+from pathlib import Path
 
-from aiogram import types, F
+from aiogram import F
 from aiogram.types import CallbackQuery, message
 
 from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
 from Telegram.Call_Back_Data import CallBackData
-from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
 from Telegram.keybords.inline import inline_kb_main, del_enrollment
 from Telegram.main import bot, dp, loop
 from Utils.log import log
 from main_registration import registration
 from parser import get_contact_from_excel
+from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
 
 
 @dp.message(F.document & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
@@ -19,8 +19,10 @@ async def download_document_handle(message: message):
     file_id = message.document.file_id
     # Download the file
     file = await bot.get_file(file_id)
-    file_path = file.cert_path
-    path = os.path.join(PATH_DOWNLOAD_FILE, file_path)
+    print(type(file))
+
+    file_path = file.file_path
+    path = Path(PATH_DOWNLOAD_FILE) / file_path
 
     # Read the contents of the file
     await bot.download_file(file_path, destination=path)
