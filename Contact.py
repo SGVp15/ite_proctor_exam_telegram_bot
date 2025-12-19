@@ -104,6 +104,7 @@ class Contact:
             f'first_name_rus={self.first_name_rus}\t'
             f'email={self.email}\t'
             f'date_from_file={self.date_from_file}\t'
+            f'date_exam={self.date_exam}\t'
             f'username={self.username}\t'
             f'password={self.password}\t'
             f'url={self.url_proctor}\t'

@@ -1,7 +1,7 @@
 from pprint import pprint
 from unittest import TestCase
 
-from Moodle.moodle_api import MOODLE_API
+from Moodle.API.moodle_api import MOODLE_API
 
 
 class TestMOODLE_API(TestCase):

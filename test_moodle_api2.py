@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
-from Moodle.moodle_api import MOODLE_API
+from Moodle.API.moodle_api import MOODLE_API
 
 
 # --- 1. МОК-КЛАСС Contact ---
