@@ -1,5 +1,5 @@
-import os
 import time
+from pathlib import Path
 
 from selenium import webdriver
 from selenium.common import NoSuchElementException, ElementNotInteractableException, ElementClickInterceptedException, \
@@ -23,7 +23,8 @@ class WebDriverIspring:
 
         options.add_argument("--headless")
 
-        os.makedirs("./Tutorial/down", exist_ok=True)
+        DIR_TUTORIAL = Path("./Tutorial") / 'down'
+        DIR_TUTORIAL.mkdir(parents=True, exist_ok=True)
 
         prefs = {'download.default_directory': "./Tutorial/down",
                  'download.prompt_for_download': False,
@@ -127,7 +128,3 @@ class WebDriverIspring:
 
     def quit(self):
         self.driver.quit()
-
-
-if __name__ == '__main__':
-    WebDriverIspring()

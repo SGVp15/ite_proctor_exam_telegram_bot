@@ -1,20 +1,21 @@
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
-from root_config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
+from Telegram.Call_Back_Data import CallBackData as call_back
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
-from Telegram.Call_Back_Data import CallBackData as call_back
 from Utils.log import log
+from root_config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
 
 
 def is_empty_file(file) -> bool:
-    if not os.path.exists(file):
+    file = Path(file)
+    if not file.exists():
         return True
 
     try:
@@ -46,17 +47,27 @@ async def get_file(callback_query: types.callback_query):
     elif query == call_back.GET_TEMPLATE_FILE_XLSX:
         file = FSInputFile(TEMPLATE_FILE_XLSX, 'template_file.xlsx')
     elif query == call_back.GET_LAST_EXCEL_FILE:
-        path = os.path.join(DOCUMENTS)
-        files = os.listdir(path)
-        paths = [os.path.join(path, basename) for basename in files]
-        path = max(paths, key=os.path.getctime)
-        file_name = os.path.basename(path)
-        file = FSInputFile(path, file_name)
+        path_dir = Path(DOCUMENTS)
+
+        # 1. Получаем список всех файлов в папке (исключая директории)
+        files = [f for f in path_dir.iterdir() if f.is_file()]
+
+        if files:
+            # 2. Находим файл с максимальным временем создания
+            # f.stat().st_ctime — время создания файла
+            last_file = max(files, key=lambda f: f.stat().st_ctime)
+
+            # 3. Создаем FSInputFile. .name заменяет os.path.basename
+            file = FSInputFile(last_file, filename=last_file.name)
+        else:
+            # Обработка ситуации, если файлов в папке нет
+            print("Файлы не найдены в директории DOCUMENTS")
+            file = None
 
     try:
         if is_empty_file(file.path):
             await bot.send_message(chat_id=callback_query.from_user.id, text=f'✅ Файл пустой',
-                                            reply_markup=inline_kb_main)
+                                   reply_markup=inline_kb_main)
         else:
             await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
     except UnicodeDecodeError:
@@ -76,6 +87,7 @@ async def show_exam_now(callback_query: types.callback_query):
         subjects = re.findall(rf'\ssubject=({now}[^\s]+)\s', s)
 
         subjects_now = '\n'.join([s for s in subjects if re.findall(now, s)])
-        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}', reply_markup=inline_kb_main)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}',
+                               reply_markup=inline_kb_main)
     except Exception as e:
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)

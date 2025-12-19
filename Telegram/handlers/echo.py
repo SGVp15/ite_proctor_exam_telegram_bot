@@ -1,5 +1,4 @@
 from aiogram import types, F
-from aiogram.fsm.context import FSMContext
 
 from Telegram.main import bot, dp
 

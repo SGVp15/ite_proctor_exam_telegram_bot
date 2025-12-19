@@ -1,12 +1,12 @@
-import os
+from pathlib import Path
 
 from aiogram import types, F
 from aiogram.types import FSInputFile
 
 from Telegram.Call_Back_Data import CallBackData
-from root_config import USERS_ID, ADMIN_ID, DOCUMENTS
 from Telegram.keybords.inline import inline_kb_main, get_list_files_keyboard
 from Telegram.main import dp, bot
+from root_config import USERS_ID, ADMIN_ID, DOCUMENTS
 
 
 def is_empty_file(file_path) -> bool:
@@ -21,8 +21,8 @@ def is_empty_file(file_path) -> bool:
 async def download_file(callback_query: types.callback_query):
     query = callback_query.data
     file_name = str(query).replace(CallBackData.FILE_DOWNLOAD_, '')
-    path = os.path.join(DOCUMENTS, file_name)
-    if os.path.exists(path):
+    path = Path(DOCUMENTS) / file_name
+    if path.exists():
         file = FSInputFile(path, file_name)
         await bot.send_document(chat_id=callback_query.from_user.id, document=file, reply_markup=inline_kb_main)
     else:
@@ -36,9 +36,9 @@ async def download_file(callback_query: types.callback_query):
 async def delete_file(callback_query: types.callback_query):
     query = callback_query.data
     file_name = str(query).replace(CallBackData.FILE_DELETE_, '')
-    path = os.path.join(DOCUMENTS, file_name)
-    if os.path.exists(path):
-        os.remove(path)
+    path = Path(DOCUMENTS) / file_name
+    if path.exists():
+        path.unlink(missing_ok=True)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Файл {file_name} удален',
                                reply_markup=get_list_files_keyboard())
     else:
