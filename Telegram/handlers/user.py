@@ -1,13 +1,10 @@
 from pathlib import Path
 
 from aiogram import F
-from aiogram.types import CallbackQuery, message
+from aiogram.types import message
 
-from Ispring.ispring2 import get_session_in_enrollments_users_contents, IspringApi
-from Telegram.Call_Back_Data import CallBackData
-from Telegram.keybords.inline import inline_kb_main, del_enrollment
+from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp, loop
-from Utils.log import log
 from main_registration import registration
 from parser import get_contact_from_excel
 from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
@@ -36,7 +33,6 @@ async def download_document_handle(message: message):
         text_answer = await registration(contacts)
         await message.answer(text_answer, reply_markup=inline_kb_main)
         loop.create_task(registration(contacts))
-
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 # async def show_registration(callback_query: CallbackQuery):
@@ -74,18 +70,18 @@ async def download_document_handle(message: message):
 #     )
 
 
-@dp.callback_query(
-    F.data.regexp(f'{CallBackData.DEL_REGISTRATION}' + r'.*')
-    & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def del_registration(callback_query: CallbackQuery):
-    delete_id = callback_query.data.replace(CallBackData.DEL_REGISTRATION, '')
-    log.info(f'{delete_id=}')
-    if IspringApi().delete_enrollment(delete_id):
-        text = 'Сессия удалена'
-    else:
-        text = 'Не получилось удалить сессию'
-    await bot.send_message(
-        chat_id=callback_query.from_user.id,
-        text=text,
-        reply_markup=inline_kb_main
-    )
+# @dp.callback_query(
+#     F.data.regexp(f'{CallBackData.DEL_REGISTRATION}' + r'.*')
+#     & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+# async def del_registration(callback_query: CallbackQuery):
+#     delete_id = callback_query.data.replace(CallBackData.DEL_REGISTRATION, '')
+#     log.info(f'{delete_id=}')
+#     if IspringApi().delete_enrollment(delete_id):
+#         text = 'Сессия удалена'
+#     else:
+#         text = 'Не получилось удалить сессию'
+#     await bot.send_message(
+#         chat_id=callback_query.from_user.id,
+#         text=text,
+#         reply_markup=inline_kb_main
+#     )
