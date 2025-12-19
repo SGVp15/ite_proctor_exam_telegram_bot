@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from dotenv import dotenv_values, find_dotenv
 
@@ -8,14 +8,16 @@ BOT_TOKEN: str | None = config.get('BOT_TOKEN')
 ADMIN_ID: list[int] = [int(x) for x in config['ADMIN_ID'].split(',')]
 USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 
-os.makedirs(os.path.join(os.getcwd(), 'data'), exist_ok=True)
-LOG_FILE: str = os.path.join(os.getcwd(), 'data', 'log.txt')
+DIR_DATA = Path('./data')
+DIR_DATA.mkdir(parents=True, exist_ok=True)
+LOG_FILE = DIR_DATA / 'log.txt'
 
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 
-os.makedirs(os.path.join(os.getcwd(), 'data', 'output', 'template'), exist_ok=True)
-TEMPLATE_FILE_XLSX: str = os.path.join(os.getcwd(), 'data', 'output', 'template', 'template.xlsx')
+DIR_template = DIR_DATA / 'output' / 'template'
+DIR_template.mkdir(parents=True, exist_ok=True)
+TEMPLATE_FILE_XLSX = DIR_template / 'template.xlsx'
 PAGE_NAME: str = 'Экзамены'
 
 LastName_column: str = 'A'
@@ -33,11 +35,11 @@ Certificate_insurance_column: str = 'L'
 
 #  == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL == EXCEL
 #  ====================================================================================================================
-os.makedirs(os.path.join(os.getcwd(), 'data', 'input', 'documents'), exist_ok=True)
-DOCUMENTS: str = os.path.join(os.getcwd(), 'data', 'input', 'documents')
 
-PATH_DOWNLOAD_FILE: str = os.path.join(os.getcwd(), 'data', 'input')
-SYSTEM_LOG = os.path.join('./', 'data', 'systemlog.txt')
+PATH_DOWNLOAD_FILE = DIR_DATA / 'input'
+DOCUMENTS = PATH_DOWNLOAD_FILE / 'documents'
+DOCUMENTS.mkdir(parents=True, exist_ok=True)
+SYSTEM_LOG = DIR_DATA / 'systemlog.txt'
 ALLOWED_EXAMS: list = [
     'BAFC',
     'BASRMC',
