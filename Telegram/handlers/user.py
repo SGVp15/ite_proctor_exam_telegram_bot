@@ -38,40 +38,40 @@ async def download_document_handle(message: message):
         loop.create_task(registration(contacts))
 
 
-@dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def show_registration(callback_query: CallbackQuery):
-    sessions = get_session_in_enrollments_users_contents()
-    sessions = sorted(sessions)
-    for session in sessions:
-        await bot.send_message(
-            chat_id=callback_query.from_user.id,
-            text=f'{session}',
-            reply_markup=del_enrollment(session.enrollment_id),
-        )
+# @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+# async def show_registration(callback_query: CallbackQuery):
+#     sessions = get_session_in_enrollments_users_contents()
+#     sessions = sorted(sessions)
+#     for session in sessions:
+#         await bot.send_message(
+#             chat_id=callback_query.from_user.id,
+#             text=f'{session}',
+#             reply_markup=del_enrollment(session.enrollment_id),
+#         )
+#
+#     await bot.send_message(
+#         chat_id=callback_query.from_user.id,
+#         text=f'End',
+#         reply_markup=inline_kb_main
+#     )
 
-    await bot.send_message(
-        chat_id=callback_query.from_user.id,
-        text=f'End',
-        reply_markup=inline_kb_main
-    )
 
-
-@dp.callback_query(F.data.in_({CallBackData.SHOW_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
-async def show_registration(callback_query: CallbackQuery):
-    sessions = get_session_in_enrollments_users_contents()
-    sessions = sorted(sessions)
-    text = 'Ругистрация Ispring:\n'
-    if sessions:
-        for session in sessions:
-            text += f'{session}\n'
-    else:
-        text += 'Никого нет.'
-
-    await bot.send_message(
-        chat_id=callback_query.from_user.id,
-        text=text,
-        reply_markup=inline_kb_main
-    )
+# @dp.callback_query(F.data.in_({CallBackData.SHOW_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
+# async def show_registration(callback_query: CallbackQuery):
+#     sessions = get_session_in_enrollments_users_contents()
+#     sessions = sorted(sessions)
+#     text = 'Ругистрация Ispring:\n'
+#     if sessions:
+#         for session in sessions:
+#             text += f'{session}\n'
+#     else:
+#         text += 'Никого нет.'
+#
+#     await bot.send_message(
+#         chat_id=callback_query.from_user.id,
+#         text=text,
+#         reply_markup=inline_kb_main
+#     )
 
 
 @dp.callback_query(
