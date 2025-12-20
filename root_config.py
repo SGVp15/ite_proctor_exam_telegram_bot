@@ -40,6 +40,7 @@ PATH_DOWNLOAD_FILE = DIR_DATA / 'input'
 DOCUMENTS = PATH_DOWNLOAD_FILE / 'documents'
 DOCUMENTS.mkdir(parents=True, exist_ok=True)
 SYSTEM_LOG = DIR_DATA / 'systemlog.txt'
+
 ALLOWED_EXAMS: list = [
     'BAFC',
     'BASRMC',
