@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from dotenv import dotenv_values, find_dotenv
 
@@ -14,8 +14,8 @@ if not EMAIL_LOGIN:
 
 SMTP_SERVER = 'smtp.yandex.ru'
 SMTP_PORT = 465
-EMAIL_BCC = ['exam@itexpert.ru',]
-EMAIL_BCC_course = ['exam@itexpert.ru',]
+EMAIL_BCC = ['exam@itexpert.ru', ]
+EMAIL_BCC_course = ['exam@itexpert.ru', ]
 email_login_password = {}
 
-TEMPLATE_FOLDER: str = os.path.join(os.getcwd(), 'Email', 'template_email')
+TEMPLATE_FOLDER = Path('./Email', 'template_email')

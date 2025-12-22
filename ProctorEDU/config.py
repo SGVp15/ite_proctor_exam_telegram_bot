@@ -7,6 +7,12 @@ config = dotenv_values(find_dotenv())
 LOGIN_PROCTOREDU = config.get('LOGIN_PROCTOREDU')
 PASSWORD_PROCTOREDU = config.get('PASSWORD_PROCTOREDU')
 
+
+if not LOGIN_PROCTOREDU:
+    raise f'ERROR .ENV {LOGIN_PROCTOREDU=}'
+if not PASSWORD_PROCTOREDU:
+    raise f'ERROR .ENV {PASSWORD_PROCTOREDU=}'
+
 CSV_HEADER_SESSION = {
     'identifier': 'Date_Name_Exam',
     # 'provider': '',

@@ -8,6 +8,9 @@ BOT_TOKEN: str | None = config.get('BOT_TOKEN')
 ADMIN_ID: list[int] = [int(x) for x in config['ADMIN_ID'].split(',')]
 USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 
+if not BOT_TOKEN:
+    raise f'ERROR .ENV {BOT_TOKEN=}'
+
 DIR_DATA = Path('./data')
 DIR_DATA.mkdir(parents=True, exist_ok=True)
 LOG_FILE = DIR_DATA / 'log.txt'
