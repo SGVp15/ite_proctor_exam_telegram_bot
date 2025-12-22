@@ -39,10 +39,6 @@ class Contact:
         # self.is_create_enrollment: bool = False
         self.status = 'Error'
 
-        self.ispring_id: str | None = None
-        self.ispring_status: str | None = None
-
-        self.id_moodle = None
         self.moodle_id_exam = None
         self.moodle_id_user = None
 
@@ -87,7 +83,7 @@ class Contact:
         self.username = re.sub(r'\s+', '_', self.name_eng.strip().lower())
 
         if not self.password:
-            self.password = f'{self.username}_P{random.randint(0, 9999):04d}'
+            self.password = f'{self.username}_P{random.randint(1000, 9999):04d}'
 
         self.subject = f'{self.date_exam_for_subject}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'

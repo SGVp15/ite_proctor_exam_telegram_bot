@@ -11,7 +11,7 @@ MOODLE_URL = config.get('MOODLE_URL')
 
 DIR_HTML_DOWNLOAD = Path('./data') / 'html_downloads'
 DIR_HTML_DOWNLOAD.mkdir(exist_ok=True, parents=True)
-DIR_REPORTS = Path('./data') / 'reports'
+DIR_REPORTS = Path('./data' , 'reports')
 DIR_REPORTS.mkdir(exist_ok=True, parents=True)
 QUESTION_INPUT_DIR_XLSX = Path('./data') / 'questions_xlsx'
 QUESTION_INPUT_DIR_XLSX.mkdir(exist_ok=True, parents=True)
