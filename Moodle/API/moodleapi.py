@@ -242,3 +242,4 @@ class MoodleApi:
             return enrollment_successful
 
         return False
+
