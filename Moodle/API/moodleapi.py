@@ -8,7 +8,7 @@ from Utils.log import log
 from Moodle.config import MOODLE_URL, MOODLE_TOKEN
 
 
-class MOODLE_API:
+class MoodleApi:
     RESPONSE_FORMAT = 'json'
     API_URL = f'{MOODLE_URL}/webservice/rest/server.php'
 
@@ -174,7 +174,6 @@ class MOODLE_API:
             log.error(f"❌ Произошла ошибка: {err}")
         return []
 
-    # --- ОСНОВНАЯ ЛОГИКА ---
     def process_user_and_enrollment(self, contact: Contact):
         '''
         1. Поиск пользователя по email.
@@ -205,7 +204,7 @@ class MOODLE_API:
         course_id = course_map[final_shortname]
         contact.moodle_id_exam = course_id
 
-        log.info(f"✨ Выбран случайный курс для зачисления: '{final_shortname}' (ID: {course_id}).")
+        log.info(f"Выбран случайный курс для зачисления: '{final_shortname}' (ID: {course_id}).")
 
         # 2. ПРОЦЕСС ПОЛЬЗОВАТЕЛЯ: Проверка и создание/обновление
 

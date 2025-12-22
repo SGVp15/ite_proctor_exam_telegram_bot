@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from Moodle.API.moodle_api import MOODLE_API
+from Moodle.API.moodleapi import MoodleApi
 
 
 # --- 1. МОК-КЛАСС Contact ---
@@ -22,7 +22,7 @@ class TestMoodleAPIEnrollment(unittest.TestCase):
 
     def setUp(self):
         # Инициализация тестируемого класса перед каждым тестом
-        self.api = MOODLE_API()
+        self.api = MoodleApi()
 
         # Общие тестовые данные
         self.test_user_new = MockContact(
@@ -50,10 +50,10 @@ class TestMoodleAPIEnrollment(unittest.TestCase):
     # ----------------------------------------------------------------------
     #                          СЦЕНАРИЙ 1: СОЗДАНИЕ НОВОГО ПОЛЬЗОВАТЕЛЯ
     # ----------------------------------------------------------------------
-    @patch.object(MOODLE_API, '_get_id_shortname_course')
-    @patch.object(MOODLE_API, 'enrol_manual_enrol_users')
-    @patch.object(MOODLE_API, 'core_user_create_users')
-    @patch.object(MOODLE_API, 'core_user_get_users_by_field')
+    @patch.object(MoodleApi, '_get_id_shortname_course')
+    @patch.object(MoodleApi, 'enrol_manual_enrol_users')
+    @patch.object(MoodleApi, 'core_user_create_users')
+    @patch.object(MoodleApi, 'core_user_get_users_by_field')
     @patch('random.choice')
     def test_process_user_new_creation_success(self, mock_choice, mock_get_user, mock_create_user, mock_enroll,
                                                mock_get_courses):
@@ -101,10 +101,10 @@ class TestMoodleAPIEnrollment(unittest.TestCase):
     # ----------------------------------------------------------------------
     #                          СЦЕНАРИЙ 2: ОБНОВЛЕНИЕ СУЩЕСТВУЮЩЕГО ПОЛЬЗОВАТЕЛЯ
     # ----------------------------------------------------------------------
-    @patch.object(MOODLE_API, '_get_id_shortname_course')
-    @patch.object(MOODLE_API, 'enrol_manual_enrol_users')
-    @patch.object(MOODLE_API, 'core_user_update_password')
-    @patch.object(MOODLE_API, 'core_user_get_users_by_field')
+    @patch.object(MoodleApi, '_get_id_shortname_course')
+    @patch.object(MoodleApi, 'enrol_manual_enrol_users')
+    @patch.object(MoodleApi, 'core_user_update_password')
+    @patch.object(MoodleApi, 'core_user_get_users_by_field')
     @patch('random.choice')
     def test_process_user_existing_update_success(self, mock_choice, mock_get_user, mock_update_password, mock_enroll,
                                                   mock_get_courses):
@@ -156,7 +156,7 @@ class TestMoodleAPIEnrollment(unittest.TestCase):
     # ----------------------------------------------------------------------
     #                          СЦЕНАРИЙ 3: ОШИБКА ПОИСКА КУРСА
     # ----------------------------------------------------------------------
-    @patch.object(MOODLE_API, '_get_id_shortname_course')
+    @patch.object(MoodleApi, '_get_id_shortname_course')
     def test_process_course_not_found_failure(self, mock_get_courses):
         """Проверяет сценарий: курс не найден."""
 

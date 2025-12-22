@@ -61,7 +61,7 @@ async def check_log_and_send_email():
                     f'Логин={c.username}\n'
                     f'Пароль={c.password}\n'
                     f'url={c.url_proctor}\n'
-                    f'\n-----------------------------------\n'
+                    f'\n{"-" * 30}\n'
                 )
                 subject += f'{c.exam} {c.date_exam} '
 

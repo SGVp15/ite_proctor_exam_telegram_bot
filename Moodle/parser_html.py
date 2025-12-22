@@ -369,7 +369,7 @@ def main(filename: Path):
 
 
 if __name__ == '__main__':
-    dir_path = Path('./data/input')
+    dir_path = Path('./data', 'input')
     dir_report_path = Path('./data/reports')
     all_file = []
     all_report_names = []
