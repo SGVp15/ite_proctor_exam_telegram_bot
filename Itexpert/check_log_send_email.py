@@ -53,6 +53,8 @@ async def check_log_and_send_email():
         for c in contact_for_email_:
             if c.proctor:
                 text += 'Online '
+            else:
+                text += 'Offline '
             text += (
                 f'{c.date_exam}\n'
                 f'{c.exam}\n'
