@@ -30,7 +30,7 @@ def find_config_modules(root_path):
 
 def _test_star_import(module_name):
     """Имитирует 'from module_name import *'"""
-    print(f"--- Проверка: from {module_name} import * ---")
+    print(f"Проверка: from {module_name} import *")
     try:
         # Пытаемся импортировать
         mod = importlib.import_module(module_name)
