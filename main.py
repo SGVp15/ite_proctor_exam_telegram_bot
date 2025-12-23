@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from Telegram.main import start_bot
@@ -19,7 +20,8 @@ async def main():
     # Если нужно запустить задачу сразу при старте, можно добавить next_run_time=datetime.now()
     scheduler.add_job(
         check_log_and_send_email,
-        IntervalTrigger(minutes=30),
+        # IntervalTrigger(minutes=30),
+        CronTrigger(minute='0,30'),
         id='check_log_job',
         next_run_time=datetime.now(),
         replace_existing=True
