@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from EXCEL.excel_reader import get_all_questions_from_excel_file
 from Question import Question
 from Utils.utils import get_all_files_from_pattern
-from config import QUESTION_INPUT_DIR_XLSX
+from config import QUESTION_INPUT_DIR_XLSX, DIR_HTML_DOWNLOAD, DIR_REPORTS
 
 
 def parse_quiz_review(html_content: str) -> dict:
@@ -372,9 +372,9 @@ def main(filename: Path, all_questions):
     generate_html_report(test_info, all_category, answer_category, filename=report_filename)
 
 
-if __name__ == '__main__':
-    dir_path = Path('./data', 'html_downloads')
-    dir_report_path = Path('./data/reports')
+def create_all_report(only_new_report=True):
+    dir_path = DIR_HTML_DOWNLOAD
+    dir_report_path = DIR_REPORTS
     all_file = []
     all_report_names = []
     all_questions = get_all_questions_from_xlsx()
@@ -383,7 +383,16 @@ if __name__ == '__main__':
         all_file.append(filename_path)
     for filename_path in dir_report_path.glob('*.html'):
         all_report_names.append(filename_path.name)
-    all_file_filtered = [f for f in all_file if f'r_{f.name}' not in all_report_names]
+
+    if only_new_report:
+        all_file_filtered = [f for f in all_file if f'r_{f.name}' not in all_report_names]
+    else:
+        all_file_filtered = [f for f in all_file if f'r_{f.name}']
+
     for filename_path in all_file_filtered:
         print(filename_path)
         main(filename=Path(filename_path), all_questions=all_questions)
+
+
+if __name__ == '__main__':
+    create_all_report(only_new_report=False)

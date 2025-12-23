@@ -2,8 +2,6 @@ import importlib
 import sys
 import os
 
-# 1. Настройка корня проекта
-# Предполагаем, что скрипт лежит в корне. Если нет, замените на нужный путь.
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, BASE_DIR)
 
@@ -30,7 +28,7 @@ def find_config_modules(root_path):
     return config_modules
 
 
-def test_star_import(module_name):
+def _test_star_import(module_name):
     """Имитирует 'from module_name import *'"""
     print(f"--- Проверка: from {module_name} import * ---")
     try:
@@ -47,7 +45,7 @@ def test_star_import(module_name):
         return False
 
 
-if __name__ == '__main__':
+def test_star_import():
     print(f"Сканирование проекта в: {BASE_DIR}\n")
 
     # Автоматический поиск модулей
@@ -62,7 +60,7 @@ if __name__ == '__main__':
 
     failed_modules = []
     for m in MODULES:
-        if not test_star_import(m):
+        if not _test_star_import(m):
             failed_modules.append(m)
         print("-" * 40)
 
@@ -74,4 +72,3 @@ if __name__ == '__main__':
         sys.exit(1)
     else:
         print("\nИТОГ: Все найденные конфиги успешно импортированы!")
-        sys.exit(0)
