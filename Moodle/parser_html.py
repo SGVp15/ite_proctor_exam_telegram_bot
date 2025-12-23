@@ -1,15 +1,16 @@
 import json
 import os
-from pathlib import Path
 import re
+from pathlib import Path
 from pprint import pprint
 
+import dateparser
 from bs4 import BeautifulSoup
 
 from EXCEL.excel_reader import get_all_questions_from_excel_file
 from Question import Question
-from config import QUESTION_INPUT_DIR_XLSX
 from Utils.utils import get_all_files_from_pattern
+from config import QUESTION_INPUT_DIR_XLSX
 
 
 def parse_quiz_review(html_content: str) -> dict:
@@ -153,8 +154,8 @@ def generate_html_report(test_info: dict, all_category: dict, answer_category: d
         </tr>
         """
     text_ = 'Экзамен не сдан.'
-    if round(all_category_correct / all_category_total, 2) >= 0.7:
-        text_ = 'Экзамен сдан.'
+    # if round(all_category_correct / all_category_total, 2) >= 0.7:
+    #     text_ = 'Экзамен сдан.'
 
     # --- 2. HTML-шаблон ---
     html_content = f"""<!DOCTYPE html>
@@ -308,13 +309,7 @@ def clean_test_infp(data):
     return data
 
 
-def main(filename: Path):
-    data = parse_data_questions_html(filename=filename)
-    if not data:
-        return
-    q_my = data['questions']
-    test_info = data['test_info']
-
+def get_all_questions_from_xlsx():
     exams_name_path = {}
     for file in get_all_files_from_pattern(QUESTION_INPUT_DIR_XLSX, '.xlsx'):
         exam_name = re.sub(r'.xlsx$', '', os.path.basename(file))
@@ -324,6 +319,15 @@ def main(filename: Path):
     for exam_name, file in exams_name_path.items():
         all_questions.extend(get_all_questions_from_excel_file(file))
 
+    return all_questions
+
+
+def main(filename: Path, all_questions):
+    data = parse_data_questions_html(filename=filename)
+    if not data:
+        return
+    q_my = data['questions']
+    test_info = data['test_info']
     quests = []
     for i, q in enumerate(q_my):
         c = Question(
@@ -336,7 +340,6 @@ def main(filename: Path):
         c.status = q.get('status')
         # print(q.get('number'), c.status , q.get('status'))
         quests.append(c)
-
     all_questions = [q for q in all_questions if q in quests]
     not_questions = [q for q in all_questions if q not in quests]
     if not_questions:
@@ -358,7 +361,8 @@ def main(filename: Path):
                 break
     clean_test_infp(test_info)
     pprint(test_info)
-    print(test_info['Тест начат'])
+    date_start = dateparser.parse(test_info['Тест начат'])
+    print(f'{date_start=}')
     print(test_info['Завершен'])
 
     for k in sorted(all_category.keys()):
@@ -369,10 +373,12 @@ def main(filename: Path):
 
 
 if __name__ == '__main__':
-    dir_path = Path('./data', 'input')
+    dir_path = Path('./data', 'html_downloads')
     dir_report_path = Path('./data/reports')
     all_file = []
     all_report_names = []
+    all_questions = get_all_questions_from_xlsx()
+
     for filename_path in dir_path.glob('*.html'):
         all_file.append(filename_path)
     for filename_path in dir_report_path.glob('*.html'):
@@ -380,4 +386,4 @@ if __name__ == '__main__':
     all_file_filtered = [f for f in all_file if f'r_{f.name}' not in all_report_names]
     for filename_path in all_file_filtered:
         print(filename_path)
-        main(filename_path)
+        main(filename=Path(filename_path), all_questions=all_questions)
