@@ -28,49 +28,48 @@ def check_time_interval(check_dt: datetime.datetime, start_dt: datetime.datetime
 
 
 async def check_log_and_send_email():
-    while True:
-        contact_for_email_ = []
-        contacts = get_contacts_from_logs()
-        for c in contacts:
-            c: Contact
-            if datetime.time(hour=9, minute=0) <= datetime.datetime.now().time() <= datetime.time(hour=9, minute=1,
-                                                                                                  second=0):
-                if datetime.datetime.now().date() == c.date_exam.date():
-                    contact_for_email_.append(c)
-                    continue
-            try:
-                if check_time_interval(
-                        check_dt=datetime.datetime.now(),
-                        start_dt=c.date_exam - datetime.timedelta(hours=1),
-                        delta_dt=datetime.timedelta(minutes=1)
-                ):
-                    contact_for_email_.append(c)
-            except TypeError:
-                pass
+    contact_for_email_ = []
+    contacts = get_contacts_from_logs()
+    for c in contacts:
+        c: Contact
+        if datetime.time(hour=9, minute=0) <= datetime.datetime.now().time() <= datetime.time(hour=9, minute=1,
+                                                                                              second=0):
+            if datetime.datetime.now().date() == c.date_exam.date():
+                contact_for_email_.append(c)
+                continue
+        try:
+            if check_time_interval(
+                    check_dt=datetime.datetime.now(),
+                    start_dt=c.date_exam - datetime.timedelta(hours=1),
+                    delta_dt=datetime.timedelta(minutes=1)
+            ):
+                contact_for_email_.append(c)
+        except TypeError:
+            pass
 
-        subject = 'Экзамен '
-        if contact_for_email_:
-            text = ''
-            for c in contact_for_email_:
-                if c.proctor:
-                    text += 'Online '
-                text += (
-                    f'{c.date_exam}\n'
-                    f'{c.exam}\n'
-                    f'{c.last_name_rus} {c.first_name_rus} {c.email}\n'
-                    f'Логин={c.username}\n'
-                    f'Пароль={c.password}\n'
-                    f'url={c.url_proctor}\n'
-                    f'\n{"-" * 30}\n'
-                )
-                subject += f'{c.exam} {c.date_exam} '
+    subject = 'Экзамен '
+    if contact_for_email_:
+        text = ''
+        for c in contact_for_email_:
+            if c.proctor:
+                text += 'Online '
+            text += (
+                f'{c.date_exam}\n'
+                f'{c.exam}\n'
+                f'{c.last_name_rus} {c.first_name_rus} {c.email}\n'
+                f'Логин={c.username}\n'
+                f'Пароль={c.password}\n'
+                f'url={c.url_proctor}\n'
+                f'\n{"-" * 30}\n'
+            )
+            subject += f'{c.exam} {c.date_exam} '
 
-            email = EmailSending(
-                subject=f'{subject}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
-                text=text, html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
-                login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None)
-            email.send_email()
-        await sleep(60)
+        email = EmailSending(
+            subject=f'{subject}', from_email=EMAIL_LOGIN, to=EMAIL_BCC, cc='', bcc='',
+            text=text, html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
+            login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None)
+        email.send_email()
+        await sleep(61)
 
 
 if __name__ == '__main__':
