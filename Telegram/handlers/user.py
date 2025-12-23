@@ -1,10 +1,11 @@
+import asyncio
 from pathlib import Path
 
 from aiogram import F
 from aiogram.types import message
 
 from Telegram.keybords.inline import inline_kb_main
-from Telegram.main import bot, dp, loop
+from Telegram.main import bot, dp
 from main_registration import registration
 from parser import get_contact_from_excel
 from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
@@ -32,7 +33,7 @@ async def download_document_handle(message: message):
     else:
         text_answer = await registration(contacts)
         await message.answer(text_answer, reply_markup=inline_kb_main)
-        loop.create_task(registration(contacts))
+        asyncio.create_task(registration(contacts))
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 # async def show_registration(callback_query: CallbackQuery):

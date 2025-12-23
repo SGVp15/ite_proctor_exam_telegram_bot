@@ -24,9 +24,8 @@ def restart_script():
 
 
 async def git_update():
-    while True:
-        if check_for_updates():
-            log.info('BOT UPDATE')
-            pull_updates()
-            restart_script()
-        await sleep(60)
+    if check_for_updates():
+        log.info('BOT UPDATE')
+        pull_updates()
+        restart_script()
+    await sleep(60)
