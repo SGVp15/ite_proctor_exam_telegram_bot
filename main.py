@@ -1,12 +1,11 @@
 import asyncio
-import datetime
+from datetime import datetime
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from Itexpert.check_log_send_email import check_log_and_send_email
-from Itexpert.ite_api import sent_report_and_cert_lk
 from Moodle.main import download_reports_moodle
 from Moodle.parser_html import create_all_report
 from Telegram.main import start_bot
@@ -16,54 +15,47 @@ from Utils.log import log
 
 
 async def main():
-    # Инициализируем планировщик
+    # Инициализируем планировщик ТОЛЬКО здесь (внутри запущенного цикла)
     scheduler = AsyncIOScheduler()
 
-    # Запуск проверки логов и отправки писем
+    # Запуск проверки логов ровно в 00 и 30 минут
     scheduler.add_job(
         check_log_and_send_email,
         CronTrigger(minute='0,30'),
         id='check_log_and_send_email'
     )
 
-    # Запуск скачивание страницы отчета из moodle в 00 минут
+    # Запуск проверки логов ровно в 00 минут
     scheduler.add_job(
         download_reports_moodle,
-        CronTrigger(hour='1'),
-        id='download_reports_moodle',
-        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
+        CronTrigger(minute='0'),
+        id='download_reports_moodle'
     )
 
-    # Запуск создание отчетов
+    # Запуск проверки логов ровно в 00 минут
     scheduler.add_job(
         create_all_report,
-        CronTrigger(hour='1', minute='30'),
-        id='create_all_report',
-        next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=3),  # Проверить сразу при старте
+        CronTrigger(minute='5'),
+        id='create_all_report'
     )
 
-    # Запуск создание отчетов
-    scheduler.add_job(
-        sent_report_and_cert_lk,
-        CronTrigger(hour='2'),
-        id='sent_report_and_cert_lk',
-    )
-
-    # Запуск проверки обновлений Git каждые 60 секунд
+    # Запуск проверки обновлений Git каждые 60 секунд (вместо while True)
     scheduler.add_job(
         git_update,
         IntervalTrigger(seconds=60),
         id='git_check',
-        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
+        next_run_time=datetime.now()  # Проверить сразу при старте
     )
 
     scheduler.start()
     log.info("Планировщик запущен успешно.")
 
+    # Запускаем бота (это заблокирует выполнение, пока бот работает)
     await start_bot()
 
 
 if __name__ == '__main__':
+    # Внешние проверки (синхронные)
     ChromedriverAutoupdate(operatingSystem="win").check()
 
     try:
