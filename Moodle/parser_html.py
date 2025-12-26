@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from EXCEL.excel_reader import get_all_questions_from_excel_file
 from Question import Question
 from Utils.utils import get_all_files_from_pattern
-from config import QUESTION_INPUT_DIR_XLSX, DIR_HTML_DOWNLOAD, DIR_REPORTS
+from Moodle.config import QUESTION_INPUT_DIR_XLSX, DIR_HTML_DOWNLOAD, DIR_REPORTS
 
 
 def parse_quiz_review(html_content: str) -> dict:
