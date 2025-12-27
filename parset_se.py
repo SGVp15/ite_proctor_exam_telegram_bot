@@ -6,9 +6,7 @@ import dateparser
 from selectolax.lexbor import LexborHTMLParser
 
 
-def parser_report(file: Path):
-    if not file:
-        return {}
+def parser_report(file=Path('./data/reports/r_53.html')):
     with open(file, mode='r', encoding='utf-8', errors='ignore') as f:
         html_content = f.read()
     # движок Lexbor (он быстрее и современнее стандартного Modest)
@@ -44,7 +42,7 @@ def parser_report(file: Path):
 def parse_all_repots(path=Path('./data/reports')):
     # Определяем путь к папке
     reports_dir = path
-    list_return = []
+    list_return=[]
     # Проверяем, существует ли папка, чтобы избежать ошибок
     if reports_dir.exists() and reports_dir.is_dir():
         # Итерируемся по всем файлам .html (или всем файлам)
@@ -54,8 +52,7 @@ def parse_all_repots(path=Path('./data/reports')):
             list_return.append(report_data)
     else:
         print(f"Ошибка: Директория {reports_dir} не найдена.")
-    return list_return
-
+    return  list_return
 
 if __name__ == '__main__':
     pprint(parse_all_repots())
