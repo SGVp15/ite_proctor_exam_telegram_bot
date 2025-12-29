@@ -39,7 +39,8 @@ async def main():
         CronTrigger(minute='52'),
         id='create_all_report'
     )
-    # Запуск проверки create_all_report в 00 минут
+
+    # Запуск проверки send_all_reports_and_cert в 18:00
     scheduler.add_job(
         send_all_reports_and_cert,
         CronTrigger(hour='18', minute='0'),
