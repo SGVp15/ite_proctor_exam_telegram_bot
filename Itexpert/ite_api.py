@@ -13,7 +13,7 @@ from requests.structures import CaseInsensitiveDict
 
 from Contact import Contact
 from Itexpert.check_log_send_email import get_contacts_from_logs
-from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
+from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY, OUT_DIR_CERT
 from Utils.utils import file_to_base64
 from parset_se import parse_all_repots
 
@@ -384,8 +384,10 @@ def get_today_exams(current_date=None) -> [Contact]:
     return today_contacts
 
 
-def send_all_reports_and_cert():
-    contacts = get_today_exams(current_date=dateparser.parse('2025.12.26'))
+def send_all_reports_and_cert(current_date):
+    if not current_date:
+        current_date = datetime.now().date()
+    contacts = get_today_exams(current_date=current_date)
     for c in contacts:
         pprint(c)
     # print(f"\n--- Тестирование API с базовым URL: {ITEXPERT_URL} ---")
@@ -412,38 +414,31 @@ def send_all_reports_and_cert():
                 file_path=r.get('file'),
                 # name='r_48.html',
             )
-            time.sleep(0.5)
+            time.sleep(5)
             if r_update:
                 print("Результат:", r_update.status_code)
-            for file_name in os.listdir('data/cert/'):
-                if c.exam in file_name:
-                    cert_path = f'data/cert/{file_name}'
-                    cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
-                    cert_name = re.sub('^_', '', cert_name)
-                    print(f"\n[5. add_cert_to_exam_by_id()]")
-                    r_update = ite_api.add_cert_to_exam_by_id(
-                        id=id,
-                        file_path=cert_path,
-                        name=cert_name,
-                    )
-                    if r_update:
-                        print("Результат:", r_update.status_code)
 
-    # 3. Добавление сертификата в ЛК
-    id = 28497
-    cert_path = 'data/cert/Сертификат_ITIL4FC_2025.12.26_Никитченко Виктор_266_nikitchenko_vg@tkbbank.ru.png'
+            for file_path in Path(OUT_DIR_CERT).rglob("*.png"):
+                # Проверяем, что это файл, а не папка
+                if not file_path.is_file():
+                    continue
+                file_name = file_path.name
 
-    cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
-    cert_name = re.sub('^_', '', cert_name)
-
-    print(f"\n[5. add_cert_to_exam_by_id()]")
-    r_update = ite_api.add_cert_to_exam_by_id(
-        id=id,
-        file_path=cert_path,
-        name=cert_name,
-    )
-    if r_update:
-        print("Результат:", r_update.status_code)
+                if (c.exam not in file_name or
+                        c.date_exam.strftime("%Y.%m.%d") not in file_name
+                        or c.exam not in file_name):
+                    continue
+                cert_path = file_name
+                cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
+                cert_name = re.sub('^_', '', cert_name)
+                print(f"\n[5. add_cert_to_exam_by_id()]")
+                r_update = ite_api.add_cert_to_exam_by_id(
+                    id=id,
+                    file_path=file_path,
+                    name=cert_name,
+                )
+                if r_update:
+                    print("Результат:", r_update.status_code)
 
     # -------------------------------------------------------------------
     # id = 00000
@@ -457,7 +452,24 @@ def send_all_reports_and_cert():
 
 
 if __name__ == '__main__':
-    send_all_reports_and_cert()
+    send_all_reports_and_cert(dateparser.parse('2025.12.26'))
+
+    # 3. Добавление сертификата в ЛК
+    id = 28495
+    cert_path = 'data/cert/Сертификат_ITIL4FC_2025.12.26_Юртаев Александр_264_yurtaev_av@tkbbank.ru.png'
+
+    cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
+    cert_name = re.sub('^_', '', cert_name)
+
+    print(f"\n[5. add_cert_to_exam_by_id()]")
+    r_update = ITEXPERT_API().add_cert_to_exam_by_id(
+        id=id,
+        file_path=cert_path,
+        name=cert_name,
+    )
+    if r_update:
+        print("Результат:", r_update.status_code)
+
     # # 1. Тестирование получения списка экзаменов
     # print("\n[1. get_list_exams(active=True)]")
     # r_list = ite_api.get_list_exams(active=True)
