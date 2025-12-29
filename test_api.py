@@ -1,12 +1,6 @@
 import asyncio
 
-from Ispring.ispring2 import IspringApi
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
-
-
-async def test_ispring():
-    IspringApi().get_users()
-    print("[test] Ispring OK")
 
 
 async def test_proctoredu():

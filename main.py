@@ -32,12 +32,12 @@ async def main():
         id='download_reports_moodle'
     )
 
-    # # Запуск проверки create_all_report в 00 минут
-    # scheduler.add_job(
-    #     create_all_report,
-    #     CronTrigger(minute='5'),
-    #     id='create_all_report'
-    # )
+    # Запуск проверки create_all_report в 00 минут
+    scheduler.add_job(
+        create_all_report,
+        CronTrigger(minute='52'),
+        id='create_all_report'
+    )
 
     # Запуск проверки обновлений Git каждые 60 секунд (вместо while True)
     scheduler.add_job(
