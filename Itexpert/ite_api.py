@@ -1,5 +1,4 @@
 import json
-import os
 import re
 import time
 from datetime import datetime
@@ -13,9 +12,11 @@ from requests.structures import CaseInsensitiveDict
 
 from Contact import Contact
 from Itexpert.check_log_send_email import get_contacts_from_logs
-from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY, OUT_DIR_CERT
+from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
+from Utils.log import log
 from Utils.utils import file_to_base64
 from parset_se import parse_all_repots
+from root_config import OUT_DIR_CERT
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
 
@@ -409,29 +410,32 @@ def send_all_reports_and_cert(current_date):
                 id = c.exam_id
             except AttributeError:
                 continue
+            file_path_report = r.get('file')
             r_update = ite_api.add_review_to_exam_by_id(
                 id=id,
-                file_path=r.get('file'),
+                file_path=file_path_report,
                 # name='r_48.html',
             )
-            time.sleep(5)
+            time.sleep(2)
             if r_update:
-                print("Результат:", r_update.status_code)
+                log.info("Результат:", r_update.status_code)
+            if r_update.ok:
+                log.info(f"[OK] Send to www.itexpert.ru {file_path_report}")
 
             for file_path in Path(OUT_DIR_CERT).rglob("*.png"):
-                # Проверяем, что это файл, а не папка
                 if not file_path.is_file():
                     continue
-                file_name = file_path.name
+                file_name = str(file_path.name)
 
                 if (c.exam not in file_name or
                         c.date_exam.strftime("%Y.%m.%d") not in file_name
                         or c.exam not in file_name):
                     continue
+
                 cert_path = file_name
                 cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
                 cert_name = re.sub('^_', '', cert_name)
-                print(f"\n[5. add_cert_to_exam_by_id()]")
+                log.info(f"Send to www.itexpert.ru {file_path}")
                 r_update = ite_api.add_cert_to_exam_by_id(
                     id=id,
                     file_path=file_path,
@@ -452,23 +456,25 @@ def send_all_reports_and_cert(current_date):
 
 
 if __name__ == '__main__':
-    send_all_reports_and_cert(dateparser.parse('2025.12.26'))
-
-    # 3. Добавление сертификата в ЛК
-    id = 28495
-    cert_path = 'data/cert/Сертификат_ITIL4FC_2025.12.26_Юртаев Александр_264_yurtaev_av@tkbbank.ru.png'
-
-    cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
-    cert_name = re.sub('^_', '', cert_name)
-
-    print(f"\n[5. add_cert_to_exam_by_id()]")
-    r_update = ITEXPERT_API().add_cert_to_exam_by_id(
-        id=id,
-        file_path=cert_path,
-        name=cert_name,
+    send_all_reports_and_cert(
+        # dateparser.parse('2025.12.26')
     )
-    if r_update:
-        print("Результат:", r_update.status_code)
+    time.sleep(1)
+    # # 3. Добавление сертификата в ЛК
+    # id = 28495
+    # cert_path = 'data/cert/Сертификат_ITIL4FC_2025.12.26_Юртаев Александр_264_yurtaev_av@tkbbank.ru.png'
+    #
+    # cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
+    # cert_name = re.sub('^_', '', cert_name)
+    #
+    # print(f"\n[5. add_cert_to_exam_by_id()]")
+    # r_update = ITEXPERT_API().add_cert_to_exam_by_id(
+    #     id=id,
+    #     file_path=cert_path,
+    #     name=cert_name,
+    # )
+    # if r_update:
+    #     print("Результат:", r_update.status_code)
 
     # # 1. Тестирование получения списка экзаменов
     # print("\n[1. get_list_exams(active=True)]")

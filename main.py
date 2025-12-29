@@ -6,6 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from Itexpert.check_log_send_email import check_log_and_send_email
+from Itexpert.ite_api import send_all_reports_and_cert
 from Moodle.main import download_reports_moodle
 from Moodle.parser_html import create_all_report
 from Telegram.main import start_bot
@@ -32,12 +33,18 @@ async def main():
         id='download_reports_moodle'
     )
 
-    # # Запуск проверки create_all_report в 00 минут
-    # scheduler.add_job(
-    #     create_all_report,
-    #     CronTrigger(minute='5'),
-    #     id='create_all_report'
-    # )
+    # Запуск проверки create_all_report в 00 минут
+    scheduler.add_job(
+        create_all_report,
+        CronTrigger(minute='52'),
+        id='create_all_report'
+    )
+    # Запуск проверки create_all_report в 00 минут
+    scheduler.add_job(
+        send_all_reports_and_cert,
+        CronTrigger(hour='18', minute='0'),
+        id='send_all_reports_and_cert'
+    )
 
     # Запуск проверки обновлений Git каждые 60 секунд (вместо while True)
     scheduler.add_job(
