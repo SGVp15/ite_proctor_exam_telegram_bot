@@ -25,19 +25,19 @@ async def main():
         id='check_log_and_send_email'
     )
 
-    # Запуск проверки логов ровно в 00 минут
+    # Запуск download_reports_moodle ровно в 00 минут
     scheduler.add_job(
         download_reports_moodle,
         CronTrigger(minute='0'),
         id='download_reports_moodle'
     )
 
-    # Запуск проверки логов ровно в 00 минут
-    scheduler.add_job(
-        create_all_report,
-        CronTrigger(minute='5'),
-        id='create_all_report'
-    )
+    # # Запуск проверки create_all_report в 00 минут
+    # scheduler.add_job(
+    #     create_all_report,
+    #     CronTrigger(minute='5'),
+    #     id='create_all_report'
+    # )
 
     # Запуск проверки обновлений Git каждые 60 секунд (вместо while True)
     scheduler.add_job(
