@@ -12,10 +12,11 @@ from requests.structures import CaseInsensitiveDict
 
 from Contact import Contact
 from Itexpert.check_log_send_email import get_contacts_from_logs
-from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY, OUT_DIR_CERT
+from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
 from Utils.log import log
 from Utils.utils import file_to_base64
 from parset_se import parse_all_repots
+from root_config import OUT_DIR_CERT
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
 
