@@ -73,7 +73,7 @@ class Contact:
         open_at = self.scheduled_at - datetime.timedelta(minutes=20)
         close_at = self.scheduled_at + datetime.timedelta(hours=2, minutes=20)
 
-        pattern_time = "%Y-%m-%dT%H:%M:%SZ"
+        pattern_time = "%Y-%m-%d T%H:%M:%S"
         self.date_exam_for_subject = self.date_exam.strftime(pattern_time)
         self.deadline = deadline.strftime(pattern_time)
         self.open_at = open_at.strftime(pattern_time)
