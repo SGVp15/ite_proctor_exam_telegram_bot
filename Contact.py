@@ -94,7 +94,7 @@ class Contact:
     def __str__(self) -> str:
         return (
             f"status={self.status}\t"
-            f"timestamp={datetime.datetime.now()}\t"
+            f"timestamp={datetime.datetime.now().strftime("%Y-%m-%d T%H:%M:%S")}\t"
             f"identifier={self.identifier}\t"
             f"subject={self.subject}\t"
             f"name_eng={self.name_eng}\t"
