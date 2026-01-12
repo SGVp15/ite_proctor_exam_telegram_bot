@@ -92,24 +92,34 @@ class Contact:
         return True
 
     def __str__(self) -> str:
-        self.s = (
-            f'{self.status}\t'
-            f'{datetime.datetime.now()}\t'
-            f'subject={self.subject}\t'
-            f'last_name_rus={self.last_name_rus}\t'
-            f'first_name_rus={self.first_name_rus}\t'
-            f'email={self.email}\t'
-            f'date_from_file={self.date_from_file}\t'
-            f'date_exam={self.date_exam}\t'
-            f'username={self.username}\t'
-            f'password={self.password}\t'
-            f'url={self.url_proctor}\t'
-            f'exam={self.exam}\t'
-            f'moodle_id_exam={self.moodle_id_exam}\t'
-            f'moodle_id_user={self.moodle_id_user}\t'
-            f'\n'
+        return (
+            f"status={self.status}\t"
+            f"timestamp={datetime.datetime.now()}\t"
+            f"identifier={self.identifier}\t"
+            f"subject={self.subject}\t"
+            f"name_eng={self.name_eng}\t"
+            f"last_name_rus={self.last_name_rus}\t"
+            f"first_name_rus={self.first_name_rus}\t"
+            f"last_name_eng={self.last_name_eng}\t"
+            f"first_name_eng={self.first_name_eng}\t"
+            f"email={self.email}\t"
+            f"username={self.username}\t"
+            f"password={self.password}\t"
+            f"exam={self.exam}\t"
+            f"proctor={self.proctor}\t"
+            f"url_proctor={self.url_proctor}\t"
+            f"date_from_file={self.date_from_file}\t"
+            f"date_exam={self.date_exam}\t"
+            f"date_exam_connect={self.date_exam_connect}\t"
+            f"date_exam_for_subject={self.date_exam_for_subject}\t"
+            f"scheduled_at={self.scheduled_at}\t"
+            f"open_at={self.open_at}\t"
+            f"close_at={self.close_at}\t"
+            f"deadline={self.deadline}\t"
+            f"remove_at={self.remove_at}\t"
+            f"moodle_id_exam={self.moodle_id_exam}\t"
+            f"moodle_id_user={self.moodle_id_user}"
         )
-        return self.s
 
     def __eq__(self, other):
         if self.email == other.email and self.email:
