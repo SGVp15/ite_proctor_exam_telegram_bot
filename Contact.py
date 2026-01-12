@@ -42,6 +42,69 @@ class Contact:
         self.moodle_id_exam = None
         self.moodle_id_user = None
 
+    def parser_str_to_contact(log_string: str):
+        """
+        Парсит строку лога прокторинга, извлекая статус, дату/время и все пары ключ=значение.
+
+        :param log_string: Строка для парсинга.
+        :return: Словарь с извлеченными данными.
+        """
+        if not log_string:
+            return {}
+
+        # 1. Разделяем строку по пробелам или табуляциям, сохраняя все части.
+        # Используем регулярное выражение для разделения, которое учитывает несколько пробелов/табуляций
+        # и не ломается, если URL содержит знаки '='.
+        parts = re.split(r'\s+', log_string, maxsplit=2)
+
+        # Инициализация результата
+        result = {}
+
+        # 2. Обработка первых двух полей: Статус и Дата/Время
+        try:
+            if len(parts) >= 1:
+                result['status'] = parts[0]
+            if len(parts) >= 2:
+                result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
+                # Переопределяем parts для правильного парсинга полей ключ=значение
+                # parts[1] - время, parts[2] - остаток строки.
+                key_value_string = ' '.join(parts[2:])
+            else:
+                # Если есть только статус, остальное пусто
+                return result
+        except IndexError:
+            return {}
+
+        # 3. Парсинг пар ключ=значение
+        # Снова разделяем строку, которая содержит только пары 'ключ=значение',
+        # но только по пробелам, чтобы не испортить URL.
+        key_value_pairs = key_value_string.split()
+
+        for item in key_value_pairs:
+            if '=' in item:
+                try:
+                    key, value = item.split('=', 1)
+                    result[key.strip()] = value.strip()
+                except ValueError:
+                    continue
+
+        c = Contact()
+        if result.get('status', '').lower() == 'ok':
+            attributes = c.__dict__
+            for attr_name in attributes:
+                if attr_name in result.keys():
+                    setattr(c, attr_name, result.get(attr_name, ''))
+            try:
+                date_str = re.findall(r'([\d-] [\d:]+)\t', c.subject)[0]
+                c.date_exam = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+                if not c.url_proctor:
+                    c.url_proctor = result.get('url', '')
+                if not c.exam:
+                    c.exam = re.findall(r'_([A-Z0-9]+)_', c.subject)[0]
+            except IndexError:
+                pass
+        return c
+
     def normalize(self) -> bool:
         self.first_name_rus = clean_string(self.first_name_rus).capitalize()
         self.last_name_eng = clean_string(self.last_name_eng).capitalize()
@@ -125,67 +188,3 @@ class Contact:
         if self.email == other.email and self.email:
             return True
         return False
-
-
-def parser_str_to_contact(log_string: str):
-    """
-    Парсит строку лога прокторинга, извлекая статус, дату/время и все пары ключ=значение.
-
-    :param log_string: Строка для парсинга.
-    :return: Словарь с извлеченными данными.
-    """
-    if not log_string:
-        return {}
-
-    # 1. Разделяем строку по пробелам или табуляциям, сохраняя все части.
-    # Используем регулярное выражение для разделения, которое учитывает несколько пробелов/табуляций
-    # и не ломается, если URL содержит знаки '='.
-    parts = re.split(r'\s+', log_string, maxsplit=2)
-
-    # Инициализация результата
-    result = {}
-
-    # 2. Обработка первых двух полей: Статус и Дата/Время
-    try:
-        if len(parts) >= 1:
-            result['status'] = parts[0]
-        if len(parts) >= 2:
-            result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
-            # Переопределяем parts для правильного парсинга полей ключ=значение
-            # parts[1] - время, parts[2] - остаток строки.
-            key_value_string = ' '.join(parts[2:])
-        else:
-            # Если есть только статус, остальное пусто
-            return result
-    except IndexError:
-        return {}
-
-    # 3. Парсинг пар ключ=значение
-    # Снова разделяем строку, которая содержит только пары 'ключ=значение',
-    # но только по пробелам, чтобы не испортить URL.
-    key_value_pairs = key_value_string.split()
-
-    for item in key_value_pairs:
-        if '=' in item:
-            try:
-                key, value = item.split('=', 1)
-                result[key.strip()] = value.strip()
-            except ValueError:
-                continue
-
-    c = Contact()
-    if result.get('status', '').lower() == 'ok':
-        attributes = c.__dict__
-        for attr_name in attributes:
-            if attr_name in result.keys():
-                setattr(c, attr_name, result.get(attr_name, ''))
-        try:
-            date_str = re.findall(r'([\d-]+T[\d:]+)Z', c.subject)[0]
-            c.date_exam = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
-            if not c.url_proctor:
-                c.url_proctor = result.get('url', '')
-            if not c.exam:
-                c.exam = re.findall(r'_([A-Z0-9]+)_', c.subject)[0]
-        except IndexError:
-            pass
-    return c
