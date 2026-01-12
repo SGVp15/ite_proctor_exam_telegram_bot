@@ -118,7 +118,7 @@ class Contact:
             f"deadline={self.deadline}\t"
             f"remove_at={self.remove_at}\t"
             f"moodle_id_exam={self.moodle_id_exam}\t"
-            f"moodle_id_user={self.moodle_id_user}"
+            f"moodle_id_user={self.moodle_id_user}\n"
         )
 
     def __eq__(self, other):
