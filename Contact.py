@@ -2,6 +2,8 @@ import datetime
 import random
 import re
 
+import dateparser
+
 from Utils.translit import transliterate, replace_ru_char_to_eng_char
 from Utils.utils import to_md5, clean_string
 
@@ -95,8 +97,8 @@ class Contact:
                 if attr_name in result.keys():
                     setattr(c, attr_name, result.get(attr_name, ''))
             try:
-                date_str = re.findall(r'([\d-] [\d:]+)\t', c.subject)[0]
-                c.date_exam = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+                date_str = re.findall(r'date_exam=([\d-] [\d:]+)\t', c.subject)[0]
+                c.date_exam = dateparser.parse(date_str)
                 if not c.url_proctor:
                     c.url_proctor = result.get('url', '')
                 if not c.exam:
