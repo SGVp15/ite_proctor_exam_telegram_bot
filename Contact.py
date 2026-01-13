@@ -10,6 +10,7 @@ from Utils.utils import to_md5, clean_string
 
 class Contact:
     def __init__(self):
+        self.pattern_time = "%Y-%m-%d T%H:%M:%S"
         self.name_eng: str | None = None
         self.last_name_rus: str | None = None
         self.first_name_rus: str | None = None
@@ -68,11 +69,8 @@ class Contact:
                 result['status'] = parts[0]
             if len(parts) >= 2:
                 result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
-                # Переопределяем parts для правильного парсинга полей ключ=значение
-                # parts[1] - время, parts[2] - остаток строки.
                 key_value_string = ' '.join(parts[2:])
             else:
-                # Если есть только статус, остальное пусто
                 return result
         except IndexError:
             return {}
@@ -138,12 +136,12 @@ class Contact:
         open_at = self.scheduled_at - datetime.timedelta(minutes=20)
         close_at = self.scheduled_at + datetime.timedelta(hours=2, minutes=20)
 
-        pattern_time = "%Y-%m-%d T%H:%M:%S"
-        self.date_exam_for_subject = self.date_exam.strftime(pattern_time)
-        self.deadline = deadline.strftime(pattern_time)
-        self.open_at = open_at.strftime(pattern_time)
-        self.close_at = close_at.strftime(pattern_time)
-        self.remove_at = remove_at.strftime(pattern_time)
+
+        self.date_exam_for_subject = self.date_exam.strftime(self.pattern_time)
+        self.deadline = deadline.strftime(self.pattern_time)
+        self.open_at = open_at.strftime(self.pattern_time)
+        self.close_at = close_at.strftime(self.pattern_time)
+        self.remove_at = remove_at.strftime(self.pattern_time)
 
         self.username = re.sub(r'\s+', '_', self.name_eng.strip().lower())
 
