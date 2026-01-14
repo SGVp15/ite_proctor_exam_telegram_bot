@@ -7,7 +7,7 @@ from typing import Optional
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from Contact import Contact, parser_str_to_contact
+from Contact import Contact
 from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
 from Utils.utils import file_to_base64
 
@@ -254,10 +254,11 @@ class ITEXPERT_API:
 if __name__ == '__main__':
 
     s = '''
-    
+    Ok	2025-10-27 17:09:42.759594	subject=2026-01-01T17:30:00Z_petr_ivanov_Cobit2019C_proctor-1	lastName=Иванов	firstName=Петр	email=sav.gv@bk.ru	username=petr_ivanov	password=petr_ivanov_P0242	url=https://itexpert.proctoring.online?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZmY3NjhlYTY4ZWRhNTM4MjJhOTMxYSIsImV4cCI6MTc2MTU5NTc4MCwiaG9zdCI6Iml0ZXhwZXJ0LnByb2N0b3Jpbmcub25saW5lIiwidXNlcm5hbWUiOiJwZXRyX2l2YW5vdiIsIm5pY2tuYW1lIjoic2F2Lmd2QGJrLnJ1Iiwicm9sZSI6InN0dWRlbnQiLCJyb29tIjoiNjhmZjc2OTRhNjhlZGE1MzgyMmE5MzJkIiwiaWF0IjoxNzYxNTc0MTgwfQ.DlMFWZro7Ip-QNpT_ZvbYmoAnbf9E8Qdb3KvRCaQqRg
+
     '''
 
-    contact = parser_str_to_contact(s)
+    contact = Contact.parser_str_to_contact(s.strip())
 
     print(f"\n--- Тестирование API с базовым URL: {ITEXPERT_URL} ---")
 
