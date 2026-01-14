@@ -10,7 +10,7 @@ from Utils.utils import to_md5, clean_string
 
 class Contact:
     def __init__(self):
-        self.pattern_time = "%Y-%m-%d T%H:%M:%S"
+        self.pattern_time = "%Y-%m-%dT%H:%M:%SZ"
         self.name_eng: str | None = None
         self.last_name_rus: str | None = None
         self.first_name_rus: str | None = None
