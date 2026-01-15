@@ -18,21 +18,21 @@ async def main():
     # Инициализируем планировщик ТОЛЬКО здесь (внутри запущенного цикла)
     scheduler = AsyncIOScheduler()
 
-    # Запуск проверки логов ровно в 00 и 30 минут
+    # Запуск проверки логов и отправки писем
     scheduler.add_job(
         check_log_and_send_email,
         CronTrigger(minute='0,30'),
         id='check_log_and_send_email'
     )
 
-    # Запуск проверки логов ровно в 00 минут
+    # Запуск скачивание страницы отчета из moodle в 00 минут
     scheduler.add_job(
         download_reports_moodle,
         CronTrigger(minute='0'),
         id='download_reports_moodle'
     )
 
-    # Запуск проверки логов ровно в 00 минут
+    # Запуск создание отчетов
     scheduler.add_job(
         create_all_report,
         CronTrigger(minute='5'),
