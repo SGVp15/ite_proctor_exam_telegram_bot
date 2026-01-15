@@ -15,7 +15,7 @@ from Utils.log import log
 
 
 async def main():
-    # Инициализируем планировщик ТОЛЬКО здесь (внутри запущенного цикла)
+    # Инициализируем планировщик
     scheduler = AsyncIOScheduler()
 
     # Запуск проверки логов и отправки писем
@@ -39,7 +39,7 @@ async def main():
         id='create_all_report'
     )
 
-    # Запуск проверки обновлений Git каждые 60 секунд (вместо while True)
+    # Запуск проверки обновлений Git каждые 60 секунд
     scheduler.add_job(
         git_update,
         IntervalTrigger(seconds=60),
@@ -50,12 +50,10 @@ async def main():
     scheduler.start()
     log.info("Планировщик запущен успешно.")
 
-    # Запускаем бота (это заблокирует выполнение, пока бот работает)
     await start_bot()
 
 
 if __name__ == '__main__':
-    # Внешние проверки (синхронные)
     ChromedriverAutoupdate(operatingSystem="win").check()
 
     try:
