@@ -290,23 +290,23 @@ if __name__ == '__main__':
     #     print("Результат создания:", r_create.status_code)
 
     # # 4. Тестирование удаления экзамена
-    # for id_exam_delete in (28297,):
+    # for id_exam_delete in (28505,28506,28507,28508,28509,28510):
     #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
     #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
     #     print("Результат удаления:", r_delete.status_code)
 
-    email = 'zhanna91@list.ru'
-    print(f"\n[get_exam_by_email({email})]")
-    r_id = ite_api.get_exam_by_email(email)
-    if r_id and r_id.ok:
-        obj = json.loads(r_id.text)['data']
-        pprint(obj)
-    else:
-        print("Не удалось получить экзамен по ID.")
-    #
-    # 3. Добавление сертификата в ЛК
-    id = 28480
-    cert_path = 'data/cert/Сертификат_OPSC_2025.12.16_Блинников Михаил_263_m.blinnikov@gpi-sakhalin.ru.png'
+    # email = 'zhanna91@list.ru'
+    # print(f"\n[get_exam_by_email({email})]")
+    # r_id = ite_api.get_exam_by_email(email)
+    # if r_id and r_id.ok:
+    #     obj = json.loads(r_id.text)['data']
+    #     pprint(obj)
+    # else:
+    #     print("Не удалось получить экзамен по ID.")
+    # #
+    # # 3. Добавление сертификата в ЛК
+    # id = 28480
+    # cert_path = 'data/cert/Сертификат_OPSC_2025.12.16_Блинников Михаил_263_m.blinnikov@gpi-sakhalin.ru.png'
 
     # cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
     # cert_name = re.sub('^_', '', cert_name)
@@ -320,14 +320,14 @@ if __name__ == '__main__':
     # if r_update:
     #     print("Результат:", r_update.status_code)
 
-    id = 00000
-    r_update = ite_api.add_review_to_exam_by_id(
-        id=id,
-        file_path='./data/reports/r_48.html',
-        name='r_48.html',
-    )
-    if r_update:
-        print("Результат:", r_update.status_code)
+    # id = 00000
+    # r_update = ite_api.add_review_to_exam_by_id(
+    #     id=id,
+    #     file_path='./data/reports/r_48.html',
+    #     name='r_48.html',
+    # )
+    # if r_update:
+    #     print("Результат:", r_update.status_code)
 
     # print(f"\n[get_exam_by_email({email})]")
     # r_id = ite_api.get_exam_by_email(email)

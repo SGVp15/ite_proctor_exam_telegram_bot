@@ -15,6 +15,10 @@ DIR_DATA = Path('./data')
 DIR_DATA.mkdir(parents=True, exist_ok=True)
 LOG_FILE = DIR_DATA / 'log.txt'
 
+# Moodle
+
+
+
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 

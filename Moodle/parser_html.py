@@ -368,7 +368,7 @@ def main(filename: Path, all_questions):
     for k in sorted(all_category.keys()):
         print(f'{k}\t{answer_category[k]}\t{all_category[k]}')
 
-    report_filename = Path('./data/reports') / f'r_{filename.name}'
+    report_filename = DIR_REPORTS / f'r_{filename.name}'
     generate_html_report(test_info, all_category, answer_category, filename=report_filename)
 
 
