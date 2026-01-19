@@ -4,7 +4,6 @@ import re
 import time
 from pathlib import Path
 from pprint import pprint
-from turtledemo.clock import current_day
 from typing import Optional
 
 import dateparser
