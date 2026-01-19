@@ -123,8 +123,6 @@ def create_html_page_report(test_info: dict, all_category: dict, answer_category
     """
     Генерирует полную HTML-страницу с информацией о тесте и результатами по категориям.
     """
-
-    # --- 1. Подготовка данных для таблицы ---
     sorted_keys = sorted(all_category.keys())
 
     table_rows = ""
@@ -150,9 +148,6 @@ def create_html_page_report(test_info: dict, all_category: dict, answer_category
             </td>
         </tr>
         """
-    text_ = 'Экзамен не сдан.'
-    # if round(all_category_correct / all_category_total, 2) >= 0.7:
-    #     text_ = 'Экзамен сдан.'
 
     # --- 2. HTML-шаблон ---
     html_content = f"""<!DOCTYPE html>
@@ -231,13 +226,12 @@ def create_html_page_report(test_info: dict, all_category: dict, answer_category
             font-weight: bold;
             color: #444444;
         }}
-        /* Стили для прогресс-бара */
         .progress-bar {{
             background-color: #e0e0e0;
             border-radius: 4px;
             height: 25px;
             overflow: hidden;
-            width: 150px; /* Фиксированная ширина */
+            width: 150px;
             margin: 0 auto;
         }}
         .progress-fill {{
@@ -282,10 +276,7 @@ def create_html_page_report(test_info: dict, all_category: dict, answer_category
         </table>
     </div>
 </body>
-</html>
-    """
-
-    # --- 3. Сохранение файла ---
+</html>"""
 
     try:
         with open(filename, 'w', encoding='utf-8') as f:
@@ -360,7 +351,10 @@ def generate_report(filename: Path, all_questions):
     pprint(test_info)
     date_start = dateparser.parse(test_info['Тест начат'])
     print(f'{date_start=}')
-    print(test_info['Завершен'])
+    try:
+        print(test_info['Завершен'])
+    except KeyError:
+        pass
 
     for k in sorted(all_category.keys()):
         print(f'{k}\t{answer_category[k]}\t{all_category[k]}')
@@ -392,4 +386,4 @@ def create_all_report(only_new_report=True):
 
 
 if __name__ == '__main__':
-    create_all_report(only_new_report=False)
+    create_all_report(only_new_report=True)

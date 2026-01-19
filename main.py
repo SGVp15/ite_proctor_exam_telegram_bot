@@ -28,14 +28,14 @@ async def main():
     # Запуск скачивание страницы отчета из moodle в 00 минут
     scheduler.add_job(
         download_reports_moodle,
-        CronTrigger(minute='0'),
+        CronTrigger(hour='1'),
         id='download_reports_moodle'
     )
 
     # Запуск создание отчетов
     scheduler.add_job(
         create_all_report,
-        CronTrigger(minute='5'),
+        CronTrigger(hour='1', minute='30'),
         id='create_all_report'
     )
 

@@ -13,6 +13,7 @@ from requests.structures import CaseInsensitiveDict
 from Contact import Contact, load_contacts_from_log_file
 from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
 from Moodle.config import DIR_REPORTS, DIR_CERTS
+from Utils.log import log
 from Utils.utils import file_to_base64
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
@@ -264,7 +265,7 @@ def get_actual_exams_id_code_dict():
         data = json.loads(response_.text)['data']
         result = {item['id']: item['code'] for item in data}
     else:
-        print("Не удалось получить список экзаменов.")
+        log.error("Не удалось получить список экзаменов.")
     result = mapping_exam_name_values(result)
     return result
 
@@ -348,8 +349,8 @@ def main(days=1):
         cert_files = [f for f in all_cert_files if c.email in f.name and c.exam in f.name]
         for cert_path in cert_files:
             d = dateparser.parse(cert_path.name)
-            # if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
-            #     continue
+            if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
+                continue
 
             cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
             cert_name = re.sub('^_', '', cert_name)
@@ -365,7 +366,7 @@ def main(days=1):
 
         return
 
-        num_report = 55
+        num_report = 56
         r_update = ite_api.add_review_to_exam_by_id(
             id=id,
             file_path=DIR_REPORTS / f'r_{num_report}.html',
@@ -383,4 +384,4 @@ def main(days=1):
 
 
 if __name__ == '__main__':
-    main()
+    main(days=0)
