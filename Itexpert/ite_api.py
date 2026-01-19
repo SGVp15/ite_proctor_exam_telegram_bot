@@ -345,7 +345,7 @@ def main(days=1):
         #
         # 3. Добавление сертификата в ЛК
         id = c.exam_it_itexpert
-        cert_files = [f for f in all_cert_files if c.email in cert_path.name and c.exam in cert_path.name]
+        cert_files = [f for f in all_cert_files if c.email in f.name and c.exam in f.name]
         for cert_path in cert_files:
             d = dateparser.parse(cert_path.name)
             # if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
@@ -363,6 +363,7 @@ def main(days=1):
             if r_update:
                 print("Результат:", r_update.status_code)
 
+        return
         # id = 00000
         num_report = 55
         r_update = ite_api.add_review_to_exam_by_id(
