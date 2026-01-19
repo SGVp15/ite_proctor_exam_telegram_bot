@@ -173,7 +173,7 @@ class Contact:
         return False
 
 
-def load_contacts_from_log_file(file):
+def load_contacts_from_log_file(file=LOG_FILE) -> [Contact]:
     contacts = []
     try:
         with open(file, 'r', encoding='utf-8') as f:
@@ -188,9 +188,9 @@ def load_contacts_from_log_file(file):
 
 if __name__ == '__main__':
     contacts = load_contacts_from_log_file(LOG_FILE)
-
-    c: Contact
     for c in contacts:
         if c:
             c.normalize()
             print(c)
+
+    print(c)

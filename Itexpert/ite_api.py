@@ -1,14 +1,19 @@
+import datetime
 import json
 import re
+import time
 from pathlib import Path
 from pprint import pprint
+from turtledemo.clock import current_day
 from typing import Optional
 
+import dateparser
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from Contact import Contact
+from Contact import Contact, load_contacts_from_log_file
 from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
+from Moodle.config import DIR_REPORTS, DIR_BASE
 from Utils.utils import file_to_base64
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
@@ -251,87 +256,131 @@ class ITEXPERT_API:
         return requests.delete(url=url, headers=self.headers, json={'id': exam_id})
 
 
-if __name__ == '__main__':
+def get_actual_exams_id_code_dict():
+    # 1. Тестирование получения списка экзаменов
+    print("\n[1. get_list_exams(active=True)]")
+    response_ = ITEXPERT_API().get_list_exams(active=True)
+    result = {}
+    if response_ and response_.ok:
+        data = json.loads(response_.text)['data']
+        result = {item['id']: item['code'] for item in data}
+    else:
+        print("Не удалось получить список экзаменов.")
+    result = mapping_exam_name(result)
+    return result
 
-    s = '''
-    Ok	2025-10-27 17:09:42.759594	subject=2026-01-01T17:30:00Z_petr_ivanov_Cobit2019C_proctor-1	lastName=Иванов	firstName=Петр	email=sav.gv@bk.ru	username=petr_ivanov	password=petr_ivanov_P0242	url=https://itexpert.proctoring.online?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZmY3NjhlYTY4ZWRhNTM4MjJhOTMxYSIsImV4cCI6MTc2MTU5NTc4MCwiaG9zdCI6Iml0ZXhwZXJ0LnByb2N0b3Jpbmcub25saW5lIiwidXNlcm5hbWUiOiJwZXRyX2l2YW5vdiIsIm5pY2tuYW1lIjoic2F2Lmd2QGJrLnJ1Iiwicm9sZSI6InN0dWRlbnQiLCJyb29tIjoiNjhmZjc2OTRhNjhlZGE1MzgyMmE5MzJkIiwiaWF0IjoxNzYxNTc0MTgwfQ.DlMFWZro7Ip-QNpT_ZvbYmoAnbf9E8Qdb3KvRCaQqRg
 
-    '''
+def mapping_exam_name(old_dict: dict):
+    mapping = {'ITSMC': 'ITIL4FC'}
+    new_dict = {k: mapping.get(v, v) for k, v in old_dict.items()}
+    return new_dict
 
-    contact = Contact.parser_str_to_contact(s.strip())
+
+def main(days=1):
+    all_cert_files = [f for f in DIR_BASE.rglob('*') if f.is_file() and f.suffix == '.png']
+    d_delta = datetime.timedelta(days=days)
+    date_contact = []
+    current_day = datetime.datetime.now().date() - d_delta
+    current_day = datetime.datetime.combine(current_day, datetime.time.min)
+
+    for c in load_contacts_from_log_file():
+        c: Contact
+        if not c:
+            continue
+        if c.date_exam == current_day:
+            date_contact.append(c)
 
     print(f"\n--- Тестирование API с базовым URL: {ITEXPERT_URL} ---")
 
     # Инициализация
     ite_api = ITEXPERT_API()
 
-    # 1. Тестирование получения списка экзаменов
-    print("\n[1. get_list_exams(active=True)]")
-    r_list = ite_api.get_list_exams(active=True)
-    if r_list and r_list.ok:
-        list_exams = json.loads(r_list.text)['data']
-        pprint(list_exams)
-    else:
-        print("Не удалось получить список экзаменов.")
+    list_exams = get_actual_exams_id_code_dict()
 
-    # # 2. Тестирование получения экзамена по ID
-    # for id_exam in [28312, 28313]:
-    #     print(f"\n[2. get_exam_by_id({id_exam})]")
-    #     r_id = ite_api.get_exam_by_id(id_exam)
-    #     if r_id and r_id.ok:
-    #         pprint(json.loads(r_id.text))
-    #     else:
-    #         print("Не удалось получить экзамен по ID.")
+    for c in date_contact:
+        time.sleep(3)
+        email = c.email
+        # print(f"\n[get_exam_by_email({email})]")
+        r_id = ite_api.get_exam_by_email(email)
+        if r_id and r_id.ok:
+            user_exams = json.loads(r_id.text)['data']
+            # pprint(user_exams)
+        else:
+            print("Не удалось получить экзамен по ID.")
 
-    # # 3. Тестирование создания экзамена
-    # print(f"\n[3. create_exam({contact})]")
-    # r_create = ite_api.create_exam(contact)
-    # if r_create:
-    #     print("Результат создания:", r_create.status_code)
+        for user_exam in user_exams:
+            user_exam['exam'] = list_exams.get(user_exam.get('exam_in'), '')
+            if c.exam.lower() != user_exam.get('exam', '').lower():
+                print('EXAM')
+                continue
+            if c.date_exam != current_day:
+                print('EXAM')
+                continue
 
-    # # 4. Тестирование удаления экзамена
-    # for id_exam_delete in (28505,28506,28507,28508,28509,28510):
-    #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
-    #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
-    #     print("Результат удаления:", r_delete.status_code)
+            c.exam_it_itexpert = user_exam.get('id')
+            break
 
-    # email = 'zhanna91@list.ru'
-    # print(f"\n[get_exam_by_email({email})]")
-    # r_id = ite_api.get_exam_by_email(email)
-    # if r_id and r_id.ok:
-    #     obj = json.loads(r_id.text)['data']
-    #     pprint(obj)
-    # else:
-    #     print("Не удалось получить экзамен по ID.")
-    # #
-    # # 3. Добавление сертификата в ЛК
-    # id = 28480
-    # cert_path = 'data/cert/Сертификат_OPSC_2025.12.16_Блинников Михаил_263_m.blinnikov@gpi-sakhalin.ru.png'
+        pprint(user_exams)
 
-    # cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
-    # cert_name = re.sub('^_', '', cert_name)
-    #
-    # print(f"\n[5. add_cert_to_exam_by_id()]")
-    # r_update = ite_api.add_cert_to_exam_by_id(
-    #     id=id,
-    #     file_path=cert_path,
-    #     name=cert_name,
-    # )
-    # if r_update:
-    #     print("Результат:", r_update.status_code)
+        # # 2. Тестирование получения экзамена по ID
+        # for id_exam in [28312, 28313]:
+        #     print(f"\n[2. get_exam_by_id({id_exam})]")
+        #     r_id = ite_api.get_exam_by_id(id_exam)
+        #     if r_id and r_id.ok:
+        #         pprint(json.loads(r_id.text))
+        #     else:
+        #         print("Не удалось получить экзамен по ID.")
 
-    # id = 00000
-    # r_update = ite_api.add_review_to_exam_by_id(
-    #     id=id,
-    #     file_path='./data/reports/r_48.html',
-    #     name='r_48.html',
-    # )
-    # if r_update:
-    #     print("Результат:", r_update.status_code)
+        # # 3. Тестирование создания экзамена
+        # print(f"\n[3. create_exam({contact})]")
+        # r_create = ite_api.create_exam(contact)
+        # if r_create:
+        #     print("Результат создания:", r_create.status_code)
 
-    # print(f"\n[get_exam_by_email({email})]")
-    # r_id = ite_api.get_exam_by_email(email)
-    # if r_id and r_id.ok:
-    #     pprint(json.loads(r_id.text))
-    # else:
-    #     print("Не удалось получить экзамен по ID.")
+        # # 4. Тестирование удаления экзамена
+        # for id_exam_delete in (28505,28506,28507,28508,28509,28510):
+        #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
+        #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
+        #     print("Результат удаления:", r_delete.status_code)
+
+        #
+        # 3. Добавление сертификата в ЛК
+        id = c.exam_it_itexpert
+        cert_files = [f for f in all_cert_files if c.email in cert_path.name and c.exam in cert_path.name]
+        for cert_path in cert_files:
+            d = dateparser.parse(cert_path.name)
+            # if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
+            #     continue
+
+            cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
+            cert_name = re.sub('^_', '', cert_name)
+
+            print(f"\n[5. add_cert_to_exam_by_id()]")
+            r_update = ite_api.add_cert_to_exam_by_id(
+                id=id,
+                file_path=cert_path,
+                name=cert_name,
+            )
+            if r_update:
+                print("Результат:", r_update.status_code)
+
+        # id = 00000
+        num_report = 55
+        r_update = ite_api.add_review_to_exam_by_id(
+            id=id,
+            file_path=DIR_REPORTS / f'r_{num_report}.html',
+            name=f'r_{num_report}.html',
+        )
+        if r_update:
+            print("Результат:", r_update.status_code)
+
+        # print(f"\n[get_exam_by_email({email})]")
+        # r_id = ite_api.get_exam_by_email(email)
+        # if r_id and r_id.ok:
+        #     pprint(json.loads(r_id.text))
+        # else:
+        #     print("Не удалось получить экзамен по ID.")
+
+
+if __name__ == '__main__':
+    main()
