@@ -265,11 +265,11 @@ def get_actual_exams_id_code_dict():
         result = {item['id']: item['code'] for item in data}
     else:
         print("Не удалось получить список экзаменов.")
-    result = mapping_exam_name(result)
+    result = mapping_exam_name_values(result)
     return result
 
 
-def mapping_exam_name(old_dict: dict):
+def mapping_exam_name_values(old_dict: dict):
     mapping = {'ITSMC': 'ITIL4FC'}
     new_dict = {k: mapping.get(v, v) for k, v in old_dict.items()}
     return new_dict
