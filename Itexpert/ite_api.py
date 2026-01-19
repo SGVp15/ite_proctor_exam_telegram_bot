@@ -349,8 +349,8 @@ def main(days=1):
         cert_files = [f for f in all_cert_files if c.email in f.name and c.exam in f.name]
         for cert_path in cert_files:
             d = dateparser.parse(cert_path.name)
-            if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
-                continue
+            # if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
+            #     continue
 
             cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
             cert_name = re.sub('^_', '', cert_name)
@@ -364,9 +364,8 @@ def main(days=1):
             if r_update:
                 print("Результат:", r_update.status_code)
 
-        return
-
-        num_report = 56
+        # return
+        num_report = 57
         r_update = ite_api.add_review_to_exam_by_id(
             id=id,
             file_path=DIR_REPORTS / f'r_{num_report}.html',
