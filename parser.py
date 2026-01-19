@@ -2,6 +2,8 @@ import datetime
 import re
 import xml.etree.ElementTree as ET
 
+import dateparser
+
 from Contact import Contact
 from EXCEL.my_excel import read_excel_file
 from root_config import TEMPLATE_FILE_XLSX, PAGE_NAME
@@ -61,15 +63,9 @@ def get_contact_from_array(data_list) -> list[Contact]:
         user.email = data[4]
         user.password = data[5]
         user.exam = data[6]
-        user.date_from_file = data[7].strip()
-        hour = int(data[8])
-        minute = int(data[9])
+        user.date_from_file = dateparser.parse(data[7]).date()
         user.proctor = data[10]
-
-        date_string = user.date_from_file
-        date_string = re.sub(r'[^\d.]', '', date_string)
-        # 2023-02-02T13:29:31Z
-        user.date_exam = datetime.datetime.strptime(f"{date_string}-{hour}:{minute}", "%d.%m.%Y-%H:%M")
+        user.date_exam = dateparser.parse(f'{data[7].strip()}-{str(data[8]).strip()}:{str(data[9]).strip()}')
 
         if user.normalize():
             users.append(user)

@@ -103,7 +103,6 @@ def parse_quiz_review(html_content: str) -> dict:
     return results
 
 
-# --- Пример использования скрипта ---
 def parse_data_questions_html(filename):
     try:
         with open(filename, 'r', encoding='utf-8') as f:
@@ -111,7 +110,6 @@ def parse_data_questions_html(filename):
 
         parsed_data = parse_quiz_review(html_content)
 
-        # Выводим результат в консоль в формате JSON
         a = json.dumps(parsed_data, indent=4, ensure_ascii=False)
         python_object = json.loads(a)
         return python_object
@@ -121,7 +119,7 @@ def parse_data_questions_html(filename):
         print(f"Произошла ошибка при парсинге: {e}")
 
 
-def generate_html_report(test_info: dict, all_category: dict, answer_category: dict, filename="quiz_report.html"):
+def create_html_page_report(test_info: dict, all_category: dict, answer_category: dict, filename="quiz_report.html"):
     """
     Генерирует полную HTML-страницу с информацией о тесте и результатами по категориям.
     """
@@ -137,7 +135,6 @@ def generate_html_report(test_info: dict, all_category: dict, answer_category: d
         correct = answer_category[k]
         all_category_total += total
         all_category_correct += correct
-        # Избегаем деления на ноль, если total = 0
         percentage = (correct / total * 100) if total > 0 else 0
 
         # Строка таблицы для категории
@@ -322,7 +319,7 @@ def get_all_questions_from_xlsx():
     return all_questions
 
 
-def main(filename: Path, all_questions):
+def generate_report(filename: Path, all_questions):
     data = parse_data_questions_html(filename=filename)
     if not data:
         return
@@ -369,7 +366,7 @@ def main(filename: Path, all_questions):
         print(f'{k}\t{answer_category[k]}\t{all_category[k]}')
 
     report_filename = DIR_REPORTS / f'r_{filename.name}'
-    generate_html_report(test_info, all_category, answer_category, filename=report_filename)
+    create_html_page_report(test_info, all_category, answer_category, filename=report_filename)
 
 
 def create_all_report(only_new_report=True):
@@ -391,7 +388,7 @@ def create_all_report(only_new_report=True):
 
     for filename_path in all_file_filtered:
         print(filename_path)
-        main(filename=Path(filename_path), all_questions=all_questions)
+        generate_report(filename=Path(filename_path), all_questions=all_questions)
 
 
 if __name__ == '__main__':

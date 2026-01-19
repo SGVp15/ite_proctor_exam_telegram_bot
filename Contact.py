@@ -4,8 +4,10 @@ import re
 
 import dateparser
 
+from Utils.log import log
 from Utils.translit import transliterate, replace_ru_char_to_eng_char
 from Utils.utils import to_md5, clean_string
+from root_config import LOG_FILE
 
 
 class Contact:
@@ -24,9 +26,9 @@ class Contact:
         # self.course: str | None = None
         # self.course_small: str | None = None
         # self.lector: str | None = None
-        self.date_from_file = None
+        self.date_from_file: datetime.datetime | None = None
         self.date_exam: datetime.datetime | None = None
-        self.date_exam_connect: str | None = None
+        self.date_exam_connect: datetime.datetime | None = None
         self.open_at: str | None = None
         self.close_at: str | None = None
         self.remove_at: str | None = None
@@ -45,40 +47,20 @@ class Contact:
         self.moodle_id_exam = None
         self.moodle_id_user = None
 
-    def parser_str_to_contact(log_string: str):
+    def parser_str_to_contact(s: str):
         """
         Парсит строку лога прокторинга, извлекая статус, дату/время и все пары ключ=значение.
 
-        :param log_string: Строка для парсинга.
+        :param s: Строка для парсинга.
         :return: Словарь с извлеченными данными.
         """
-        if not log_string:
-            return {}
-
-        # 1. Разделяем строку по пробелам или табуляциям, сохраняя все части.
-        # Используем регулярное выражение для разделения, которое учитывает несколько пробелов/табуляций
-        # и не ломается, если URL содержит знаки '='.
-        parts = re.split(r'\s+', log_string, maxsplit=2)
-
-        # Инициализация результата
         result = {}
-
-        # 2. Обработка первых двух полей: Статус и Дата/Время
-        try:
-            if len(parts) >= 1:
-                result['status'] = parts[0]
-            if len(parts) >= 2:
-                result['datetime'] = parts[1] + (parts[2].split()[0] if len(parts[2].split()) > 0 else "")
-                key_value_string = ' '.join(parts[2:])
-            else:
-                return result
-        except IndexError:
+        if not s:
             return {}
 
-        # 3. Парсинг пар ключ=значение
-        # Снова разделяем строку, которая содержит только пары 'ключ=значение',
+        # Разделяем строку, которая содержит только пары 'ключ=значение',
         # но только по пробелам, чтобы не испортить URL.
-        key_value_pairs = key_value_string.split()
+        key_value_pairs = s.split()
 
         for item in key_value_pairs:
             if '=' in item:
@@ -88,29 +70,31 @@ class Contact:
                 except ValueError:
                     continue
 
-        c = Contact()
-        if result.get('status', '').lower() == 'ok':
-            attributes = c.__dict__
-            for attr_name in attributes:
-                if attr_name in result.keys():
-                    setattr(c, attr_name, result.get(attr_name, ''))
-            try:
-                date_str = re.findall(r'date_exam=([\d-] [\d:]+)\t', c.subject)[0]
-                c.date_exam = dateparser.parse(date_str)
-                if not c.url_proctor:
-                    c.url_proctor = result.get('url', '')
-                if not c.exam:
-                    c.exam = re.findall(r'_([A-Z0-9]+)_', c.subject)[0]
-            except IndexError:
-                pass
-        return c
+        if result.get('status', '').lower() != 'ok':
+            return {}
+
+        contact = Contact()
+        attributes = contact.__dict__
+        for attr_name in attributes:
+            if attr_name in result.keys():
+                if 'date' in attr_name:
+                    setattr(contact, attr_name, dateparser.parse(result.get(attr_name, '')))
+                    continue
+                setattr(contact, attr_name, result.get(attr_name, ''))
+        try:
+            if not contact.url_proctor:
+                contact.url_proctor = result.get('url', '')
+            if not contact.exam:
+                contact.exam = re.findall(r'_([A-Z0-9]+)_', contact.subject)[0]
+        except IndexError:
+            pass
+        return contact
 
     def normalize(self) -> bool:
         self.first_name_rus = clean_string(self.first_name_rus).capitalize()
         self.last_name_eng = clean_string(self.last_name_eng).capitalize()
         self.first_name_eng = clean_string(self.first_name_eng).capitalize()
         self.email = replace_ru_char_to_eng_char(clean_string(self.email).lower())
-        self.date_from_file = clean_string(self.date_from_file).lower()
 
         if not self.first_name_eng:
             self.first_name_eng = transliterate(f'{self.first_name_rus}').capitalize()
@@ -126,18 +110,17 @@ class Contact:
 
         self.name_eng = f'{self.first_name_eng} {self.last_name_eng}'
 
-        if datetime.datetime.now() > self.date_exam:
-            return False
-
-        self.date_exam_connect = self.date_exam + datetime.timedelta(minutes=-5)
-        self.scheduled_at = self.date_exam + datetime.timedelta(hours=-3)
+        if not self.date_exam_connect:
+            self.date_exam_connect = self.date_exam + datetime.timedelta(minutes=-5)
+        if not self.scheduled_at:
+            self.scheduled_at = self.date_exam + datetime.timedelta(hours=-3)
+        else:
+            self.scheduled_at = dateparser.parse(self.scheduled_at)
         deadline = self.scheduled_at + datetime.timedelta(hours=2)
         remove_at = self.scheduled_at + datetime.timedelta(days=90)
         open_at = self.scheduled_at - datetime.timedelta(minutes=20)
         close_at = self.scheduled_at + datetime.timedelta(hours=2, minutes=20)
 
-
-        self.date_exam_for_subject = self.date_exam.strftime(self.pattern_time)
         self.deadline = deadline.strftime(self.pattern_time)
         self.open_at = open_at.strftime(self.pattern_time)
         self.close_at = close_at.strftime(self.pattern_time)
@@ -151,7 +134,7 @@ class Contact:
         self.subject = f'{self.date_exam_for_subject}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'
 
-        self.identifier = to_md5(f'{self.date_from_file.replace(".", "-")}_{self.username}_{self.exam}')
+        self.identifier = to_md5(f'{self.date_from_file.strftime(self.pattern_time)}_{self.username}_{self.exam}')
         return True
 
     def __str__(self) -> str:
@@ -188,3 +171,26 @@ class Contact:
         if self.email == other.email and self.email:
             return True
         return False
+
+
+def load_contacts_from_log_file(file):
+    contacts = []
+    try:
+        with open(file, 'r', encoding='utf-8') as f:
+            s = f.read()
+        for row in s.split('\n'):
+            contacts.append(Contact.parser_str_to_contact(row))
+        return contacts
+    except Exception as e:
+        log.error(e)
+        return []
+
+
+if __name__ == '__main__':
+    contacts = load_contacts_from_log_file(LOG_FILE)
+
+    c: Contact
+    for c in contacts:
+        if c:
+            c.normalize()
+            print(c)
