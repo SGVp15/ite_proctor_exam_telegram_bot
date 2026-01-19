@@ -11,6 +11,7 @@ MOODLE_URL = config.get('MOODLE_URL')
 
 DIR_BASE = Path(
     '//192.168.20.100/Administrative server/РАБОТА АДМИНИСТРАТОРА/ОРГАНИЗАЦИЯ IT ЭКЗАМЕНОВ/ЭКЗАМЕНЫ ЦИФРОВОЙ ПУТЬ')
+DIR_CERTS = DIR_BASE / 'сертификаты'
 DIR_HTML_DOWNLOAD = DIR_BASE / 'DOWNLOAD_Moodle'
 DIR_HTML_DOWNLOAD.mkdir(exist_ok=True, parents=True)
 DIR_REPORTS = DIR_BASE / 'Результаты HTML'

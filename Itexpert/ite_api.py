@@ -12,7 +12,7 @@ from requests.structures import CaseInsensitiveDict
 
 from Contact import Contact, load_contacts_from_log_file
 from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
-from Moodle.config import DIR_REPORTS, DIR_BASE
+from Moodle.config import DIR_REPORTS, DIR_CERTS
 from Utils.utils import file_to_base64
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
@@ -276,7 +276,7 @@ def mapping_exam_name(old_dict: dict):
 
 
 def main(days=1):
-    all_cert_files = [f for f in DIR_BASE.rglob('*') if f.is_file() and f.suffix == '.png']
+    all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
     d_delta = datetime.timedelta(days=days)
     date_contact = []
     current_day = datetime.datetime.now().date() - d_delta
@@ -354,7 +354,7 @@ def main(days=1):
             cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
             cert_name = re.sub('^_', '', cert_name)
 
-            print(f"\n[5. add_cert_to_exam_by_id()]")
+            print(f"\n[3. add_cert_to_exam_by_id()]")
             r_update = ite_api.add_cert_to_exam_by_id(
                 id=id,
                 file_path=cert_path,
@@ -364,7 +364,7 @@ def main(days=1):
                 print("Результат:", r_update.status_code)
 
         return
-        # id = 00000
+
         num_report = 55
         r_update = ite_api.add_review_to_exam_by_id(
             id=id,
