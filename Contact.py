@@ -36,7 +36,6 @@ class Contact:
         self.scheduled_at: str | None = None
         self.proctor: str | None = None
         self.subject: str | None = None
-        self.date_exam_for_subject = None
         self.url_proctor: str | None = None
         # self.url_course: str | None = None
 
@@ -131,7 +130,7 @@ class Contact:
         if not self.password:
             self.password = f'{self.username}_P{random.randint(1000, 9999):04d}'
 
-        self.subject = f'{self.date_exam_for_subject}_{self.username}_' \
+        self.subject = f'{self.date_exam.strftime(self.pattern_time)}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'
 
         self.identifier = to_md5(f'{self.date_from_file.strftime(self.pattern_time)}_{self.username}_{self.exam}')
@@ -157,7 +156,6 @@ class Contact:
             f"date_from_file={self.date_from_file}\t"
             f"date_exam={self.date_exam}\t"
             f"date_exam_connect={self.date_exam_connect}\t"
-            f"date_exam_for_subject={self.date_exam_for_subject}\t"
             f"scheduled_at={self.scheduled_at}\t"
             f"open_at={self.open_at}\t"
             f"close_at={self.close_at}\t"
