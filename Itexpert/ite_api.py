@@ -6,7 +6,6 @@ from pathlib import Path
 from pprint import pprint
 from typing import Optional
 
-import dateparser
 import requests
 from requests.structures import CaseInsensitiveDict
 

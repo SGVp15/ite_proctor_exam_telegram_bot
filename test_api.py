@@ -1,12 +1,8 @@
 import asyncio
+import time
 
-from Ispring.ispring2 import IspringApi
+from Itexpert.ite_api import ITEXPERT_API
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
-
-
-async def test_ispring():
-    IspringApi().get_users()
-    print("[test] Ispring OK")
 
 
 async def test_proctoredu():
@@ -18,10 +14,14 @@ async def test_proctoredu():
 
 async def main():
     task1 = asyncio.create_task(test_proctoredu())
-    task2 = asyncio.create_task(test_ispring())
     await task1
-    await task2
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    # asyncio.run(main())
+    # 4. Тестирование удаления экзамена
+    for id_exam_delete in range(28528, 28535 + 1):
+        time.sleep(1)
+        print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
+        r_delete = ITEXPERT_API().delete_exam_by_id(id_exam_delete)
+        print("Результат удаления:", r_delete.status_code)
