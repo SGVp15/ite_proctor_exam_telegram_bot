@@ -57,6 +57,7 @@ async def check_log_and_send_email():
                 text += 'Offline '
             text += (
                 f'{c.date_exam}\n'
+                f'{c.date_exam_connect}\n'
                 f'{c.exam}\n'
                 f'{c.last_name_rus} {c.first_name_rus} {c.email}\n'
                 f'Логин={c.username}\n'

@@ -65,7 +65,7 @@ def get_contact_from_array(data_list) -> list[Contact]:
         user.exam = data[6]
         user.date_from_file = dateparser.parse(data[7]).date()
         user.proctor = data[10]
-        user.date_exam = dateparser.parse(f'{data[7].strip()}-{str(data[8]).strip()}:{str(data[9]).strip()}')
+        user.date_exam = dateparser.parse(f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}')
 
         if user.normalize():
             users.append(user)
