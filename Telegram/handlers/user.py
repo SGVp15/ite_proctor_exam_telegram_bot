@@ -4,11 +4,12 @@ from pathlib import Path
 from aiogram import F
 from aiogram.types import message
 
+from Contact import load_contacts_from_log_file
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
 from main_registration import registration
 from parser import get_contact_from_excel
-from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
+from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE, LOG_FILE
 
 
 @dp.message(F.document & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
@@ -26,7 +27,10 @@ async def download_document_handle(message: message):
     await bot.download_file(file_path, destination=path)
     await message.answer('Добавил файл', reply_markup=inline_kb_main)
 
-    contacts = get_contact_from_excel(path)
+    contacts_from_file = get_contact_from_excel(path)
+    contacts_from_log = load_contacts_from_log_file(LOG_FILE)
+    contacts = [c for c in contacts_from_file if c not in contacts_from_log]
+
     if not contacts:
         text_answer = 'No contact'
         await message.answer(text_answer, reply_markup=inline_kb_main)

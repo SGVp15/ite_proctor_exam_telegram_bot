@@ -42,7 +42,6 @@ async def registration(contacts: [Contact]) -> str:
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')
     for contact in contacts:
-        # if contact.is_create_enrollment:
         if contact.proctor:
             log.info(f'MyJinja start template_email_registration_exam_online')
             text = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
@@ -70,7 +69,6 @@ async def registration(contacts: [Contact]) -> str:
 
     # OUT STRING
     for contact in contacts:
-        # if contact.is_create_enrollment:
         out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
                     f'{contact.email} {contact.exam} {contact.date_exam}\n')
     return out_str
