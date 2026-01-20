@@ -37,7 +37,7 @@ async def download_document_handle(message: message):
     else:
         text_answer = await registration(contacts)
         await message.answer(text_answer, reply_markup=inline_kb_main)
-        asyncio.create_task(registration(contacts))
+        # asyncio.create_task(registration(contacts))
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 # async def show_registration(callback_query: CallbackQuery):
