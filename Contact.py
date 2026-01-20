@@ -173,13 +173,20 @@ class Contact:
         return False
 
 
-def load_contacts_from_log_file(file=LOG_FILE) -> [Contact]:
+def load_contacts_from_log_file(file=LOG_FILE, date: datetime.datetime | None = None) -> [Contact]:
     contacts = []
     try:
         with open(file, 'r', encoding='utf-8') as f:
             s = f.read()
         for row in s.split('\n'):
-            contacts.append(Contact.parser_str_to_contact(row))
+            c: Contact
+            c = Contact.parser_str_to_contact(row)
+            if not date:
+                contacts.append(c)
+                continue
+            if date.day() == c.date_exam.day():
+                contacts.append(c)
+                continue
         return contacts
     except Exception as e:
         log.error(e)

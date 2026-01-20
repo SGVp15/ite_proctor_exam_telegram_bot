@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+import datetime
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -29,14 +29,16 @@ async def main():
     scheduler.add_job(
         download_reports_moodle,
         CronTrigger(hour='1'),
-        id='download_reports_moodle'
+        id='download_reports_moodle',
+        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
     )
 
     # Запуск создание отчетов
     scheduler.add_job(
         create_all_report,
         CronTrigger(hour='1', minute='30'),
-        id='create_all_report'
+        id='create_all_report',
+        next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=3),  # Проверить сразу при старте
     )
 
     # Запуск проверки обновлений Git каждые 60 секунд
@@ -44,7 +46,7 @@ async def main():
         git_update,
         IntervalTrigger(seconds=60),
         id='git_check',
-        next_run_time=datetime.now()  # Проверить сразу при старте
+        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
     )
 
     scheduler.start()

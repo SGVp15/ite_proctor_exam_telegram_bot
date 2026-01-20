@@ -276,23 +276,26 @@ def mapping_exam_name_values(old_dict: dict):
     return new_dict
 
 
-def main(days=1):
-    all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
-    d_delta = datetime.timedelta(days=days)
-    date_contact = []
-    current_day = datetime.datetime.now().date() - d_delta
-    current_day = datetime.datetime.combine(current_day, datetime.time.min)
+def main(date: datetime.datetime | None = None):
+    if not date:
+        d_delta = datetime.timedelta(days=1)
+        current_day = datetime.datetime.now().date() - d_delta
+        current_day = datetime.datetime.combine(current_day, datetime.time.min)
+    else:
+        current_day = datetime.datetime.combine(date, datetime.time.min)
 
-    for c in load_contacts_from_log_file():
+    date_contact = []
+    contacts = load_contacts_from_log_file()
+    for c in contacts:
         c: Contact
         if not c:
             continue
         if c.date_exam == current_day:
             date_contact.append(c)
 
-    print(f"\n--- Тестирование API с базовым URL: {ITEXPERT_URL} ---")
+    all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
+    all_report_files = [f for f in DIR_REPORTS.rglob('*') if f.is_file() and f.suffix == '.html']
 
-    # Инициализация
     ite_api = ITEXPERT_API()
 
     list_exams = get_actual_exams_id_code_dict()
@@ -330,20 +333,19 @@ def main(days=1):
         #         pprint(json.loads(r_id.text))
         #     else:
         #         print("Не удалось получить экзамен по ID.")
-
+        #
         # # 3. Тестирование создания экзамена
         # print(f"\n[3. create_exam({contact})]")
         # r_create = ite_api.create_exam(contact)
         # if r_create:
         #     print("Результат создания:", r_create.status_code)
-
+        #
         # # 4. Тестирование удаления экзамена
         # for id_exam_delete in (28505,28506,28507,28508,28509,28510):
         #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
         #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
         #     print("Результат удаления:", r_delete.status_code)
 
-        #
         # 3. Добавление сертификата в ЛК
         id = c.exam_it_itexpert
         cert_files = [f for f in all_cert_files if c.email in f.name and c.exam in f.name]
@@ -364,7 +366,7 @@ def main(days=1):
             if r_update:
                 print("Результат:", r_update.status_code)
 
-        # return
+        return
         num_report = 57
         r_update = ite_api.add_review_to_exam_by_id(
             id=id,
@@ -383,4 +385,5 @@ def main(days=1):
 
 
 if __name__ == '__main__':
-    main(days=0)
+    main(date=datetime.datetime(year=2026, month=1, day=20))
+    # main()
