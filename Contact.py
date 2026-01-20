@@ -59,7 +59,7 @@ class Contact:
 
         # Разделяем строку, которая содержит только пары 'ключ=значение',
         # но только по пробелам, чтобы не испортить URL.
-        key_value_pairs = s.split()
+        key_value_pairs = s.split('\t')
 
         for item in key_value_pairs:
             if '=' in item:
@@ -77,6 +77,8 @@ class Contact:
         for attr_name in attributes:
             if attr_name in result.keys():
                 if 'date' in attr_name:
+                    v = result.get(attr_name, '')
+                    d = dateparser.parse(v)
                     setattr(contact, attr_name, dateparser.parse(result.get(attr_name, '')))
                     continue
                 setattr(contact, attr_name, result.get(attr_name, ''))
@@ -167,8 +169,10 @@ class Contact:
 
     def __eq__(self, other):
         try:
-            if self.email == other.email and self.exam == other.exam and self.date_exam == other.date_exam:
-                return True
+            if self.email == other.email:
+                if self.exam == other.exam:
+                    if self.date_exam == other.date_exam:
+                        return True
         except AttributeError:
             pass
         return False
