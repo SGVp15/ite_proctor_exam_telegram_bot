@@ -168,8 +168,11 @@ class Contact:
         )
 
     def __eq__(self, other):
-        if self.email == other.email and self.exam == other.exam and self.date_exam == other.date_exam:
-            return True
+        try:
+            if self.email == other.email and self.exam == other.exam and self.date_exam == other.date_exam:
+                return True
+        except AttributeError:
+            pass
         return False
 
 
