@@ -294,6 +294,10 @@ def clean_test_infp(data):
         data['Оценка'] = re.sub(r',\d+', '', data['Оценка'])
     except KeyError:
         pass
+    try:
+        data['test_info'] = re.sub(r'[А-Яа-яёЁ]', '', data['test_info']).strip()
+    except KeyError:
+        pass
     return data
 
 
@@ -347,7 +351,7 @@ def generate_report(filename: Path, all_questions):
                 if q.status == 'Верно':
                     answer_category[q_all.category] += 1
                 break
-    clean_test_infp(test_info)
+    test_info = clean_test_infp(test_info)
     pprint(test_info)
     date_start = dateparser.parse(test_info['Тест начат'])
     print(f'{date_start=}')
@@ -359,7 +363,7 @@ def generate_report(filename: Path, all_questions):
     for k in sorted(all_category.keys()):
         print(f'{k}\t{answer_category[k]}\t{all_category[k]}')
 
-    report_filename = DIR_REPORTS / f'r_{filename.name}'
+    report_filename = DIR_REPORTS / f'r_{date_start.strftime('%Y.%m.%d')}_{test_info['test_name']}_{test_info['user']}_{filename.name}'
     create_html_page_report(test_info, all_category, answer_category, filename=report_filename)
 
 
@@ -386,4 +390,4 @@ def create_all_report(only_new_report=True):
 
 
 if __name__ == '__main__':
-    create_all_report(only_new_report=True)
+    create_all_report(only_new_report=False)

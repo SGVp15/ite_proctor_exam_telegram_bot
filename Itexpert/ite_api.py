@@ -276,7 +276,7 @@ def mapping_exam_name_values(old_dict: dict):
     return new_dict
 
 
-def main(date: datetime.datetime | None = None):
+def sent_report_and_cert_lk(date: datetime.datetime | None = None):
     if not date:
         d_delta = datetime.timedelta(days=1)
         current_day = datetime.datetime.now().date() - d_delta
@@ -292,6 +292,7 @@ def main(date: datetime.datetime | None = None):
             continue
         if c.date_exam == current_day:
             date_contact.append(c)
+            print(c)
 
     all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
     all_report_files = [f for f in DIR_REPORTS.rglob('*') if f.is_file() and f.suffix == '.html']
@@ -320,41 +321,18 @@ def main(date: datetime.datetime | None = None):
                 print('EXAM')
                 continue
 
-            c.exam_it_itexpert = user_exam.get('id')
+            c.exam_id_itexpert = user_exam.get('id')
             break
 
         pprint(user_exams)
-
-        # # 2. Тестирование получения экзамена по ID
-        # for id_exam in [28312, 28313]:
-        #     print(f"\n[2. get_exam_by_id({id_exam})]")
-        #     r_id = ite_api.get_exam_by_id(id_exam)
-        #     if r_id and r_id.ok:
-        #         pprint(json.loads(r_id.text))
-        #     else:
-        #         print("Не удалось получить экзамен по ID.")
-        #
-        # # 3. Тестирование создания экзамена
-        # print(f"\n[3. create_exam({contact})]")
-        # r_create = ite_api.create_exam(contact)
-        # if r_create:
-        #     print("Результат создания:", r_create.status_code)
-        #
-        # # 4. Тестирование удаления экзамена
-        # for id_exam_delete in (28505,28506,28507,28508,28509,28510):
-        #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
-        #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
-        #     print("Результат удаления:", r_delete.status_code)
-
         # 3. Добавление сертификата в ЛК
-        id = c.exam_it_itexpert
+        id = c.exam_id_itexpert
         cert_files = [f for f in all_cert_files if c.email in f.name and c.exam in f.name]
         for cert_path in cert_files:
-            d = dateparser.parse(cert_path.name)
-            # if d.strftime('_&Y.%m.%d_') not in dateparser.parse(cert_path.name):
-            #     continue
+            if c.date_exam.strftime('_%Y.%m.%d_') not in cert_path.name:
+                continue
 
-            cert_name = re.sub('[ а-яА-я]+_*', '', Path(cert_path).name)
+            cert_name = re.sub('[ а-яА-яЁё]+_*', '', Path(cert_path).name)
             cert_name = re.sub('^_', '', cert_name)
 
             print(f"\n[3. add_cert_to_exam_by_id()]")
@@ -366,15 +344,22 @@ def main(date: datetime.datetime | None = None):
             if r_update:
                 print("Результат:", r_update.status_code)
 
-        return
-        num_report = 57
-        r_update = ite_api.add_review_to_exam_by_id(
-            id=id,
-            file_path=DIR_REPORTS / f'r_{num_report}.html',
-            name=f'r_{num_report}.html',
-        )
-        if r_update:
-            print("Результат:", r_update.status_code)
+        report_files = [f for f in all_report_files if
+                        c.last_name_rus in f.name
+                        and c.first_name_rus in f.name
+                        and c.exam in f.name]
+
+        for file_report in report_files:
+            if c.date_exam.strftime('_%Y.%m.%d_') not in file_report.name:
+                continue
+
+            r_update = ite_api.add_review_to_exam_by_id(
+                id=id,
+                file_path=file_report,
+                name=file_report.name,
+            )
+            if r_update:
+                print("Результат:", r_update.status_code)
 
         # print(f"\n[get_exam_by_email({email})]")
         # r_id = ite_api.get_exam_by_email(email)
@@ -384,6 +369,28 @@ def main(date: datetime.datetime | None = None):
         #     print("Не удалось получить экзамен по ID.")
 
 
+# # 2. Тестирование получения экзамена по ID
+# for id_exam in [28312, 28313]:
+#     print(f"\n[2. get_exam_by_id({id_exam})]")
+#     r_id = ite_api.get_exam_by_id(id_exam)
+#     if r_id and r_id.ok:
+#         pprint(json.loads(r_id.text))
+#     else:
+#         print("Не удалось получить экзамен по ID.")
+#
+# # 3. Тестирование создания экзамена
+# print(f"\n[3. create_exam({contact})]")
+# r_create = ite_api.create_exam(contact)
+# if r_create:
+#     print("Результат создания:", r_create.status_code)
+#
+# # 4. Тестирование удаления экзамена
+# for id_exam_delete in (28505,28506,28507,28508,28509,28510):
+#     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
+#     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
+#     print("Результат удаления:", r_delete.status_code)
+
+
 if __name__ == '__main__':
-    main(date=datetime.datetime(year=2026, month=1, day=20))
+    sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=20))
     # main()

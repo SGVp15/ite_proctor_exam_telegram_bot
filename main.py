@@ -6,6 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from Itexpert.check_log_send_email import check_log_and_send_email
+from Itexpert.ite_api import sent_report_and_cert_lk
 from Moodle.main import download_reports_moodle
 from Moodle.parser_html import create_all_report
 from Telegram.main import start_bot
@@ -39,6 +40,13 @@ async def main():
         CronTrigger(hour='1', minute='30'),
         id='create_all_report',
         next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=3),  # Проверить сразу при старте
+    )
+
+    # Запуск создание отчетов
+    scheduler.add_job(
+        sent_report_and_cert_lk,
+        CronTrigger(hour='2'),
+        id='sent_report_and_cert_lk',
     )
 
     # Запуск проверки обновлений Git каждые 60 секунд
