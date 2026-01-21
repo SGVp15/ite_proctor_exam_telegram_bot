@@ -46,7 +46,7 @@ async def download_document_handle(message: message):
 async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
     await sent_report_and_cert_lk(date=datetime.datetime.now())
     await bot.send_message(text='SENT_REPORT_AND_CERT_LK', chat_id=callback_query.from_user.id,
-                           message_id=callback_query.message.message_id,
+                           # message_id=callback_query.message.message_id,
                            reply_markup=inline_kb_main)
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
