@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import json
 import re
@@ -275,7 +276,7 @@ def mapping_exam_name_values(old_dict: dict):
     return new_dict
 
 
-def sent_report_and_cert_lk(date: datetime.datetime | None = None):
+async def sent_report_and_cert_lk(date: datetime.datetime | None = None):
     if not date:
         d_delta = datetime.timedelta(days=1)
         current_day = datetime.datetime.now().date() - d_delta
@@ -300,7 +301,8 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
     ite_api = ITEXPERT_API()
 
     list_exams = get_actual_exams_id_code_dict()
-    time.sleep(1)
+    # time.sleep(1)
+    await asyncio.sleep(1)
 
     for c in date_contact:
         date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
@@ -324,7 +326,8 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             # pprint(user_exams)
         else:
             print("Не удалось получить экзамен по ID.")
-        time.sleep(1)
+        # time.sleep(1)
+        await asyncio.sleep(1)
 
         for user_exam in user_exams:
             user_exam['exam'] = list_exams.get(user_exam.get('exam_in'), '')
@@ -353,7 +356,8 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             )
             if r_update:
                 print("Результат:", r_update.status_code)
-            time.sleep(1)
+            # time.sleep(1)
+            await asyncio.sleep(1)
 
         # 4. Добавление отчета в ЛК
         for file_report in report_files:
@@ -364,9 +368,12 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             )
             if r_update:
                 print("Результат:", r_update.status_code)
-            time.sleep(1)
+            # time.sleep(1)
+            await asyncio.sleep(1)
+
+async def main():
+    await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=21))
 
 
 if __name__ == '__main__':
-    sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=21))
-    # main()
+    asyncio.run(main())

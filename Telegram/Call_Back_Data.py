@@ -1,4 +1,5 @@
 class CallBackData:
+    SENT_REPORT_AND_CERT_LK = 'SENT_REPORT_AND_CERT_LK'
     DOWNLOAD_LOGS = 'download_logs'
     GET_LOG = 'get_log'
     GET_REGISTRATION_WEBINAR = 'get_registration_webinar'

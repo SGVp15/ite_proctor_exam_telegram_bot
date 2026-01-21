@@ -1,10 +1,13 @@
-import asyncio
+import datetime
+import types
 from pathlib import Path
 
 from aiogram import F
 from aiogram.types import message
 
 from Contact import load_contacts_from_log_file
+from Itexpert.ite_api import sent_report_and_cert_lk
+from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
 from main_registration import registration
@@ -38,6 +41,12 @@ async def download_document_handle(message: message):
         text_answer = await registration(contacts)
         await message.answer(text_answer, reply_markup=inline_kb_main)
         # asyncio.create_task(registration(contacts))
+
+
+@dp.callback_query(F.data.in_({CallBackData.SENT_REPORT_AND_CERT_LK}))
+async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
+    await sent_report_and_cert_lk(date=datetime.datetime.now())
+    await message.answer('sent_report_and_cert_lk', reply_markup=inline_kb_main)
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 # async def show_registration(callback_query: CallbackQuery):

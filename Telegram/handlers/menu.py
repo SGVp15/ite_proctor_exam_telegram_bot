@@ -1,9 +1,9 @@
 from aiogram import types, F
 
-from root_config import ADMIN_ID
+from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import k_admin_menu, inline_kb_main
 from Telegram.main import bot, dp
-from Telegram.Call_Back_Data import CallBackData
+from root_config import ADMIN_ID
 
 
 @dp.callback_query(F.data.in_({CallBackData.ADMIN_MENU}) & F.from_user.id.in_({*ADMIN_ID}))
