@@ -291,7 +291,7 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             continue
         if c.date_exam == current_day:
             date_contact.append(c)
-            print(c)
+            # print(c)
 
     all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
     all_report_files = [f for f in DIR_REPORTS.rglob('*') if f.is_file() and f.suffix == '.html']
@@ -302,9 +302,22 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
     time.sleep(1)
 
     for c in date_contact:
-        email = c.email
+        date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
+
+        report_files = [f for f in all_report_files if c.last_name_rus in f.name
+                        and c.first_name_rus in f.name
+                        and c.exam in f.name
+                        and date_exam_file in f.name]
+
+        cert_files = [f for f in all_cert_files if c.email in f.name
+                      and c.exam in f.name
+                      and date_exam_file in f.name]
+
+        if not report_files and not cert_files:
+            continue
+
         # print(f"\n[get_exam_by_email({email})]")
-        r_id = ite_api.get_exam_by_email(email)
+        r_id = ite_api.get_exam_by_email(c.email)
         if r_id and r_id.ok:
             user_exams = json.loads(r_id.text)['data']
             # pprint(user_exams)
@@ -325,11 +338,8 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
         pprint(user_exams)
         # 3. Добавление сертификата в ЛК
         id = c.exam_id_itexpert
-        cert_files = [f for f in all_cert_files if c.email in f.name and c.exam in f.name]
-        for cert_path in cert_files:
-            if c.date_exam.strftime('_%Y.%m.%d_') not in cert_path.name:
-                continue
 
+        for cert_path in cert_files:
             cert_name = re.sub('[ а-яА-яЁё]+_*', '', Path(cert_path).name)
             cert_name = re.sub('^_', '', cert_name)
 
@@ -341,17 +351,10 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             )
             if r_update:
                 print("Результат:", r_update.status_code)
-                time.sleep(1)
+            time.sleep(1)
 
-        report_files = [f for f in all_report_files if
-                        c.last_name_rus in f.name
-                        and c.first_name_rus in f.name
-                        and c.exam in f.name]
-
+        # 4. Добавление отчета в ЛК
         for file_report in report_files:
-            if c.date_exam.strftime('_%Y.%m.%d_') not in file_report.name:
-                continue
-
             r_update = ite_api.add_review_to_exam_by_id(
                 id=id,
                 file_path=file_report,
