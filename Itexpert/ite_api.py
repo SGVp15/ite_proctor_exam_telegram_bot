@@ -332,7 +332,8 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
                 continue
             if c.date_exam.date() != current_day.date():
                 continue
-
+            if c.date_exam.strftime('%d.%m.%Y') != user_exam.get('exam_date', ''):
+                continue
             c.exam_id_itexpert = user_exam.get('id')
             break
 
