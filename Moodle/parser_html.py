@@ -390,4 +390,4 @@ def create_all_report(only_new_report=True):
 
 
 if __name__ == '__main__':
-    create_all_report(only_new_report=False)
+    create_all_report(only_new_report=True)

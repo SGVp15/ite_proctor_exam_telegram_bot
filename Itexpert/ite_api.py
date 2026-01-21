@@ -289,7 +289,8 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
         c: Contact
         if not c:
             continue
-        if c.date_exam == current_day:
+        d = c.date_exam.date()
+        if d == current_day.date():
             date_contact.append(c)
             # print(c)
 
@@ -316,7 +317,7 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
         if not report_files and not cert_files:
             continue
 
-        # print(f"\n[get_exam_by_email({email})]")
+        print(f"\n[get_exam_by_email({c.email})]")
         r_id = ite_api.get_exam_by_email(c.email)
         if r_id and r_id.ok:
             user_exams = json.loads(r_id.text)['data']
@@ -329,7 +330,7 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             user_exam['exam'] = list_exams.get(user_exam.get('exam_in'), '')
             if c.exam.lower() != user_exam.get('exam', '').lower():
                 continue
-            if c.date_exam != current_day:
+            if c.date_exam.date() != current_day.date():
                 continue
 
             c.exam_id_itexpert = user_exam.get('id')
@@ -366,5 +367,5 @@ def sent_report_and_cert_lk(date: datetime.datetime | None = None):
 
 
 if __name__ == '__main__':
-    sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=20))
+    sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=21))
     # main()
