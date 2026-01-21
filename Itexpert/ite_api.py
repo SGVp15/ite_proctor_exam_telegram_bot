@@ -276,7 +276,7 @@ def mapping_exam_name_values(old_dict: dict):
     return new_dict
 
 
-async def sent_report_and_cert_lk(date: datetime.datetime | None = None):
+async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     if not date:
         d_delta = datetime.timedelta(days=1)
         current_day = datetime.datetime.now().date() - d_delta
@@ -284,6 +284,7 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None):
     else:
         current_day = datetime.datetime.combine(date, datetime.time.min)
 
+    out_str = 'Отчет:\n'
     date_contact = []
     contacts = load_contacts_from_log_file()
     for c in contacts:
@@ -338,6 +339,8 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             if c.date_exam.strftime('%d.%m.%Y') != user_exam.get('exam_date', ''):
                 continue
             c.exam_id_itexpert = user_exam.get('id')
+            out_str += f'{c.email}\n'
+
             break
 
         pprint(user_exams)
@@ -356,6 +359,8 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             )
             if r_update:
                 print("Результат:", r_update.status_code)
+                out_str += f' + cert\n'
+
             # time.sleep(1)
             await asyncio.sleep(1)
 
@@ -368,8 +373,11 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None):
             )
             if r_update:
                 print("Результат:", r_update.status_code)
+            out_str += f' + report\n'
             # time.sleep(1)
             await asyncio.sleep(1)
+    return out_str
+
 
 async def main():
     await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=21))
