@@ -81,7 +81,7 @@ async def get_file(callback_query: types.callback_query):
 async def show_exam_now(callback_query: types.callback_query):
     'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
     try:
-        contacts = load_contacts_from_log_file(date=datetime.now())
+        contacts = load_contacts_from_log_file(filtered_date=datetime.now())
         c: Contact
         rows = []
         for c in contacts:

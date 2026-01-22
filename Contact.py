@@ -178,7 +178,7 @@ class Contact:
         return False
 
 
-def load_contacts_from_log_file(file=LOG_FILE, date: datetime.datetime | None = None) -> [Contact]:
+def load_contacts_from_log_file(file=LOG_FILE, filtered_date: datetime.datetime | None = None) -> [Contact]:
     contacts = []
     try:
         with open(file, 'r', encoding='utf-8') as f:
@@ -190,12 +190,7 @@ def load_contacts_from_log_file(file=LOG_FILE, date: datetime.datetime | None = 
             c = Contact.parser_str_to_contact(row)
             if not c:
                 continue
-            if not date:
-                contacts.append(c)
-                continue
-            d =date.date()
-            cd = c.date_exam.date()
-            if date.date() == c.date_exam.date():
+            if not filtered_date or filtered_date.date() == c.date_exam.date():
                 contacts.append(c)
                 continue
         return contacts
@@ -205,9 +200,8 @@ def load_contacts_from_log_file(file=LOG_FILE, date: datetime.datetime | None = 
 
 
 if __name__ == '__main__':
-    contacts = load_contacts_from_log_file(date=datetime.datetime(2026,1,19))
+    contacts = load_contacts_from_log_file(filtered_date=datetime.datetime(2026, 1, 19))
     for c in contacts:
         if c:
             c.normalize()
             print(c)
-
