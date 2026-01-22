@@ -200,7 +200,7 @@ def load_contacts_from_log_file(file=LOG_FILE, filtered_date: datetime.datetime 
 
 
 if __name__ == '__main__':
-    contacts = load_contacts_from_log_file(filtered_date=datetime.datetime(2026, 1, 19))
+    contacts = load_contacts_from_log_file(filtered_date=datetime.datetime(2026, 1, 23))
     for c in contacts:
         if c:
             c.normalize()
