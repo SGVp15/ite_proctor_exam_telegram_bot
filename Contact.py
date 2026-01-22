@@ -185,24 +185,29 @@ def load_contacts_from_log_file(file=LOG_FILE, date: datetime.datetime | None = 
             s = f.read()
         for row in s.split('\n'):
             c: Contact
+            if not row:
+                continue
             c = Contact.parser_str_to_contact(row)
+            if not c:
+                continue
             if not date:
                 contacts.append(c)
                 continue
-            if date.day() == c.date_exam.day():
+            d =date.date()
+            cd = c.date_exam.date()
+            if date.date() == c.date_exam.date():
                 contacts.append(c)
                 continue
         return contacts
     except Exception as e:
         log.error(e)
-        return []
+        return contacts
 
 
 if __name__ == '__main__':
-    contacts = load_contacts_from_log_file(LOG_FILE)
+    contacts = load_contacts_from_log_file(date=datetime.datetime(2026,1,19))
     for c in contacts:
         if c:
             c.normalize()
             print(c)
 
-    print(c)
