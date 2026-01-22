@@ -6,6 +6,7 @@ from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
+from Contact import load_contacts_from_log_file, Contact
 from Telegram.Call_Back_Data import CallBackData as call_back
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
@@ -75,19 +76,21 @@ async def get_file(callback_query: types.callback_query):
 
 
 @dp.callback_query(
-    F.data.in_({call_back.SHOW_EXAM_NOW, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.in_({call_back.SHOW_EXAM_TODAY, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def show_exam_now(callback_query: types.callback_query):
     'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
     try:
-        with open(LOG_FILE, 'r', encoding='utf-8') as f:
-            s = f.read()
-        now = datetime.now()
-        now = now.strftime(f'%Y-%m-%d')
-        subjects = re.findall(rf'\ssubject=({now}[^\s]+)\s', s)
+        contacts: [Contact] = load_contacts_from_log_file(date=datetime.now())
+        c: Contact
+        c.date_exam.strftime('')
 
-        subjects_now = '\n'.join([s for s in subjects if re.findall(now, s)])
-        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}',
+        rows = []
+        for c in contacts:
+            rows.append(
+                f'{c.date_exam.strftime("%Y-%m-%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+        text = '\n'.join(rows)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
                                reply_markup=inline_kb_main)
     except Exception as e:
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)

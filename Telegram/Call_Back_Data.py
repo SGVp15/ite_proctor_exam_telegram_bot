@@ -5,7 +5,7 @@ class CallBackData:
     GET_REGISTRATION_WEBINAR = 'get_registration_webinar'
     GET_SELLER = 'get_seller'
     GET_LAST_EXCEL_FILE = 'get_last_excel_file'
-    SHOW_EXAM_NOW = 'show_exam_now'
+    SHOW_EXAM_TODAY = 'SHOW_EXAM_TODAY'
     SHOW_LIST_FILE = 'show_list_file'
     SHOW_QUEUE = 'show_queue'
     ZOOM_MENU = 'zoom_menu'
