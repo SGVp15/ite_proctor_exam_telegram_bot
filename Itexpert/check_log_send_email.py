@@ -4,6 +4,7 @@ from asyncio import sleep
 from Contact import Contact
 from Email import EmailSending
 from Email.config import EMAIL_LOGIN, SMTP_SERVER, SMTP_PORT, EMAIL_PASSWORD, EMAIL_BCC
+from Utils.check_time import check_time_interval
 from root_config import LOG_FILE
 
 
@@ -22,18 +23,17 @@ def get_contacts_from_logs() -> [Contact]:
     return contacts
 
 
-def check_time_interval(check_dt: datetime.datetime, start_dt: datetime.datetime, delta_dt: datetime.timedelta) -> bool:
-    end_dt = start_dt + delta_dt
-    return start_dt <= check_dt <= end_dt
-
-
 async def check_log_and_send_email():
     contact_for_email_ = []
     contacts = get_contacts_from_logs()
     for c in contacts:
         c: Contact
-        if datetime.time(hour=9, minute=0) <= datetime.datetime.now().time() <= datetime.time(hour=9, minute=1,
-                                                                                              second=0):
+        if check_time_interval(
+                check_dt=datetime.datetime.now().time(),
+                start_dt=datetime.time(hour=9, minute=0),
+                delta_dt=datetime.timedelta(minutes=1)):
+            # if datetime.time(hour=9, minute=0) <= datetime.datetime.now().time() <= datetime.time(hour=9, minute=1,
+            #                                                                                       second=0):
             if datetime.datetime.now().date() == c.date_exam.date():
                 contact_for_email_.append(c)
                 continue
@@ -56,8 +56,7 @@ async def check_log_and_send_email():
             else:
                 text += 'Offline '
             text += (
-                f'{c.date_exam}\n'
-                f'{c.date_exam_connect}\n'
+                f'{c.date_exam.strftime(c.pattern_time)}\n'
                 f'{c.exam}\n'
                 f'{c.last_name_rus} {c.first_name_rus} {c.email}\n'
                 f'Логин={c.username}\n'

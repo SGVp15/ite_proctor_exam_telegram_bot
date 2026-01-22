@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация на экзамен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #2196F3; /* Синий цвет для информационных сообщений */
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .credentials-box {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #555555;
+            border-top: 1px solid #eeeeee;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 10px;
+            background-color: #2196F3;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 style="margin: 0;">Регистрация на экзамен</h1>
+    </div>
+
+    <div class="content">
+        <p>Добрый день, <strong>{{ user.last_name_rus }} {{ user.first_name_rus }}</strong>!</p>
+
+        <p>Вы зарегистрированы на экзамен <strong>«{{ user.exam }}»</strong>, который пройдет <strong>{{ user.date_exam }}</strong> (по МСК).</p>
+
+        <p><strong>Место проведения:</strong><br>
+        г. Москва, Каланчевская ул., д. 15, офис 402 (Учебный центр).</p>
+
+        <div class="credentials-box">
+            <p style="margin: 0;"><strong>Ваши данные для доступа:</strong></p>
+            <p style="margin: 5px 0;">Логин: <code>{{ user.username }}</code></p>
+            <p style="margin: 5px 0;">Пароль: <code>{{ user.password }}</code></p>
+        </div>
+
+        <p>Просим Вас <strong>подтвердить участие</strong> ответным письмом.</p>
+
+        <div style="text-align: center;">
+            <a href="https://www.itexpert.ru/cabinet/main.php" class="button">Перейти в личный кабинет</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        С уважением,<br>
+        <strong>IT Expert</strong>
+    </div>
+</div>
+</body>
+</html>
