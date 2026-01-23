@@ -2,12 +2,9 @@ import datetime
 from unittest import TestCase
 
 from Contact import load_contacts_from_log_file
-# from Config.config import user_id_email
-# from Contact import parser
-
-from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
-from Email.template import template_email_exam_result_passed, template_email_exam_result_failed
-
+from Email import EmailSending
+from Email.template import template_email_exam_result_passed, template_email_exam_result_failed, \
+    template_email_registration_exam_online, template_email_registration_exam_offline
 from My_jinja import MyJinja
 
 
@@ -18,13 +15,13 @@ class TestEmailSending(TestCase):
         print(contacts)
         for contact in contacts:
             templates = [
-                # template_email_registration_exam_offline,
-                #          template_email_registration_exam_online,
-                         template_email_exam_result_passed,
-                         template_email_exam_result_failed,
-                         ]
+                template_email_registration_exam_offline,
+                template_email_registration_exam_online,
+                template_email_exam_result_passed,
+                template_email_exam_result_failed,
+            ]
             for template in templates:
                 text = MyJinja(template_file=template).render_document(user=contact)
-                EmailSending(to='g.savushkin@itexpert.ru',
+                EmailSending(to='g.savushkin@itexpert.ru', subject='test_email',
                              # text='text',
                              html=text).send_email()
