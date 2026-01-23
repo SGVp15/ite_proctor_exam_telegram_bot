@@ -1,4 +1,6 @@
-from Contact import Contact
+import datetime
+
+from Contact import Contact, load_contacts_from_log_file
 from Itexpert.ite_api import ITEXPERT_API
 from Moodle.API.moodleapi import MoodleApi
 from root_config import LOG_FILE, ALLOWED_EXAMS
@@ -17,13 +19,18 @@ async def registration(contacts: [Contact]) -> str:
         if exam not in ALLOWED_EXAMS:
             return 'Проверьте курс'
 
+    contacts_from_log_file = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
+    new_contacts = [c for c in contacts if c not in contacts_from_log_file]
+    old_contacts = [c for c in contacts_from_log_file if c in contacts]
+    all_contacts = new_contacts + old_contacts
+
     # -------------- Moodle --------------
     moodle_api = MoodleApi()
-    for contact in contacts:
+    for contact in new_contacts:
         moodle_api.process_user_and_enrollment(contact=contact)
 
     # -------------- ProctorEDU --------------
-    contacts_proctor = [c for c in contacts if c.proctor]
+    contacts_proctor = [c for c in all_contacts if c.proctor]
     if contacts_proctor:
         await create_csv_files(contacts_proctor)
 
@@ -31,7 +38,7 @@ async def registration(contacts: [Contact]) -> str:
         await drive.create_users_and_session()
 
         # Get link ProctorEDU
-        for contact in contacts:
+        for contact in contacts_proctor:
             if contact.proctor:
                 contact.url_proctor = await drive.get_url_session(contact.subject)
                 if contact.url_proctor == '':
@@ -64,7 +71,7 @@ async def registration(contacts: [Contact]) -> str:
 
     # ITEXPERT
     ite_api = ITEXPERT_API()
-    for contact in contacts:
+    for contact in new_contacts:
         ite_api.create_exam(contact)
 
     # OUT STRING
