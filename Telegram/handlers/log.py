@@ -102,7 +102,7 @@ async def show_all_exams(callback_query: types.callback_query):
     try:
         contacts = load_contacts_from_log_file()
         contacts = [c for c in contacts if check_time_interval(check_dt=c.date_exam,
-                                                               start_dt=datetime.datetime.now().date(),
+                                                               start_dt=datetime.datetime.now(),
                                                                delta_dt=datetime.timedelta(days=60))]
         c: Contact
         rows = []

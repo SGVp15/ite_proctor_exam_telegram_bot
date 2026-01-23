@@ -40,8 +40,10 @@ def check_time_interval(check_dt: datetime.datetime | datetime.time,
         end_t = end_dt
         if isinstance(end_dt, datetime.datetime):
             end_t = end_dt.time()
-
         return check_time(check_t, start_dt, delta_dt, end_t)
+
+    if isinstance(start_dt, datetime.date):
+        start_dt = datetime.datetime.combine(start_dt, datetime.time.min)
 
     # Логика для полных дат (datetime)
     if end_dt is None:
@@ -51,6 +53,7 @@ def check_time_interval(check_dt: datetime.datetime | datetime.time,
             end_dt = start_dt
 
     return start_dt <= check_dt <= end_dt
+
 
 #
 if __name__ == '__main__':
