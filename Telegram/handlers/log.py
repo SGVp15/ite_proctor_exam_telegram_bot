@@ -86,7 +86,7 @@ async def show_exam_now(callback_query: types.callback_query):
         rows = []
         for c in contacts:
             rows.append(
-                f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+                f' {c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
         text = '\n'.join(rows)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
                                reply_markup=inline_kb_main)
@@ -108,7 +108,7 @@ async def show_all_exams(callback_query: types.callback_query):
         rows = []
         for c in contacts:
             rows.append(
-                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+                f' {c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
         text = '\n'.join(rows)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены:\n{text}',
                                reply_markup=inline_kb_main)
