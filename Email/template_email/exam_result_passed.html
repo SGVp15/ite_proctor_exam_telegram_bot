@@ -4,70 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Результаты экзамена</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            -webkit-text-size-adjust: 100%;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .content {
-            padding: 30px;
-            line-height: 1.6;
-            color: #333333;
-        }
-        .footer {
-            background-color: #f9f9f9;
-            padding: 20px;
-            text-align: center;
-            font-size: 12px;
-            color: #777777;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin-top: 20px;
-            background-color: #4CAF50;
-            color: white !important;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .success-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        <h1>Экзамен сдан!</h1>
-    </div>
-    <div class="content">
-        <p>Добрый день, <strong>{{ user.last_name_rus }} {{ user.first_name_rus }}</strong>!</p>
-        <p>Поздравляем, вы успешно сдали экзамен: <strong>«{{ user.exam }}»</strong>!</p>
-        <p>Это отличный результат! Подробную информацию о набранных баллах и детальную статистику вы можете найти в
-            своем профиле.</p>
-        <div style="text-align: center;">
-            <a href="https://www.itexpert.ru/cabinet/main.php" class="button">Перейти в личный кабинет</a>
-        </div>
-    </div>
-</div>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f4;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0"
+                   style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 600px; max-width: 600px;">
+
+                <tr>
+                    <td align="center" style="background-color: #4CAF50; padding: 40px 30px;">
+                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold; text-transform: uppercase;">
+                            Экзамен сдан!</h1>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 30px; color: #333333; line-height: 1.6; font-size: 16px;">
+                        <p style="margin-top: 0; margin-bottom: 15px;">
+                            Добрый день, <strong>{{ user.last_name_rus }} {{ user.first_name_rus }}</strong>!
+                        </p>
+                        <p style="margin-bottom: 15px;">
+                            Поздравляем! Вы успешно сдали экзамен:<strong>{{ user.exam }}</strong>
+                        </p>
+                        <p style="margin-bottom: 25px;">
+                            Это отличный результат! Подробную информацию о набранных баллах и детальную статистику вы
+                            можете найти в своем профиле.
+                        </p>
+
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+                            <tr>
+                                <td align="center" style="border-radius: 5px; background-color: #4CAF50;">
+                                    <a href="https://www.itexpert.ru/cabinet/main.php" target="_blank"
+                                       style="padding: 14px 30px; font-family: Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; font-weight: bold; display: inline-block;">
+                                        Перейти в личный кабинет
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center"
+                        style="background-color: #f9f9f9; padding: 20px; font-size: 12px; color: #777777; border-top: 1px solid #eeeeee;">
+                        <p style="margin: 0;">
+                            Вы получили это письмо, так как зарегистрированы на платформе IT Expert.<br>
+                            &copy; IT Expert, 2026
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 </body>
 </html>
