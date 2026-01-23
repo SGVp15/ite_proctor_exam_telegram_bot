@@ -1,4 +1,5 @@
 class CallBackData:
+    SEND_NEW_LINK_PROCTOREDU = 'SEND_NEW_LINK_PROCTOREDU'
     SENT_REPORT_AND_CERT_LK = 'SENT_REPORT_AND_CERT_LK'
     DOWNLOAD_LOGS = 'download_logs'
     GET_LOG = 'get_log'
@@ -24,4 +25,3 @@ class CallBackData:
 
     FILE_DOWNLOAD_ = 'file_download_'
     FILE_DELETE_ = 'file_delete_'
-
