@@ -26,6 +26,7 @@ def check_time_interval(check_dt: datetime.datetime,
     ''' Если введены delta_dt и end_dt - приоритет end_dt. '''
     if type(start_dt) is datetime.time:
         return check_time(check_dt, start_dt, delta_dt, end_dt)
+
     if end_dt is None:
         if delta_dt is not None:
             end_dt = start_dt + delta_dt
