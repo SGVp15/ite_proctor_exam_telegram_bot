@@ -1,5 +1,4 @@
-import re
-from datetime import datetime
+import datetime
 from pathlib import Path
 
 from aiogram import types, F
@@ -10,6 +9,7 @@ from Contact import load_contacts_from_log_file, Contact
 from Telegram.Call_Back_Data import CallBackData as call_back
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
+from Utils.check_time import check_time_interval
 from Utils.log import log
 from root_config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
 
@@ -81,12 +81,34 @@ async def get_file(callback_query: types.callback_query):
 async def show_exam_now(callback_query: types.callback_query):
     'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
     try:
-        contacts = load_contacts_from_log_file(filtered_date=datetime.now())
+        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
         c: Contact
         rows = []
         for c in contacts:
             rows.append(
                 f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+        text = '\n'.join(rows)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
+                               reply_markup=inline_kb_main)
+    except Exception as e:
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)
+
+
+@dp.callback_query(
+    F.data.in_({call_back.SHOW_ALL_EXAMS, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+)
+async def show_all_exams(callback_query: types.callback_query):
+    'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
+    try:
+        contacts = load_contacts_from_log_file()
+        contacts = [c for c in contacts if check_time_interval(check_dt=c.date_exam,
+                                                               start_dt=datetime.datetime.now().date(),
+                                                               delta_dt=datetime.timedelta(days=60))]
+        c: Contact
+        rows = []
+        for c in contacts:
+            rows.append(
+                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
         text = '\n'.join(rows)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
                                reply_markup=inline_kb_main)
