@@ -116,7 +116,6 @@ class ProctorEduSelenium:
         return True
 
     async def create_users_and_session(self):
-        await self.authorization()
         self.alert_message()
         if self.is_authorized:
             await self.send_csv(url='https://itexpert.proctoring.online/#!/users',

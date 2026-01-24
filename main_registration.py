@@ -1,6 +1,7 @@
 import datetime
 
 from Contact import Contact, load_contacts_from_log_file
+from Email.template import template_email_new_link_for_old_users
 from Itexpert.ite_api import ITEXPERT_API
 from Moodle.API.moodleapi import MoodleApi
 from root_config import LOG_FILE, ALLOWED_EXAMS
@@ -21,8 +22,6 @@ async def registration(contacts: [Contact]) -> str:
 
     contacts_from_log_file = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
     new_contacts = [c for c in contacts if c not in contacts_from_log_file]
-    old_contacts = [c for c in contacts_from_log_file if c in contacts]
-    all_contacts = new_contacts + old_contacts
 
     # -------------- Moodle --------------
     moodle_api = MoodleApi()
@@ -30,16 +29,18 @@ async def registration(contacts: [Contact]) -> str:
         moodle_api.process_user_and_enrollment(contact=contact)
 
     # -------------- ProctorEDU --------------
-    contacts_proctor = [c for c in all_contacts if c.proctor]
+    contacts_proctor = [c for c in new_contacts if c.proctor]
     if contacts_proctor:
         await create_csv_files(contacts_proctor)
 
         drive = ProctorEduSelenium()
+        await drive.authorization()
         await drive.create_users_and_session()
 
         # Get link ProctorEDU
         for contact in contacts_proctor:
             if contact.proctor:
+                contact.url_proctor == ''
                 contact.url_proctor = await drive.get_url_session(contact.subject)
                 if contact.url_proctor == '':
                     log.warning(f"\n\n[error] NOT found URL {contact}\n\n")
@@ -48,7 +49,7 @@ async def registration(contacts: [Contact]) -> str:
 
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')
-    for contact in contacts:
+    for contact in new_contacts:
         if contact.proctor:
             log.info(f'MyJinja start template_email_registration_exam_online')
             text = MyJinja(template_file=template_email_registration_exam_online).render_document(user=contact)
@@ -61,6 +62,64 @@ async def registration(contacts: [Contact]) -> str:
             log.error(f'[Error] URL {contact}')
             continue
         EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
+        contact.status = 'Ok'
+    log.info(f'[ end ] SEND EMAIL ')
+    # Write Log
+    with open(LOG_FILE, mode='a', encoding='utf-8') as f:
+        for contact in contacts:
+            f.write(str(contact))
+            log.info(contact)
+
+    # ITEXPERT
+    ite_api = ITEXPERT_API()
+    for contact in new_contacts:
+        ite_api.create_exam(contact)
+
+    # OUT STRING
+    for contact in contacts:
+        out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
+                    f'{contact.email} {contact.exam} {contact.date_exam}\n')
+    return out_str
+
+
+async def create_new_link_for_old_users(contacts: [Contact]):
+    out_str = ''
+    exams = [contact.exam for contact in contacts]
+    for exam in exams:
+        if exam not in ALLOWED_EXAMS:
+            return 'Проверьте курс'
+
+    contacts_from_log_file = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
+    new_contacts = [c for c in contacts if c not in contacts_from_log_file]
+    old_contacts = [c for c in contacts_from_log_file if c in contacts]
+    all_contacts = new_contacts + old_contacts
+
+    # -------------- ProctorEDU --------------
+    contacts_proctor = [c for c in all_contacts if c.proctor]
+    if contacts_proctor:
+        drive = ProctorEduSelenium()
+        await drive.authorization()
+        # Get link ProctorEDU
+        for contact in contacts_proctor:
+            if contact.proctor:
+                contact.url_proctor == ''
+                contact.url_proctor = await drive.get_url_session(contact.subject)
+                if contact.url_proctor == '':
+                    log.warning(f"\n\n[error] NOT found URL {contact}\n\n")
+                    contacts.remove(contact)
+        drive.quit()
+
+    # -------------- SEND EMAIL --------------
+    log.info(f'[ start ] SEND EMAIL ')
+    for contact in contacts_proctor:
+        log.info(f'MyJinja start template_email_registration_exam_online')
+        email_html = MyJinja(template_file=template_email_new_link_for_old_users).render_document(user=contact)
+        subject = f'Новая ссылка на экзамен {contact.exam} {contact.date_exam}'
+        if contact.proctor and not contact.url_proctor:
+            out_str += f'[Error] URL {contact}\n'
+            log.error(f'[Error] URL {contact}')
+            continue
+        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, html=email_html).send_email()
         contact.status = 'Ok'
     log.info(f'[ end ] SEND EMAIL ')
     # Write Log
