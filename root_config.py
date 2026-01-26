@@ -64,3 +64,6 @@ ALLOWED_EXAMS: list = [
     'SOA4C',
     'SYSAC',
 ]
+
+
+VERSION = '1.1'

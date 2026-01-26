@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 
 from aiogram.filters import Command
 
-from root_config import ADMIN_ID, USERS_ID
+from root_config import ADMIN_ID, USERS_ID, VERSION
 from Telegram.keybords import inline
 from Telegram.main import dp
 
@@ -13,6 +13,7 @@ async def send_welcome_admin(message: types.Message, state: FSMContext):
     text = f'Здравствуйте , {message.from_user.first_name}! \n'
     text += f'Этот бот работает с ProctorEDU.'
     text += f'\n ❓/id - узнать ваш id'
+    text += f'\n Version = {VERSION}'
     await message.answer(text=text, reply_markup=inline.inline_kb_main)
 
 
@@ -20,6 +21,7 @@ async def send_welcome_admin(message: types.Message, state: FSMContext):
 async def send_welcome_new_user(message: types.Message):
     text = f'Здравствуйте, {message.from_user.first_name}.'
     text += f'\n ❓/id - узнать ваш id'
+    text += f'\n Version = {VERSION}'
     await message.answer(text=text, reply_markup=inline.inline_kb_main)
 
 
@@ -27,6 +29,8 @@ async def send_welcome_new_user(message: types.Message):
 async def send_welcome(message: types.Message):
     text = f'Здравствуйте, {message.from_user.first_name}.'
     text += f'\n ❓/id - узнать ваш id'
+    text += f'\n Version = {VERSION}'
+
     await message.answer(text=text, reply_markup=inline.inline_kb_main)
 
 
