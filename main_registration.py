@@ -82,8 +82,7 @@ async def registration(contacts: [Contact]) -> str:
     return out_str
 
 
-async def send_new_link_proctoredu(contacts: [Contact]) -> str:
-    out_str = ''
+async def send_new_link_proctoredu(contacts: [Contact] = []) -> str:
     exams = [contact.exam for contact in contacts]
     for exam in exams:
         if exam not in ALLOWED_EXAMS:
@@ -136,7 +135,7 @@ async def send_new_link_proctoredu(contacts: [Contact]) -> str:
     #     ite_api.create_exam(contact)
 
     # OUT STRING
-    out_str="  Новые ссылки:\n"
+    out_str = "  Новые ссылки:\n"
     for contact in contacts:
         out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
                     f'{contact.email} {contact.exam} {contact.date_exam}\n')
