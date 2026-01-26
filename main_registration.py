@@ -130,10 +130,10 @@ async def send_new_link_proctoredu(contacts: [Contact]) -> str:
             f.write(str(contact))
             log.info(contact)
 
-    # ITEXPERT
-    ite_api = ITEXPERT_API()
-    for contact in new_contacts:
-        ite_api.create_exam(contact)
+    # # ITEXPERT
+    # ite_api = ITEXPERT_API()
+    # for contact in new_contacts:
+    #     ite_api.create_exam(contact)
 
     # OUT STRING
     for contact in contacts:

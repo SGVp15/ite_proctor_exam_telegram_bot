@@ -191,7 +191,8 @@ def load_contacts_from_log_file(file=LOG_FILE, filtered_date: datetime.datetime 
             if not c:
                 continue
             if not filtered_date or filtered_date.date() == c.date_exam.date():
-                contacts.append(c)
+                if c not in contacts:
+                    contacts.append(c)
                 continue
         return contacts
     except Exception as e:
