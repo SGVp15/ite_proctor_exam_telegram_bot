@@ -83,6 +83,7 @@ async def registration(contacts: [Contact]) -> str:
 
 
 async def send_new_link_proctoredu(contacts: [Contact] = []) -> str:
+    out_str = ''
     exams = [contact.exam for contact in contacts]
     for exam in exams:
         if exam not in ALLOWED_EXAMS:
