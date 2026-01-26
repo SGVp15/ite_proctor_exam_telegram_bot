@@ -9,7 +9,7 @@ from Itexpert.ite_api import sent_report_and_cert_lk
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
-from main_registration import registration
+from main_registration import registration, send_new_link_proctoredu
 from parser import get_contact_from_excel
 from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE, LOG_FILE
 
@@ -47,6 +47,12 @@ async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
     text = await sent_report_and_cert_lk(date=datetime.datetime.now())
     await bot.send_message(text=text, chat_id=callback_query.from_user.id,
                            # message_id=callback_query.message.message_id,
+                           reply_markup=inline_kb_main)
+
+@dp.callback_query(F.data.in_({CallBackData.SEND_NEW_LINK_PROCTOREDU}))
+async def btn_send_new_link_proctoredu(callback_query: types.callback_query):
+    text = await send_new_link_proctoredu()
+    await bot.send_message(text=text, chat_id=callback_query.from_user.id,
                            reply_markup=inline_kb_main)
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))

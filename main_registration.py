@@ -82,12 +82,14 @@ async def registration(contacts: [Contact]) -> str:
     return out_str
 
 
-async def create_new_link_for_old_users(contacts: [Contact]):
+async def send_new_link_proctoredu(contacts: [Contact]) -> str:
     out_str = ''
     exams = [contact.exam for contact in contacts]
     for exam in exams:
         if exam not in ALLOWED_EXAMS:
             return 'Проверьте курс'
+    if not contacts:
+        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
 
     contacts_from_log_file = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
     new_contacts = [c for c in contacts if c not in contacts_from_log_file]
@@ -112,7 +114,7 @@ async def create_new_link_for_old_users(contacts: [Contact]):
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')
     for contact in contacts_proctor:
-        log.info(f'MyJinja start template_email_registration_exam_online')
+        log.info(f'MyJinja start template_email_new_link_proctoredu')
         email_html = MyJinja(template_file=template_email_new_link_for_old_users).render_document(user=contact)
         subject = f'Новая ссылка на экзамен {contact.exam} {contact.date_exam}'
         if contact.proctor and not contact.url_proctor:
