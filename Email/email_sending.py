@@ -9,6 +9,10 @@ from Email.config import EMAIL_PASSWORD, EMAIL_LOGIN, SMTP_SERVER, SMTP_PORT, em
 from Utils.log import log
 
 
+def format_recipients(recipients):
+    return recipients if isinstance(recipients, str) else ','.join(recipients)
+
+
 class EmailSending:
     def __init__(self, subject='Вы зарегистрированы на курс', from_email=EMAIL_LOGIN, to='', cc='', bcc='',
                  text='', html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
@@ -48,20 +52,13 @@ class EmailSending:
         msg = MIMEMultipart()
         msg['From'] = self.from_email
         msg['Subject'] = self.subject
-        if type(self.to) is str:
-            msg['To'] = self.to
-        else:
-            msg['To'] = ','.join(self.to)
 
-        if type(self.cc) is str:
-            msg['Cc'] = self.cc
-        else:
-            msg['Cc'] = ','.join(self.cc)
-
-        if type(self.bcc) is str:
-            msg['Bcc'] = self.bcc
-        else:
-            msg['Bcc'] = ','.join(self.bcc)
+        if self.to:
+            msg['To'] = format_recipients(self.to)
+        if self.cc:
+            msg['Cc'] = format_recipients(self.cc)
+        if self.bcc:
+            msg['Bcc'] = format_recipients(self.bcc)
 
         msg.attach(MIMEText(self.text, 'plain'))
         msg.attach(MIMEText(self.html, 'html'))

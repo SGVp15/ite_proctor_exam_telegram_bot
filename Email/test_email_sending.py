@@ -11,17 +11,17 @@ from My_jinja import MyJinja
 class TestEmailSending(TestCase):
     @staticmethod
     def test_send_email():
-        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
-        print(contacts)
+        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime(2026,1,26))
         for contact in contacts:
             templates = [
-                template_email_registration_exam_offline,
-                template_email_registration_exam_online,
-                template_email_exam_result_passed,
+                # template_email_registration_exam_offline,
+                # template_email_registration_exam_online,
+                # template_email_exam_result_passed,
                 template_email_exam_result_failed,
             ]
             for template in templates:
                 text = MyJinja(template_file=template).render_document(user=contact)
-                EmailSending(to='g.savushkin@itexpert.ru', subject='test_email',
+                EmailSending(to=['g.savushkin@itexpert.ru', ],
+                             subject='test_email',
                              # text='text',
                              html=text).send_email()
