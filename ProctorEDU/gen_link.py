@@ -28,13 +28,17 @@ def generate_proctoring_link(
 
     # 1. Формируем данные (payload) из заголовков и значений
     data: dict
-    data['template'] = template
-    data['identifier'] = identifier
-    data['subject'] = subject
-    data['members'] = members
-    data['tags'] = tags
     data['username'] = username
     data['nickname'] = nickname
+    data['subject'] = subject
+
+    if template:
+        data['template'] = template
+    data['identifier'] = identifier
+    if members:
+        data['members'] = members
+    if tags:
+        data['tags'] = tags
 
     # 2. Настраиваем время истечения (exp) и выпуска (iat)
     now = datetime.datetime.now()
