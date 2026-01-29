@@ -1,5 +1,3 @@
-import datetime
-import re
 import xml.etree.ElementTree as ET
 
 import dateparser
