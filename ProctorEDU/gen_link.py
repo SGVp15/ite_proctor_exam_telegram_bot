@@ -13,7 +13,7 @@ def generate_proctoring_link(
         members: str = '',
         tags: str = '',
         identifier: str = '',
-        template: str = '',
+        template: str = 'examitexpert',
         expires_in_hours: int = 500,
         host=HOST_PROCTOREDU,
         secret: str = SECRET_GEN_LINK_PROCTOREDU,
