@@ -61,7 +61,8 @@ class EmailSending:
             msg['Bcc'] = format_recipients(self.bcc)
 
         # msg.attach(MIMEText(self.text, 'plain'))
-        msg.attach(MIMEText(self.html, 'html'))
+        if self.html:
+            msg.attach(MIMEText(self.html, 'html'))
 
         for f in self.files:
             with open(f, "rb") as fil:
