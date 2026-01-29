@@ -36,9 +36,9 @@ def get_all_users(xml: str) -> list[dict]:
 
 
 def get_contact_from_array(data_list) -> list[Contact]:
-    users = []
+    contacts = []
     for data in data_list:
-        user = Contact()
+        contact = Contact()
 
         # LastName_column: str = 'A'	0
         # FirstName_column: str = 'B'	1
@@ -51,23 +51,24 @@ def get_contact_from_array(data_list) -> list[Contact]:
         # Hour_column: str = 'I'	8
         # Minute_column: str = 'J'	9
         # Proctor_column: str = 'K'	10
+        # Email_CC_column: str = 'M'	11
 
         if not data[0]:
             continue
-        user.last_name_rus = data[0]
-        user.first_name_rus = data[1]
-        user.last_name_eng = data[2]
-        user.first_name_eng = data[3]
-        user.email = data[4]
-        user.password = data[5]
-        user.exam = data[6]
-        user.date_from_file = dateparser.parse(data[7]).date()
-        user.proctor = data[10]
-        user.date_exam = dateparser.parse(f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}')
-
-        if user.normalize():
-            users.append(user)
-    return users
+        contact.last_name_rus = data[0]
+        contact.first_name_rus = data[1]
+        contact.last_name_eng = data[2]
+        contact.first_name_eng = data[3]
+        contact.email = data[4]
+        contact.password = data[5]
+        contact.exam = data[6]
+        contact.date_from_file = dateparser.parse(data[7]).date()
+        contact.proctor = data[10]
+        contact.date_exam = dateparser.parse(f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}')
+        contact.email_cc = str(data[11]).strip().split(' ')
+        if contact.normalize():
+            contacts.append(contact)
+    return contacts
 
 
 def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):

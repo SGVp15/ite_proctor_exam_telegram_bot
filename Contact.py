@@ -12,20 +12,18 @@ from root_config import LOG_FILE
 
 class Contact:
     def __init__(self):
-        self.pattern_time = "%Y-%m-%dT%H:%M:%SZ"
         self.name_eng: str | None = None
         self.last_name_rus: str | None = None
         self.first_name_rus: str | None = None
         self.last_name_eng: str | None = None
         self.first_name_eng: str | None = None
         self.email: str | None = None
+        self.email_cc: list | None = None
         self.username: str | None = None
         self.password: str | None = None
         self.exam: str | None = None
 
-        # self.course: str | None = None
-        # self.course_small: str | None = None
-        # self.lector: str | None = None
+        self.pattern_time = "%Y-%m-%dT%H:%M:%SZ"
         self.date_from_file: datetime.datetime | None = None
         self.date_exam: datetime.datetime | None = None
         self.date_exam_connect: datetime.datetime | None = None
@@ -37,10 +35,8 @@ class Contact:
         self.proctor: str | None = None
         self.subject: str | None = None
         self.url_proctor: str | None = None
-        # self.url_course: str | None = None
 
         self.identifier: str | None = None
-        # self.is_create_enrollment: bool = False
         self.status = 'Error'
 
         self.moodle_id_exam = None

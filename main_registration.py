@@ -7,9 +7,7 @@ from Email.template import template_email_new_link_for_old_users
 from Itexpert.ite_api import ITEXPERT_API
 from Moodle.API.moodleapi import MoodleApi
 from My_jinja.my_jinja import MyJinja
-from ProctorEDU.csv_creator import create_csv_files
 from ProctorEDU.gen_link import generate_proctoring_link
-from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from Utils.log import log
 from root_config import LOG_FILE, ALLOWED_EXAMS
 
@@ -71,7 +69,7 @@ async def registration(contacts: [Contact]) -> str:
             out_str += f'[Error] URL {contact}\n'
             log.error(f'[Error] URL {contact}')
             continue
-        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, text=text).send_email()
+        EmailSending(subject=subject, to=contact.email, cc=contact.email_cc, bcc=EMAIL_BCC, text=text).send_email()
         contact.status = 'Ok'
     log.info(f'[ end ] SEND EMAIL ')
     # Write Log
@@ -132,7 +130,8 @@ async def send_new_link_proctoredu(contacts: [Contact] = []) -> str:
             out_str += f'[Error] URL {contact}\n'
             log.error(f'[Error] URL {contact}')
             continue
-        EmailSending(subject=subject, to=contact.email, bcc=EMAIL_BCC, html=email_html).send_email()
+        EmailSending(subject=subject, to=contact.email, cc=contact.email_cc, bcc=EMAIL_BCC,
+                     html=email_html).send_email()
         contact.status = 'Ok'
     log.info(f'[ end ] SEND EMAIL ')
     # Write Log
