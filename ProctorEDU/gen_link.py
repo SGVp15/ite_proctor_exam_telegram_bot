@@ -27,10 +27,9 @@ def generate_proctoring_link(
         identifier = secrets.token_hex(16)
 
     # 1. Формируем данные (payload) из заголовков и значений
-    data: dict
-    data['username'] = username
-    data['nickname'] = nickname
-    data['subject'] = subject
+    data = {'username': username,
+            'nickname': nickname,
+            'subject': subject}
 
     if template:
         data['template'] = template
