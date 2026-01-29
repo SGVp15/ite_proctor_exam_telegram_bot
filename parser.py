@@ -51,7 +51,8 @@ def get_contact_from_array(data_list) -> list[Contact]:
         # Hour_column: str = 'I'	8
         # Minute_column: str = 'J'	9
         # Proctor_column: str = 'K'	10
-        # Email_CC_column: str = 'M'	11
+        # Cert_save: str = 'L'	11
+        # Email_CC_column: str = 'M'	12
 
         if not data[0]:
             continue
