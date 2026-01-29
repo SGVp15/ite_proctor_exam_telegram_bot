@@ -18,7 +18,7 @@ class Contact:
         self.last_name_eng: str | None = None
         self.first_name_eng: str | None = None
         self.email: str | None = None
-        self.email_cc: list | None = None
+        self.email_cc: list = []
         self.username: str | None = None
         self.password: str | None = None
         self.exam: str | None = None
