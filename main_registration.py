@@ -1,16 +1,25 @@
 import datetime
 
 from Contact import Contact, load_contacts_from_log_file
+from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
+from Email.config import EMAIL_BCC
 from Email.template import template_email_new_link_for_old_users
 from Itexpert.ite_api import ITEXPERT_API
 from Moodle.API.moodleapi import MoodleApi
-from root_config import LOG_FILE, ALLOWED_EXAMS
-from Email.config import EMAIL_BCC
-from ProctorEDU.csv_creator import create_csv_files
-from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from My_jinja.my_jinja import MyJinja
-from Email import EmailSending, template_email_registration_exam_offline, template_email_registration_exam_online
+from ProctorEDU.csv_creator import create_csv_files
+from ProctorEDU.gen_link import generate_proctoring_link
+from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 from Utils.log import log
+from root_config import LOG_FILE, ALLOWED_EXAMS
+
+
+def generate_new_proctoring_link_by_contact(contact):
+    url = generate_proctoring_link(subject=contact.subject,
+                                   nickname=contact.email,
+                                   username=contact.username)
+    contact.url_proctor = url
+    return url
 
 
 async def registration(contacts: [Contact]) -> str:
@@ -31,21 +40,22 @@ async def registration(contacts: [Contact]) -> str:
     # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in new_contacts if c.proctor]
     if contacts_proctor:
-        await create_csv_files(contacts_proctor)
-
-        drive = ProctorEduSelenium()
-        await drive.authorization()
-        await drive.create_users_and_session()
+        # await create_csv_files(contacts_proctor)
+        #
+        # drive = ProctorEduSelenium()
+        # await drive.authorization()
+        # await drive.create_users_and_session()
 
         # Get link ProctorEDU
         for contact in contacts_proctor:
             if contact.proctor:
-                contact.url_proctor == ''
-                contact.url_proctor = await drive.get_url_session(contact.subject)
+                contact.url_proctor = ''
+                # contact.url_proctor = await drive.get_url_session(contact.subject)
+                generate_new_proctoring_link_by_contact(contact)
                 if contact.url_proctor == '':
                     log.warning(f"\n\n[error] NOT found URL {contact}\n\n")
                     contacts.remove(contact)
-        drive.quit()
+        # drive.quit()
 
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')
@@ -99,17 +109,18 @@ async def send_new_link_proctoredu(contacts: [Contact] = []) -> str:
     # -------------- ProctorEDU --------------
     contacts_proctor = [c for c in all_contacts if c.proctor]
     if contacts_proctor:
-        drive = ProctorEduSelenium()
-        await drive.authorization()
+        # drive = ProctorEduSelenium()
+        # await drive.authorization()
         # Get link ProctorEDU
         for contact in contacts_proctor:
             if contact.proctor:
-                contact.url_proctor == ''
-                contact.url_proctor = await drive.get_url_session(contact.subject)
+                contact.url_proctor = ''
+                # contact.url_proctor = await drive.get_url_session(contact.subject)
+                generate_new_proctoring_link_by_contact(contact)
                 if contact.url_proctor == '':
                     log.warning(f"\n\n[error] NOT found URL {contact}\n\n")
                     contacts.remove(contact)
-        drive.quit()
+        # drive.quit()
 
     # -------------- SEND EMAIL --------------
     log.info(f'[ start ] SEND EMAIL ')
