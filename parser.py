@@ -65,7 +65,9 @@ def get_contact_from_array(data_list) -> list[Contact]:
         contact.date_from_file = dateparser.parse(data[7]).date()
         contact.proctor = data[10]
         contact.date_exam = dateparser.parse(f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}')
-        contact.email_cc = str(data[11]).strip().split(' ')
+        if data[11]:
+            row = str(data[11]).strip().split(' ')
+            contact.email_cc = [w for w in row if '@' in w]
         if contact.normalize():
             contacts.append(contact)
     return contacts
