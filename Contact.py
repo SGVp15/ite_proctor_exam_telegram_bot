@@ -159,6 +159,7 @@ class Contact:
             f"close_at={self.close_at}\t"
             f"deadline={self.deadline}\t"
             f"remove_at={self.remove_at}\t"
+            f"email_cc={self.email_cc}\t"
             f"moodle_id_exam={self.moodle_id_exam}\t"
             f"moodle_id_user={self.moodle_id_user}\n"
         )
