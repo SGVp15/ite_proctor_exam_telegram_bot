@@ -22,7 +22,7 @@ class TestEmailSending(TestCase):
             ]
             for template in templates:
                 text = MyJinja(template_file=template).render_document(user=contact)
-                EmailSending(to=['g.savushkin@itexpert.ru', 'a.rybalkin@itexpert.ru'],
+                EmailSending(to=['g.savushkin@itexpert.ru',],
                              subject='test_email',
                              # text='text',
                              html=text).send_email()
