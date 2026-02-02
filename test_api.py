@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # asyncio.run(main())
     # 4. Тестирование удаления экзамена
     ite_api = ITEXPERT_API()
-    for id_exam_delete in range(28528, 28535 + 1):
+    for id_exam_delete in (28555,28554,28553,28541 ):
         time.sleep(1)
         print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
         r_delete = ITEXPERT_API().delete_exam_by_id(id_exam_delete)
