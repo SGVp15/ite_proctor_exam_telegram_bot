@@ -1,6 +1,6 @@
-import datetime
-import re
 import xml.etree.ElementTree as ET
+
+import dateparser
 
 from Contact import Contact
 from EXCEL.my_excel import read_excel_file
@@ -36,9 +36,9 @@ def get_all_users(xml: str) -> list[dict]:
 
 
 def get_contact_from_array(data_list) -> list[Contact]:
-    users = []
+    contacts = []
     for data in data_list:
-        user = Contact()
+        contact = Contact()
 
         # LastName_column: str = 'A'	0
         # FirstName_column: str = 'B'	1
@@ -51,29 +51,28 @@ def get_contact_from_array(data_list) -> list[Contact]:
         # Hour_column: str = 'I'	8
         # Minute_column: str = 'J'	9
         # Proctor_column: str = 'K'	10
+        # Cert_save: str = 'L'	11
+        # Email_CC_column: str = 'M'	12
 
         if not data[0]:
             continue
-        user.last_name_rus = data[0]
-        user.first_name_rus = data[1]
-        user.last_name_eng = data[2]
-        user.first_name_eng = data[3]
-        user.email = data[4]
-        user.password = data[5]
-        user.exam = data[6]
-        user.date_from_file = data[7].strip()
-        hour = int(data[8])
-        minute = int(data[9])
-        user.proctor = data[10]
-
-        date_string = user.date_from_file
-        date_string = re.sub(r'[^\d.]', '', date_string)
-        # 2023-02-02T13:29:31Z
-        user.date_exam = datetime.datetime.strptime(f"{date_string}-{hour}:{minute}", "%d.%m.%Y-%H:%M")
-
-        if user.normalize():
-            users.append(user)
-    return users
+        contact.last_name_rus = data[0]
+        contact.first_name_rus = data[1]
+        contact.last_name_eng = data[2]
+        contact.first_name_eng = data[3]
+        contact.email = data[4]
+        contact.password = data[5]
+        contact.exam = data[6]
+        contact.date_from_file = dateparser.parse(data[7]).date()
+        contact.proctor = data[10]
+        contact.date_exam = dateparser.parse(f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}',
+                                             settings={'DATE_ORDER': 'DMY'})
+        if data[12]:
+            row = str(data[12]).strip().split(' ')
+            contact.email_cc = [w for w in row if '@' in w]
+        if contact.normalize():
+            contacts.append(contact)
+    return contacts
 
 
 def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):
@@ -84,3 +83,4 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):
     if not contacts:
         return None
     return contacts
+

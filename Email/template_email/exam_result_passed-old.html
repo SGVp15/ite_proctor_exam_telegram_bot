@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Результаты экзамена</title>
+    <style>
+        body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #f4f4f4; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        .button { background-color: #4CAF50; border-radius: 5px; color: #ffffff; display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; line-height: 45px; text-align: center; text-decoration: none; width: 250px; -webkit-text-size-adjust: none; }
+    </style>
+</head>
+<body style="background-color: #f4f4f4; margin: 0; padding: 0;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; border: 1px solid #dddddd;">
+
+                    <tr>
+                        <td align="center" bgcolor="#4CAF50" style="padding: 40px; border-radius: 8px 8px 0 0;">
+                            <h1 style="margin: 0; font-family: Arial, sans-serif; font-size: 24px; color: #ffffff; font-weight: bold;">
+                                Экзамен сдан
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6; color: #333333;">
+                            <p style="margin-top: 0; margin-bottom: 16px;">
+                                Добрый день, <strong>{{ user.last_name_rus }} {{ user.first_name_rus }}</strong>!
+                            </p>
+                            <p style="margin-bottom: 16px;">
+                                Поздравляем! Вы успешно сдали экзамен:<br>
+                                <strong>{{ user.exam }}</strong>
+                            </p>
+                            <p style="margin-bottom: 24px;">
+                                Это отличный результат! Подробную статистику по разделам вы можете найти в личном кабинете.
+                            </p>
+
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td align="center" style="padding: 10px 0 20px 0;">
+                                        <a href="https://www.itexpert.ru/cabinet/main.php" class="button" style="mso-hide:all;">Перейти в личный кабинет</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" bgcolor="#f9f9f9" style="padding: 25px; font-family: Arial, sans-serif; font-size: 12px; color: #777777; border-top: 1px solid #eeeeee; border-radius: 0 0 8px 8px;">
+                            <p style="margin: 0 0 10px 0;">Это автоматическое уведомление. Пожалуйста, не отвечайте на него.</p>
+                            <p style="margin: 0;">
+                                <a href="https://www.itexpert.ru/" target="_blank" style="font-family: Arial, sans-serif; font-size: 14px; color: #555555; text-decoration: none; font-weight: bold;">
+                                    IT Expert
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                </td>
+        </tr>
+    </table>
+</body>
+</html>

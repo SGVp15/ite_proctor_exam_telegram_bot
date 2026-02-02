@@ -1,10 +1,14 @@
 class CallBackData:
+    SHOW_VERSION = 'SHOW_VERSION'
+    SEND_NEW_LINK_PROCTOREDU = 'SEND_NEW_LINK_PROCTOREDU'
+    SENT_REPORT_AND_CERT_LK = 'SENT_REPORT_AND_CERT_LK'
     DOWNLOAD_LOGS = 'download_logs'
     GET_LOG = 'get_log'
     GET_REGISTRATION_WEBINAR = 'get_registration_webinar'
     GET_SELLER = 'get_seller'
     GET_LAST_EXCEL_FILE = 'get_last_excel_file'
-    SHOW_EXAM_NOW = 'show_exam_now'
+    SHOW_EXAM_TODAY = 'SHOW_EXAM_TODAY'
+    SHOW_ALL_EXAMS = 'SHOW_ALL_EXAMS'
     SHOW_LIST_FILE = 'show_list_file'
     SHOW_QUEUE = 'show_queue'
     ZOOM_MENU = 'zoom_menu'
@@ -22,4 +26,3 @@ class CallBackData:
 
     FILE_DOWNLOAD_ = 'file_download_'
     FILE_DELETE_ = 'file_delete_'
-

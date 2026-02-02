@@ -4,14 +4,23 @@ from dotenv import dotenv_values, find_dotenv
 
 config = dotenv_values(find_dotenv())
 
-LOGIN_PROCTOREDU = config.get('LOGIN_PROCTOREDU')
-PASSWORD_PROCTOREDU = config.get('PASSWORD_PROCTOREDU')
+# Список необходимых ключей
+REQUIRED_KEYS = [
+    'LOGIN_PROCTOREDU',
+    'PASSWORD_PROCTOREDU',
+    'SECRET_GEN_LINK_PROCTOREDU'
+]
 
-if not LOGIN_PROCTOREDU:
-    raise f'ERROR .ENV {LOGIN_PROCTOREDU=}'
-if not PASSWORD_PROCTOREDU:
-    raise f'ERROR .ENV {PASSWORD_PROCTOREDU=}'
+# Проверка наличия ключей и их значений
+for key in REQUIRED_KEYS:
+    if not config.get(key):
+        raise ValueError(f"ОШИБКА .ENV: Параметр {key} не найден или пуст")
 
+# Присвоение
+LOGIN_PROCTOREDU = config['LOGIN_PROCTOREDU']
+PASSWORD_PROCTOREDU = config['PASSWORD_PROCTOREDU']
+SECRET_GEN_LINK_PROCTOREDU = config['SECRET_GEN_LINK_PROCTOREDU']
+HOST_PROCTOREDU = "itexpert.proctoring.online"
 
 CSV_HEADER_SESSION = {
     'identifier': 'Date_Name_Exam',

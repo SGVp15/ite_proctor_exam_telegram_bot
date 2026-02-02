@@ -14,5 +14,4 @@ aiogram>=3.23.0
 keyboard>=0.13.5
 PyGetWindow>=0.0.9
 pyperclip>=1.11.0
-
-selectolax>=0.4.6
+PyJWT>=2.10.1

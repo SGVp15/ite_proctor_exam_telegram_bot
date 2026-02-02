@@ -1,14 +1,15 @@
-import re
-from datetime import datetime
+import datetime
 from pathlib import Path
 
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.types import FSInputFile
 
+from Contact import load_contacts_from_log_file, Contact
 from Telegram.Call_Back_Data import CallBackData as call_back
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import dp, bot
+from Utils.check_time import check_time_interval
 from Utils.log import log
 from root_config import USERS_ID, ADMIN_ID, LOG_FILE, TEMPLATE_FILE_XLSX, DOCUMENTS, SYSTEM_LOG
 
@@ -75,19 +76,41 @@ async def get_file(callback_query: types.callback_query):
 
 
 @dp.callback_query(
-    F.data.in_({call_back.SHOW_EXAM_NOW, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+    F.data.in_({call_back.SHOW_EXAM_TODAY, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
 )
 async def show_exam_now(callback_query: types.callback_query):
     'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
     try:
-        with open(LOG_FILE, 'r', encoding='utf-8') as f:
-            s = f.read()
-        now = datetime.now()
-        now = now.strftime(f'%Y-%m-%d')
-        subjects = re.findall(rf'\ssubject=({now}[^\s]+)\s', s)
+        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
+        c: Contact
+        rows = []
+        for i, c in enumerate(contacts):
+            rows.append(
+                f'{i + 1}. {c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+        text = '\n'.join(rows)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
+                               reply_markup=inline_kb_main)
+    except Exception as e:
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)
 
-        subjects_now = '\n'.join([s for s in subjects if re.findall(now, s)])
-        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{subjects_now}',
+
+@dp.callback_query(
+    F.data.in_({call_back.SHOW_ALL_EXAMS, }) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID})
+)
+async def show_all_exams(callback_query: types.callback_query):
+    'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
+    try:
+        contacts = load_contacts_from_log_file()
+        contacts = [c for c in contacts if check_time_interval(check_dt=c.date_exam,
+                                                               start_dt=datetime.datetime.now(),
+                                                               delta_dt=datetime.timedelta(days=60))]
+        c: Contact
+        rows = []
+        for i, c in enumerate(contacts):
+            rows.append(
+                f'{i + 1}. {c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+        text = '\n'.join(rows)
+        await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены:\n{text}',
                                reply_markup=inline_kb_main)
     except Exception as e:
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Error {e}', reply_markup=inline_kb_main)

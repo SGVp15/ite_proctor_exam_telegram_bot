@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Результаты экзамена</title>
+    <style>
+        body { margin: 0; padding: 0; width: 100% !important; background-color: #f4f4f4; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
+        .externalClass { width: 100%; }
+    </style>
+</head>
+<body style="background-color: #f4f4f4; margin: 0; padding: 0;">
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f4f4f4">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="max-width: 600px; background-color: #ffffff; border: 1px solid #dddddd; border-radius: 8px;">
+
+                <tr>
+                    <td align="center" bgcolor="#e53935"
+                        style="padding: 40px; background-color: #e53935; border-radius: 8px 8px 0 0;">
+                        <h1 style="margin: 0; font-family: Arial, sans-serif; font-size: 26px; color: #ffffff; font-weight: bold;">
+                            Экзамен не сдан
+                        </h1>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 40px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6; color: #333333;">
+                        <p style="margin-top: 0; margin-bottom: 20px;">
+                            Добрый день, <strong>{{ user.last_name_rus }} {{ user.first_name_rus }}</strong>!
+                        </p>
+                        <p style="margin-bottom: 20px;">
+                            К сожалению, вам не удалось набрать достаточное количество баллов для успешной сдачи экзамена:<br>
+                            <strong style="font-size: 18px;">{{ user.exam }}</strong>
+                        </p>
+                        <p style="margin-bottom: 30px;">
+                            Не расстраивайтесь — это повод проанализировать ошибки и подготовиться лучше. Подробную статистику по разделам вы можете найти в личном кабинете.
+                        </p>
+
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center"
+                               style="margin: 0 auto;">
+                            <tr>
+                                <td align="center" bgcolor="#e53935"
+                                    style="border-radius: 5px; color: #ffffff; display: block; background-color: #e53935;">
+                                    <a href="https://www.itexpert.ru/cabinet/main.php"
+                                       style="font-family: Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; font-weight: bold; padding: 15px 30px; border: 1px solid #e53935; display: inline-block; border-radius: 5px; background-color: #e53935;">
+                                        Перейти в личный кабинет
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" bgcolor="#f9f9f9"
+                        style="padding: 30px; background-color: #f9f9f9; font-family: Arial, sans-serif; font-size: 12px; color: #777777; border-top: 1px solid #eeeeee; border-radius: 0 0 8px 8px;">
+                        <p style="margin: 0 0 10px 0;">Это автоматическое уведомление. Пожалуйста, не отвечайте на него.</p>
+                        <p style="margin: 0;">
+                            <a href="https://www.itexpert.ru/" target="_blank"
+                               style="font-family: Arial, sans-serif; font-size: 14px; color: #555555; text-decoration: none; font-weight: bold;">
+                                IT Expert
+                            </a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            </td>
+    </tr>
+</table>
+</body>
+</html>

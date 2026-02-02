@@ -1,14 +1,17 @@
-import asyncio
+import datetime
 from pathlib import Path
 
-from aiogram import F
+from aiogram import types, F
 from aiogram.types import message
 
+from Contact import load_contacts_from_log_file
+from Itexpert.ite_api import sent_report_and_cert_lk
+from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
-from main_registration import registration
+from main_registration import registration, send_new_link_proctoredu
 from parser import get_contact_from_excel
-from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE
+from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE, LOG_FILE
 
 
 @dp.message(F.document & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
@@ -26,14 +29,30 @@ async def download_document_handle(message: message):
     await bot.download_file(file_path, destination=path)
     await message.answer('Добавил файл', reply_markup=inline_kb_main)
 
-    contacts = get_contact_from_excel(path)
+    contacts_from_file = get_contact_from_excel(path)
+    contacts_from_log = load_contacts_from_log_file(LOG_FILE)
+    contacts = [c for c in contacts_from_file if c not in contacts_from_log]
+
     if not contacts:
         text_answer = 'No contact'
         await message.answer(text_answer, reply_markup=inline_kb_main)
     else:
         text_answer = await registration(contacts)
         await message.answer(text_answer, reply_markup=inline_kb_main)
-        asyncio.create_task(registration(contacts))
+        # asyncio.create_task(registration(contacts))
+
+
+@dp.callback_query(F.data.in_({CallBackData.SENT_REPORT_AND_CERT_LK}))
+async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
+    text = await sent_report_and_cert_lk(date=datetime.datetime.now())
+    await bot.send_message(text=text, chat_id=callback_query.from_user.id,
+                           reply_markup=inline_kb_main)
+
+@dp.callback_query(F.data.in_({CallBackData.SEND_NEW_LINK_PROCTOREDU}))
+async def btn_send_new_link_proctoredu(callback_query: types.callback_query):
+    text = await send_new_link_proctoredu()
+    await bot.send_message(text=text, chat_id=callback_query.from_user.id,
+                           reply_markup=inline_kb_main)
 
 # @dp.callback_query(F.data.in_({CallBackData.EDIT_REGISTRATION}) & F.from_user.id.in_({*ADMIN_ID, *USERS_ID}))
 # async def show_registration(callback_query: CallbackQuery):

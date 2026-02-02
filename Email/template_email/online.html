@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация на онлайн-экзамен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #673AB7; /* Фиолетовый цвет для онлайн-формата */
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .info-block {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .credentials-box {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 25px;
+            text-align: left;
+            font-size: 13px;
+            color: #555555;
+            border-top: 1px solid #eeeeee;
+        }
+        .button {
+            display: inline-block;
+            padding: 14px 25px;
+            margin: 10px 0;
+            background-color: #673AB7;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .check-link {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 style="margin: 0;">Онлайн-экзамен</h1>
+    </div>
+
+    <div class="content">
+        <p>Добрый день, <strong>{{ user.last_name_rus }} {{ user.first_name_rus }}</strong>!</p>
+
+        <p>Вы зарегистрированы на экзамен <strong>«{{ user.exam }}»</strong>.</p>
+
+        <div class="info-block">
+            <strong>Дата и время:</strong> {{ user.date_exam }} (мск)<br>
+            <strong>Время подключения для проверки:</strong> <span style="color: #d32f2f;">{{ user.date_exam_connect }} (мск)</span>
+        </div>
+
+        <p><strong>1. Подготовка:</strong><br>
+        Перед началом обязательно <a href="https://proctoredu.ru/check" class="check-link">пройдите проверку оборудования</a>.
+        Ознакомьтесь с <a href="https://www.itexpert.ru/rus/about/instruction/">инструкцией</a> и посмотрите <a href="https://files.proctoring.online/rules/video-ru/v4/">видеоролик</a> о процедуре.</p>
+
+        <p><strong>2. Вход в систему:</strong></p>
+        <div style="text-align: center;">
+            <a href="{{ user.url_proctor }}" class="button">Войти в систему прокторинга</a>
+        </div>
+
+        <div class="credentials-box">
+            Логин: <code>{{ user.username }}</code><br>
+            Пароль: <code>{{ user.password }}</code>
+        </div>
+
+        <p>Просим Вас <strong>подтвердить участие</strong> ответом на это письмо.</p>
+    </div>
+
+    <div class="footer">
+        <strong>Поддержка:</strong><br>
+        Email: <a href="mailto:exam@itexpert.ru">exam@itexpert.ru</a><br>
+        Тел: +7 (495) 981-57-10 (доб. 110)<br><br>
+        С уважением, <strong>IT Expert</strong>
+    </div>
+</div>
+</body>
+</html>
