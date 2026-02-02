@@ -265,7 +265,7 @@ def get_actual_exams_id_code_dict():
         result = {item['id']: item['code'] for item in data}
     else:
         log.error("Не удалось получить список экзаменов.")
-    result = mapping_exam_name_values(result)
+    # result = mapping_exam_name_values(result)
     return result
 
 
