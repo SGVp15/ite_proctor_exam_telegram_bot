@@ -11,7 +11,7 @@ class User(BaseModel):
     email: EmailStr
     last_name_eng: str = 'Ivanov'
     first_name_eng: str = 'Ivan'
-    exam: str = 'ITIL4FC'
+    exam: str = 'ITSMC'
     is_online_exam: bool
     date_exam: datetime
 

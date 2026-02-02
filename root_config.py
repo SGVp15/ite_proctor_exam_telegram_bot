@@ -63,6 +63,7 @@ ALLOWED_EXAMS: list = [
     'SCMC',
     'SOA4C',
     'SYSAC',
+    'ITSMC',
 ]
 
 
