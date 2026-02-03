@@ -63,10 +63,11 @@ def get_contact_from_array(data_list) -> list[Contact]:
         contact.email = data[4]
         contact.password = data[5]
         contact.exam = data[6]
-        contact.date_from_file = dateparser.parse(data[7]).date()
         contact.proctor = data[10]
-        contact.date_exam = dateparser.parse(f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}',
-                                             settings={'DATE_ORDER': 'DMY'})
+        contact.date_exam = dateparser.parse(
+            f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}',
+            settings={'DATE_ORDER': 'DMY'}
+        )
         if data[12]:
             row = str(data[12]).strip().split(' ')
             contact.email_cc = [w for w in row if '@' in w]
@@ -83,4 +84,3 @@ def get_contact_from_excel(filename=TEMPLATE_FILE_XLSX):
     if not contacts:
         return None
     return contacts
-

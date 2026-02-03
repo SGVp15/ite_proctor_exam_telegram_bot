@@ -24,7 +24,6 @@ class Contact:
         self.exam: str | None = None
 
         self.pattern_time = "%Y-%m-%dT%H:%M:%SZ"
-        self.date_from_file: datetime.datetime | None = None
         self.date_exam: datetime.datetime | None = None
         self.date_exam_connect: datetime.datetime | None = None
         self.open_at: str | None = None
@@ -131,14 +130,13 @@ class Contact:
         self.subject = f'{self.date_exam.strftime(self.pattern_time)}_{self.username}_' \
                        f'{self.exam}_proctor-{self.proctor}'
 
-        self.identifier = to_md5(f'{self.date_from_file.strftime(self.pattern_time)}_{self.username}_{self.exam}')
+        self.identifier = to_md5(f'{self.date_exam.strftime(self.pattern_time)}_{self.username}_{self.exam}')
         return True
 
     def __str__(self) -> str:
         return (
             f"status={self.status}\t"
             f"timestamp={datetime.datetime.now().strftime("%Y-%m-%d T%H:%M:%S")}\t"
-            f"identifier={self.identifier}\t"
             f"subject={self.subject}\t"
             f"name_eng={self.name_eng}\t"
             f"last_name_rus={self.last_name_rus}\t"
@@ -151,7 +149,6 @@ class Contact:
             f"exam={self.exam}\t"
             f"proctor={self.proctor}\t"
             f"url_proctor={self.url_proctor}\t"
-            f"date_from_file={self.date_from_file}\t"
             f"date_exam={self.date_exam}\t"
             f"date_exam_connect={self.date_exam_connect}\t"
             f"scheduled_at={self.scheduled_at}\t"
@@ -159,6 +156,7 @@ class Contact:
             f"close_at={self.close_at}\t"
             f"deadline={self.deadline}\t"
             f"remove_at={self.remove_at}\t"
+            f"identifier={self.identifier}\t"
             f"email_cc={self.email_cc}\t"
             f"moodle_id_exam={self.moodle_id_exam}\t"
             f"moodle_id_user={self.moodle_id_user}\n"
