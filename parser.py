@@ -60,9 +60,17 @@ def get_contact_from_array(data_list) -> list[Contact]:
         contact.first_name_rus = data[1]
         contact.last_name_eng = data[2]
         contact.first_name_eng = data[3]
+
         contact.email = data[4]
+        if '@' not in contact.email:
+            continue
+
         contact.password = data[5]
+
         contact.exam = data[6]
+        if not contact.exam:
+            continue
+
         contact.proctor = data[10]
         contact.date_exam = dateparser.parse(
             f'{data[7].strip()} {str(data[8]).strip()}:{str(data[9]).strip()}',
