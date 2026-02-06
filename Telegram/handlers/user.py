@@ -5,9 +5,7 @@ from aiogram import types, F
 from aiogram.types import message
 
 from Contact import load_contacts_from_log_file
-from Itexpert.ite_api import send_all_reports_and_cert
-from Moodle.main import download_reports_moodle
-from Moodle.parser_html import create_all_report
+from Itexpert.ite_api import sent_report_and_cert_lk
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
@@ -46,23 +44,13 @@ async def download_document_handle(message: message):
 
 @dp.callback_query(F.data.in_({CallBackData.SENT_REPORT_AND_CERT_LK}))
 async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
-    text = send_all_reports_and_cert(current_date=datetime.datetime.now())
+    text = await sent_report_and_cert_lk(date=datetime.datetime.now())
     await bot.send_message(text=text, chat_id=callback_query.from_user.id,
                            reply_markup=inline_kb_main)
-
 
 @dp.callback_query(F.data.in_({CallBackData.SEND_NEW_LINK_PROCTOREDU}))
 async def btn_send_new_link_proctoredu(callback_query: types.callback_query):
     text = await send_new_link_proctoredu()
-    await bot.send_message(text=text, chat_id=callback_query.from_user.id,
-                           reply_markup=inline_kb_main)
-
-
-@dp.callback_query(F.data.in_({CallBackData.MOODLE_GET_REPORT}))
-async def btn_moodle_get_report(callback_query: types.callback_query):
-    text = 'btn_moodle_get_report'
-    await download_reports_moodle()
-    create_all_report()
     await bot.send_message(text=text, chat_id=callback_query.from_user.id,
                            reply_markup=inline_kb_main)
 

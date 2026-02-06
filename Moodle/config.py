@@ -20,7 +20,7 @@ QUESTION_INPUT_DIR_XLSX = Path('./data', 'questions_xlsx')
 QUESTION_INPUT_DIR_XLSX.mkdir(exist_ok=True, parents=True)
 
 if not LOGIN_MOODLE:
-    raise f'ERROR .ENV {LOGIN_MOODLE=}'
+    raise f'ERROR .ENV {MOODLE_TOKEN=}'
 if not PASSWORD_MOODLE:
     raise f'ERROR .ENV {MOODLE_URL=}'
 if not MOODLE_TOKEN:

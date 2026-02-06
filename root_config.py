@@ -18,6 +18,7 @@ LOG_FILE = DIR_DATA / 'log.txt'
 # Moodle
 
 
+
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 
@@ -66,10 +67,4 @@ ALLOWED_EXAMS: list = [
 ]
 
 
-BASE_PATH = Path(
-    '//192.168.20.100/Administrative server/РАБОТА АДМИНИСТРАТОРА/ОРГАНИЗАЦИЯ IT ЭКЗАМЕНОВ/ЭКЗАМЕНЫ ЦИФРОВОЙ ПУТЬ')
-
-FILE_XLSX = BASE_PATH / 'Нумерация_Экзамены.xlsx'
-OUT_DIR_CERT = BASE_PATH / 'сертификаты'
-
-VERSION = '1.2.3'
+VERSION = '1.2.2'
