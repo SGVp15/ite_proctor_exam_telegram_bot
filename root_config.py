@@ -15,6 +15,10 @@ DIR_DATA = Path('./data')
 DIR_DATA.mkdir(parents=True, exist_ok=True)
 LOG_FILE = DIR_DATA / 'log.txt'
 
+# Moodle
+
+
+
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
 
@@ -59,6 +63,8 @@ ALLOWED_EXAMS: list = [
     'SCMC',
     'SOA4C',
     'SYSAC',
+    'ITSMC',
 ]
-BASE_PATH = Path('//192.168.20.100/Administrative server/РАБОТА АДМИНИСТРАТОРА/ОРГАНИЗАЦИЯ IT ЭКЗАМЕНОВ/ЭКЗАМЕНЫ ЦИФРОВОЙ ПУТЬ')
-OUT_DIR_CERT = BASE_PATH / 'сертификаты'
+
+
+VERSION = '1.2.3'
