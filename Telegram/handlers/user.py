@@ -46,7 +46,7 @@ async def download_document_handle(message: message):
 
 @dp.callback_query(F.data.in_({CallBackData.SENT_REPORT_AND_CERT_LK}))
 async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
-    text = await send_all_reports_and_cert(current_date=datetime.datetime.now())
+    text = send_all_reports_and_cert(current_date=datetime.datetime.now())
     await bot.send_message(text=text, chat_id=callback_query.from_user.id,
                            reply_markup=inline_kb_main)
 
