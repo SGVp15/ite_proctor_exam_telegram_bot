@@ -385,7 +385,7 @@ def get_today_exams(current_date=None) -> [Contact]:
     return today_contacts
 
 
-def send_all_reports_and_cert(current_date):
+def send_all_reports_and_cert(current_date=None):
     if not current_date:
         current_date = datetime.now().date()
     contacts = get_today_exams(current_date=current_date)
