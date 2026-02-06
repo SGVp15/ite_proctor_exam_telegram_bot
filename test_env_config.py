@@ -72,3 +72,7 @@ def test_star_import():
         sys.exit(1)
     else:
         print("\nИТОГ: Все найденные конфиги успешно импортированы!")
+
+
+if __name__ == '__main__':
+    test_star_import()
