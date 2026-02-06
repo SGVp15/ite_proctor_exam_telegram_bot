@@ -12,9 +12,7 @@ async def test_proctoredu():
 
 async def main():
     task1 = asyncio.create_task(test_proctoredu())
-    task2 = asyncio.create_task(test_ispring())
     await task1
-    await task2
 
 
 if __name__ == '__main__':
