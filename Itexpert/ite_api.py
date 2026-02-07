@@ -312,8 +312,8 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
                         and c.exam in f.name
                         and date_exam_file in f.name]
 
-        cert_files = [f for f in all_cert_files if c.email in f.name
-                      and c.exam in f.name
+        cert_files = [f for f in all_cert_files if c.email.lower() in f.name.lower()
+                      and c.exam.lower() in f.name.lower()
                       and date_exam_file in f.name]
 
         if not report_files and not cert_files:
@@ -379,7 +379,7 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
 
 
 async def main():
-    await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=1, day=21))
+    await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=2, day=6))
 
 
 if __name__ == '__main__':
