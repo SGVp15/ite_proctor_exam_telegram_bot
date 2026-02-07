@@ -307,14 +307,14 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     for c in date_contact:
         date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
 
-        report_files = [f for f in all_report_files if c.last_name_rus in f.name
-                        and c.first_name_rus in f.name
-                        and c.exam in f.name
-                        and date_exam_file in f.name]
+        report_files = [f for f in all_report_files if c.last_name_rus in f.name.lower()
+                        and c.first_name_rus in f.name.lower()
+                        and c.exam in f.name.lower()
+                        and date_exam_file in f.name.lower()]
 
         cert_files = [f for f in all_cert_files if c.email.lower() in f.name.lower()
                       and c.exam.lower() in f.name.lower()
-                      and date_exam_file in f.name]
+                      and date_exam_file in f.name.lower()]
 
         if not report_files and not cert_files:
             continue
