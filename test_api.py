@@ -5,23 +5,23 @@ from Itexpert.ite_api import ITEXPERT_API
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 
 
-async def test_proctoredu():
-    drive = ProctorEduSelenium()
-    await drive.authorization()
-    drive.quit()
-    print("[test] ProctorEDU OK")
+# async def test_proctoredu():
+#     drive = ProctorEduSelenium()
+#     await drive.authorization()
+#     drive.quit()
+#     print("[test] ProctorEDU OK")
 
 
-async def main():
-    task1 = asyncio.create_task(test_proctoredu())
-    await task1
+# async def main():
+#     task1 = asyncio.create_task(test_proctoredu())
+#     await task1
 
 
 if __name__ == '__main__':
     # asyncio.run(main())
     # 4. Тестирование удаления экзамена
     ite_api = ITEXPERT_API()
-    for id_exam_delete in (28555,28554,28553,28541 ):
+    for id_exam_delete in (28562,):
         time.sleep(1)
         print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
         r_delete = ITEXPERT_API().delete_exam_by_id(id_exam_delete)
@@ -47,9 +47,9 @@ if __name__ == '__main__':
     #     print(f"\n[4. delete_exam_by_id({id_exam_delete})]")
     #     r_delete = ite_api.delete_exam_by_id(id_exam_delete)
     #     print("Результат удаления:", r_delete.status_code)
-        # print(f"\n[get_exam_by_email({email})]")
-        # r_id = ite_api.get_exam_by_email(email)
-        # if r_id and r_id.ok:
-        #     pprint(json.loads(r_id.text))
-        # else:
-        #     print("Не удалось получить экзамен по ID.")
+    # print(f"\n[get_exam_by_email({email})]")
+    # r_id = ite_api.get_exam_by_email(email)
+    # if r_id and r_id.ok:
+    #     pprint(json.loads(r_id.text))
+    # else:
+    #     print("Не удалось получить экзамен по ID.")
