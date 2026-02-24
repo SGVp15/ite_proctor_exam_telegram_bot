@@ -1,11 +1,13 @@
 import asyncio
 import datetime
+import time
 import json
 import re
 from pathlib import Path
 from pprint import pprint
 from typing import Optional
 
+import dateparser
 import requests
 from requests.structures import CaseInsensitiveDict
 
@@ -378,9 +380,83 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     return out_str
 
 
-async def main():
-    await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=2, day=6))
+def update_cert_lk(contacts: [Contact]) -> str:
+    all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
+    all_report_files = [f for f in DIR_REPORTS.rglob('*') if f.is_file() and f.suffix == '.html']
 
+    ite_api = ITEXPERT_API()
 
-if __name__ == '__main__':
-    asyncio.run(main())
+    list_exams = get_actual_exams_id_code_dict()
+    time.sleep(1)
+
+    for c in contacts:
+        date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
+
+        report_files = [f for f in all_report_files
+                        if c.last_name_rus.lower() in f.name.lower()
+                        and c.first_name_rus.lower() in f.name.lower()
+                        and c.exam.lower() in f.name.lower()
+                        and date_exam_file.lower() in f.name.lower()]
+        pprint(all_cert_files)
+        cert_files = [f for f in all_cert_files if c.email.lower() in f.name.lower()]
+        exam_cert_files = [f for f in cert_files if c.exam.lower() in f.name.lower()]
+
+        cert_files = [f for f in all_cert_files if c.email.lower() in f.name.lower()
+                      and c.exam.lower() in f.name.lower()
+                      and date_exam_file.lower() in f.name.lower()]
+
+        if not report_files and not cert_files:
+            continue
+
+        print(f"\n[get_exam_by_email({c.email})]")
+        r_id = ite_api.get_exam_by_email(c.email)
+        if r_id and r_id.ok:
+            user_exams = json.loads(r_id.text)['data']
+            pprint(user_exams)
+        else:
+            print("Не удалось получить экзамен по ID.")
+        # time.sleep(1)
+        time.sleep(1)
+
+        for user_exam in user_exams:
+            user_exam['exam'] = list_exams.get(user_exam.get('exam_in'), '')
+            if c.exam.lower() != user_exam.get('exam', '').lower():
+                continue
+            if c.date_exam.strftime('%d.%m.%Y') != user_exam.get('exam_date', ''):
+                continue
+            c.exam_id_itexpert = user_exam.get('id')
+
+            break
+
+        pprint(user_exams)
+        # 3. Добавление сертификата в ЛК
+        id = c.exam_id_itexpert
+
+        for cert_path in cert_files:
+            cert_name = re.sub('[ а-яА-яЁё]+_*', '', Path(cert_path).name)
+            cert_name = re.sub('^_', '', cert_name)
+
+            print(f"\n[3. add_cert_to_exam_by_id()]")
+            r_update = ite_api.add_cert_to_exam_by_id(
+                id=id,
+                file_path=cert_path,
+                name=cert_name,
+            )
+            if r_update:
+                print("Результат:", r_update.status_code)
+
+            # time.sleep(1)
+            time.sleep(1)
+
+        # 4. Добавление отчета в ЛК
+        for file_report in report_files:
+            r_update = ite_api.add_review_to_exam_by_id(
+                id=id,
+                file_path=file_report,
+                name=file_report.name,
+            )
+            if r_update:
+                print("Результат:", r_update.status_code)
+            # time.sleep(1)
+            time.sleep(1)
+

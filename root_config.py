@@ -2,6 +2,8 @@ from pathlib import Path
 
 from dotenv import dotenv_values, find_dotenv
 
+VERSION = '1.3'
+
 config = dotenv_values(find_dotenv())
 
 BOT_TOKEN: str | None = config.get('BOT_TOKEN')
@@ -16,7 +18,6 @@ DIR_DATA.mkdir(parents=True, exist_ok=True)
 LOG_FILE = DIR_DATA / 'log.txt'
 
 # Moodle
-
 
 
 #  ====================================================================================================================
@@ -65,6 +66,3 @@ ALLOWED_EXAMS: list = [
     'SYSAC',
     'ITSMC',
 ]
-
-
-VERSION = '1.3'
