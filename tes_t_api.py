@@ -1,11 +1,12 @@
 import asyncio
+import datetime
 import json
 import time
 from pprint import pprint
 from Contact import Contact
 import dateparser
 
-from Itexpert.ite_api import ITEXPERT_API, update_cert_lk
+from Itexpert.ite_api import ITEXPERT_API, update_cert_lk, sent_report_and_cert_lk
 from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 
 
@@ -123,8 +124,8 @@ from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 #     #     print("Не удалось получить экзамен по ID.")
 
 
-def main():
-    # await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=2, day=6))
+async def main():
+    await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=3, day=14))
     contacts = []
     contact_list = []
     for num in contact_list:
@@ -142,4 +143,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
