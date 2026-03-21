@@ -15,8 +15,7 @@ if not BOT_TOKEN:
 
 DIR_DATA = Path('./data')
 DIR_DATA.mkdir(parents=True, exist_ok=True)
-LOG_FILE = str(DIR_DATA / 'log.txt')
-
+LOG_FILE = './data/log.txt'
 
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
