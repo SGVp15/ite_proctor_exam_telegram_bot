@@ -286,9 +286,8 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
         current_day = datetime.datetime.combine(date, datetime.time.min)
 
     out_str = 'Отчет:\n'
-    date_contact = []
 
-    contacts = None
+    contacts = []
     if date:
         contacts = load_contacts_from_log_file(date_start=date)
     else:
@@ -296,13 +295,6 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
 
     if not contacts:
         return 'No contacts'
-
-    for c in contacts:
-        c: Contact
-        d = c.date_exam.date()
-        if d == current_day.date():
-            date_contact.append(c)
-            # print(c)
 
     all_cert_files = [f for f in DIR_CERTS.rglob('*') if f.is_file() and f.suffix == '.png']
     all_report_files = [f for f in DIR_REPORTS.rglob('*') if f.is_file() and f.suffix == '.html']
@@ -313,7 +305,7 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     # time.sleep(1)
     await asyncio.sleep(1)
 
-    for c in date_contact:
+    for c in contacts:
         date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
 
         report_files = [f for f in all_report_files if c.last_name_rus.lower() in f.name.lower()]

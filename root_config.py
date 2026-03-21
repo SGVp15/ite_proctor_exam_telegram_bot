@@ -13,9 +13,10 @@ USERS_ID: list[int] = [int(x) for x in config['USERS_ID'].split(',')]
 if not BOT_TOKEN:
     raise f'ERROR .ENV {BOT_TOKEN=}'
 
-DIR_DATA = Path('./data')
+DIR_DATA = Path('./data').resolve()
 DIR_DATA.mkdir(parents=True, exist_ok=True)
-LOG_FILE = './data/log.txt'
+LOG_FILE = Path(DIR_DATA / 'log.txt')
+
 
 #  ====================================================================================================================
 #  -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL -- EXCEL
