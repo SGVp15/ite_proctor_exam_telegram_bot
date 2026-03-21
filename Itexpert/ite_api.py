@@ -279,7 +279,7 @@ def mapping_exam_name_values(old_dict: dict):
 
 async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     if not date:
-        d_delta = datetime.timedelta(days=1)
+        d_delta = datetime.timedelta(days=3)
         current_day = datetime.datetime.now().date() - d_delta
         current_day = datetime.datetime.combine(current_day, datetime.time.min)
     else:
@@ -288,10 +288,9 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     out_str = 'Отчет:\n'
     date_contact = []
 
-    contacts = []
-
+    contacts = None
     if date:
-        contacts = load_contacts_from_log_file(filtered_date=date)
+        contacts = load_contacts_from_log_file(date_start=date)
     else:
         contacts = load_contacts_from_log_file()
 

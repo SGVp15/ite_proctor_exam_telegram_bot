@@ -12,7 +12,7 @@ class TestEmailSending(TestCase):
     @staticmethod
     def test_send_email():
         # 2026-01-30
-        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime(2026, 1, 30))
+        contacts = load_contacts_from_log_file(date_start=datetime.datetime(2026, 1, 30))
         print(contacts)
         for contact in contacts:
             templates = [

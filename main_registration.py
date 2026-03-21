@@ -27,7 +27,7 @@ async def registration(contacts: [Contact]) -> str:
         if exam not in ALLOWED_EXAMS:
             return 'Проверьте курс'
 
-    contacts_from_log_file = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
+    contacts_from_log_file = load_contacts_from_log_file(date_start=datetime.datetime.now())
     new_contacts = [c for c in contacts if c not in contacts_from_log_file]
 
     # -------------- Moodle --------------
@@ -97,9 +97,9 @@ async def send_new_link_proctoredu(contacts: [Contact] = []) -> str:
         if exam not in ALLOWED_EXAMS:
             return 'Проверьте курс'
     if not contacts:
-        contacts = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
+        contacts = load_contacts_from_log_file(date_start=datetime.datetime.now())
 
-    contacts_from_log_file = load_contacts_from_log_file(filtered_date=datetime.datetime.now())
+    contacts_from_log_file = load_contacts_from_log_file(date_start=datetime.datetime.now())
     new_contacts = [c for c in contacts if c not in contacts_from_log_file]
     old_contacts = [c for c in contacts_from_log_file if c in contacts]
     all_contacts = new_contacts + old_contacts

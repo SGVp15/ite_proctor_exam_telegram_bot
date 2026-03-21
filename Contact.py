@@ -174,33 +174,57 @@ class Contact:
         return False
 
 
-def load_contacts_from_log_file(file=LOG_FILE, filtered_date: datetime.datetime | None = None) -> [Contact]:
+def load_contacts_from_log_file(
+        file=LOG_FILE,
+        date_start: datetime.datetime | None = None,
+        date_end: datetime.datetime | None = None,
+) -> [Contact]:
     contacts = []
     s = ''
+
+    # Попытка прочитать файл (10 попыток)
     for _ in range(10):
         try:
             with open(file, 'r', encoding='utf-8') as f:
                 s = f.read()
+            break  # Если прочитали успешно, выходим из цикла попыток
         except Exception as e:
-            print(e)
+            print(f"Ошибка чтения: {e}")
             time.sleep(0.5)
-            log.error(e)
+            # log.error(e) # Убедитесь, что объект log инициализирован
+
+    if not s:
+        return contacts
+
     for row in s.split('\n'):
-        c: Contact
-        if not row:
+        if not row.strip():
             continue
+
         c = Contact.parser_str_to_contact(row)
-        if not c:
+        if not c or not c.date_exam:
             continue
-        if not filtered_date or filtered_date.date() == c.date_exam.date():
+
+        # Логика фильтрации по диапазону
+        # Извлекаем только дату для сравнения (без времени), если это необходимо
+        current_date = c.date_exam.date()
+
+        is_after_start = True
+        if date_start:
+            is_after_start = current_date >= date_start.date()
+
+        is_before_end = True
+        if date_end:
+            is_before_end = current_date <= date_end.date()
+
+        if is_after_start and is_before_end:
             if c not in contacts:
                 contacts.append(c)
-            continue
+
     return contacts
 
 
 if __name__ == '__main__':
-    contacts = load_contacts_from_log_file(filtered_date=datetime.datetime(2026, 1, 23))
+    contacts = load_contacts_from_log_file(date_start=datetime.datetime(2026, 1, 23))
     for c in contacts:
         if c:
             c.normalize()
