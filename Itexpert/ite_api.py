@@ -279,19 +279,17 @@ def mapping_exam_name_values(old_dict: dict):
 
 async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     if not date:
-        d_delta = datetime.timedelta(days=3)
-        current_day = datetime.datetime.now().date() - d_delta
-        current_day = datetime.datetime.combine(current_day, datetime.time.min)
-    else:
-        current_day = datetime.datetime.combine(date, datetime.time.min)
+        date = datetime.datetime.now()
+    if isinstance(date, datetime.datetime):
+        date = date.date()
+    d_delta = datetime.timedelta(days=3)
+    current_day = date - d_delta
+    date = datetime.datetime.combine(current_day, datetime.time.min)
+    date = datetime.datetime.combine(date, datetime.time.min)
 
     out_str = 'Отчет:\n'
 
-    contacts = []
-    if date:
-        contacts = load_contacts_from_log_file(date_start=date)
-    else:
-        contacts = load_contacts_from_log_file()
+    contacts = load_contacts_from_log_file(date_start=date)
 
     if not contacts:
         return 'No contacts'
@@ -305,23 +303,23 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     # time.sleep(1)
     await asyncio.sleep(1)
 
-    for c in contacts:
-        date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
+    for contact in contacts:
+        date_exam_file = contact.date_exam.strftime('_%Y.%m.%d_')
 
-        report_files = [f for f in all_report_files if c.last_name_rus.lower() in f.name.lower()]
-        report_files = [f for f in report_files if c.first_name_rus.lower() in f.name.lower()]
-        report_files = [f for f in report_files if c.exam.lower() in f.name.lower()]
+        report_files = [f for f in all_report_files if contact.last_name_rus.lower() in f.name.lower()]
+        report_files = [f for f in report_files if contact.first_name_rus.lower() in f.name.lower()]
+        report_files = [f for f in report_files if contact.exam.lower() in f.name.lower()]
         report_files = [f for f in report_files if date_exam_file.lower() in f.name.lower()]
 
-        cert_files = [f for f in all_cert_files if c.email.lower() in f.name.lower()]
-        cert_files = [f for f in cert_files if c.exam.lower() in f.name.lower()]
+        cert_files = [f for f in all_cert_files if contact.email.lower() in f.name.lower()]
+        cert_files = [f for f in cert_files if contact.exam.lower() in f.name.lower()]
         cert_files = [f for f in cert_files if date_exam_file.lower() in f.name.lower()]
 
         if not report_files and not cert_files:
             continue
 
-        print(f"\n[get_exam_by_email({c.email})]")
-        r_id = ite_api.get_exam_by_email(c.email)
+        print(f"\n[get_exam_by_email({contact.email})]")
+        r_id = ite_api.get_exam_by_email(contact.email)
         if r_id and r_id.ok:
             user_exams = json.loads(r_id.text)['data']
             # pprint(user_exams)
@@ -332,20 +330,18 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
 
         for user_exam in user_exams:
             user_exam['exam'] = list_exams.get(user_exam.get('exam_in'), '')
-            if c.exam.lower() != user_exam.get('exam', '').lower():
+            if contact.exam.lower() != user_exam.get('exam', '').lower():
                 continue
-            if c.date_exam.date() != current_day.date():
+            if contact.date_exam.strftime('%d.%m.%Y') != user_exam.get('exam_date', ''):
                 continue
-            if c.date_exam.strftime('%d.%m.%Y') != user_exam.get('exam_date', ''):
-                continue
-            c.exam_id_itexpert = user_exam.get('id')
-            out_str += f'{c.email}\n'
+            contact.exam_id_itexpert = user_exam.get('id')
+            out_str += f'{contact.email}\n'
 
             break
 
         pprint(user_exams)
         # 3. Добавление сертификата в ЛК
-        id = c.exam_id_itexpert
+        id = contact.exam_id_itexpert
 
         for cert_path in cert_files:
             cert_name = re.sub('[ а-яА-яЁё]+_*', '', Path(cert_path).name)
