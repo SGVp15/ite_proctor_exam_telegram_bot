@@ -1,6 +1,7 @@
 import datetime
 import random
 import re
+import time
 
 import dateparser
 
@@ -175,25 +176,27 @@ class Contact:
 
 def load_contacts_from_log_file(file=LOG_FILE, filtered_date: datetime.datetime | None = None) -> [Contact]:
     contacts = []
-    try:
-        with open(file, 'r', encoding='utf-8') as f:
-            s = f.read()
-        for row in s.split('\n'):
-            c: Contact
-            if not row:
-                continue
-            c = Contact.parser_str_to_contact(row)
-            if not c:
-                continue
-            if not filtered_date or filtered_date.date() == c.date_exam.date():
-                if c not in contacts:
-                    contacts.append(c)
-                continue
-    except Exception as e:
-        print(e)
-        log.error(e)
-    finally:
-        return contacts
+    s = ''
+    for _ in range(10):
+        try:
+            with open(file, 'r', encoding='utf-8') as f:
+                s = f.read()
+        except Exception as e:
+            print(e)
+            time.sleep(0.5)
+            log.error(e)
+    for row in s.split('\n'):
+        c: Contact
+        if not row:
+            continue
+        c = Contact.parser_str_to_contact(row)
+        if not c:
+            continue
+        if not filtered_date or filtered_date.date() == c.date_exam.date():
+            if c not in contacts:
+                contacts.append(c)
+            continue
+    return contacts
 
 
 if __name__ == '__main__':
