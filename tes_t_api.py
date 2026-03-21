@@ -124,23 +124,24 @@ from ProctorEDU.selenium_for_proctoredu import ProctorEduSelenium
 #     #     print("Не удалось получить экзамен по ID.")
 
 
-async def main():
-    await sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=3, day=14))
-    contacts = []
-    contact_list = []
-    for num in contact_list:
-        c = Contact()
-        c.date_exam = dateparser.parse(num[0])
-        c.exam = num[1]
-        c.last_name_rus = num[2]
-        c.first_name_rus = num[3]
-        c.last_name_eng = num[4]
-        c.first_name_eng = num[5]
-        c.email = num[6]
-        c.exam_id_itexpert = num[6]
-        contacts.append(c)
-    update_cert_lk(contacts=contacts)
+def main():
+    asyncio.run(sent_report_and_cert_lk(date=datetime.datetime(year=2026, month=3, day=20)))
+
+    # contacts = []
+    # contact_list = []
+    # for num in contact_list:
+    #     c = Contact()
+    #     c.date_exam = dateparser.parse(num[0])
+    #     c.exam = num[1]
+    #     c.last_name_rus = num[2]
+    #     c.first_name_rus = num[3]
+    #     c.last_name_eng = num[4]
+    #     c.first_name_eng = num[5]
+    #     c.email = num[6]
+    #     c.exam_id_itexpert = num[7]
+    #     contacts.append(c)
+    # update_cert_lk(contacts=contacts)
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

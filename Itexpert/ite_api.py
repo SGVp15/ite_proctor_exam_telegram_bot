@@ -287,11 +287,16 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
 
     out_str = 'Отчет:\n'
     date_contact = []
-    contacts = load_contacts_from_log_file()
+    if date:
+        contacts = load_contacts_from_log_file(filtered_date=date)
+    else:
+        contacts = load_contacts_from_log_file()
+
+    if not contacts:
+        return ''
+
     for c in contacts:
         c: Contact
-        if not c:
-            continue
         d = c.date_exam.date()
         if d == current_day.date():
             date_contact.append(c)
@@ -309,14 +314,14 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     for c in date_contact:
         date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
 
-        report_files = [f for f in all_report_files if c.last_name_rus in f.name.lower()
-                        and c.first_name_rus in f.name.lower()
-                        and c.exam in f.name.lower()
-                        and date_exam_file in f.name.lower()]
+        report_files = [f for f in all_report_files if c.last_name_rus.lower() in f.name.lower()
+                        and c.first_name_rus.lower() in f.name.lower()
+                        and c.exam.lower() in f.name.lower()
+                        and date_exam_file.lower() in f.name.lower()]
 
         cert_files = [f for f in all_cert_files if c.email.lower() in f.name.lower()
                       and c.exam.lower() in f.name.lower()
-                      and date_exam_file in f.name.lower()]
+                      and date_exam_file.lower() in f.name.lower()]
 
         if not report_files and not cert_files:
             continue
@@ -459,4 +464,3 @@ def update_cert_lk(contacts: [Contact]) -> str:
                 print("Результат:", r_update.status_code)
             # time.sleep(1)
             time.sleep(1)
-
