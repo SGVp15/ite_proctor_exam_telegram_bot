@@ -290,9 +290,9 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
 
     contacts = None
     if date:
-        contacts = load_contacts_from_log_file(date_start=date)
+        contacts = load_contacts_from_log_file(date_start=date, date_end=datetime.datetime.now())
     else:
-        contacts = load_contacts_from_log_file()
+        contacts = load_contacts_from_log_file(date_end=datetime.datetime.now())
 
     if not contacts:
         return 'No contacts'

@@ -187,7 +187,7 @@ def load_contacts_from_log_file(
         try:
             with open(file, 'r', encoding='utf-8') as f:
                 s = f.read()
-            break  # Если прочитали успешно, выходим из цикла попыток
+                break
         except Exception as e:
             print(f"Ошибка чтения: {e}")
             time.sleep(0.5)

@@ -15,9 +15,7 @@ if not BOT_TOKEN:
 
 DIR_DATA = Path('./data')
 DIR_DATA.mkdir(parents=True, exist_ok=True)
-LOG_FILE = DIR_DATA / 'log.txt'
-
-# Moodle
+LOG_FILE = str(DIR_DATA / 'log.txt')
 
 
 #  ====================================================================================================================
