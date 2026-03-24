@@ -86,7 +86,9 @@ async def show_exam_now(callback_query: types.callback_query):
         rows = []
 
         for i, c in enumerate(contacts):
-            if c.date_exam.date() == datetime.datetime.date():
+            if not c.date_exam:
+                continue
+            if c.date_exam.date() == datetime.datetime.now().date():
                 rows.append(
                     f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
 
