@@ -81,19 +81,18 @@ async def get_file(callback_query: types.callback_query):
 async def show_exam_now(callback_query: types.callback_query):
     'subject=2024-12-25T11:00:00Z_Vitaliy_Stepanov_ITIL4FC_proctor-1'
     try:
-        contacts = load_contacts_from_log_file(date_start=datetime.datetime.now())
+        contacts = load_contacts_from_log_file()
+        contacts = [c for c in contacts if check_time_interval(check_dt=c.date_exam,
+                                                               start_dt=datetime.datetime.now(),
+                                                               delta_dt=datetime.timedelta(days=1))]
         c: Contact
         rows = []
 
-        for i, c in enumerate(contacts):
-            if not c.date_exam:
-                continue
-            if c.date_exam.date() == datetime.datetime.now().date():
-                rows.append(
-                    f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+        for c in contacts:
+            rows.append(f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
 
         if rows:
-            rows = [f'{i + 1} {v}' for i, v in enumerate(sorted(rows))]
+            rows = [f'{i + 1}. {v}' for i, v in enumerate(sorted(rows))]
 
         text = '\n'.join(rows)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
@@ -114,10 +113,15 @@ async def show_all_exams(callback_query: types.callback_query):
                                                                delta_dt=datetime.timedelta(days=60))]
         c: Contact
         rows = []
-        for i, c in enumerate(contacts):
+        for c in enumerate(contacts):
             rows.append(
-                f'{i + 1}. {c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+
+        if rows:
+            rows = [f'{i + 1}. {v}' for i, v in enumerate(sorted(rows))]
+
         text = '\n'.join(rows)
+
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены:\n{text}',
                                reply_markup=inline_kb_main)
     except Exception as e:
