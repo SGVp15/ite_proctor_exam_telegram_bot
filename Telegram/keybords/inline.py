@@ -29,6 +29,7 @@ inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='📂 Показать входящие файлы 📂', callback_data=CallBackData.SHOW_LIST_FILE)],
     [InlineKeyboardButton(text='🚀 Отправить в ЛК отчеты и сертификаты 🎓',
                           callback_data=CallBackData.SENT_REPORT_AND_CERT_LK)],
+    [InlineKeyboardButton(text='! Загрузить отчеты', callback_data=CallBackData.DOWNLOAD_REPORT_MOODLE_AND_CREATE_FOR_LK)],
     [InlineKeyboardButton(text='? VERSION ?', callback_data=CallBackData.SHOW_VERSION)],
     [InlineKeyboardButton(text='⚙️ Admin Menu ⚙️', callback_data=CallBackData.ADMIN_MENU)],
 ])
