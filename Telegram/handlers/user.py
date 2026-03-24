@@ -6,6 +6,7 @@ from aiogram.types import message
 
 from Contact import load_contacts_from_log_file
 from Itexpert.ite_api import sent_report_and_cert_lk
+from Moodle.main import download_reports_moodle
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
@@ -44,6 +45,7 @@ async def download_document_handle(message: message):
 
 @dp.callback_query(F.data.in_({CallBackData.SENT_REPORT_AND_CERT_LK}))
 async def btn_sent_report_and_cert_lk(callback_query: types.callback_query):
+    await download_reports_moodle()
     text = await sent_report_and_cert_lk(date=datetime.datetime.now())
     await bot.send_message(text=text, chat_id=callback_query.from_user.id,
                            reply_markup=inline_kb_main)
