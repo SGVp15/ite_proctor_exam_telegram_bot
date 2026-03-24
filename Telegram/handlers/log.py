@@ -113,7 +113,7 @@ async def show_all_exams(callback_query: types.callback_query):
                                                                delta_dt=datetime.timedelta(days=60))]
         c: Contact
         rows = []
-        for c in enumerate(contacts):
+        for c in contacts:
             rows.append(
                 f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
 
