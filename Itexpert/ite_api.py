@@ -248,6 +248,46 @@ class ITEXPERT_API:
                 print(f"Ответ сервера: {response.text}")
             return None
 
+    def add_exam_in_to_exam_by_id(
+            self,
+            id,
+            exam_in: str = '',
+    ) -> Optional[requests.Response]:
+        url = self._get_full_url(EXAM_ENDPOINT)
+        data = {
+            'id': id,
+            'exam_in':exam_in,
+        }
+
+        print(f"Выполняется POST-запрос: {url=}")
+
+        try:
+            # Отправка POST-запроса с автоматической сериализацией JSON
+            response = requests.put(url, headers=self.headers, json=data)
+
+            # Проверяем статус ответа
+            response.raise_for_status()
+
+            print(f"✅ Успешный ответ. Статус код: {response.status_code}")
+
+            # Попытка вывода JSON-ответа
+            try:
+                print("Тело ответа (JSON):")
+                print(json.dumps(response.json(), indent=2, ensure_ascii=False))
+            except json.JSONDecodeError:
+                print("Тело ответа не является JSON-объектом или пустое.")
+                print(f"Текстовый ответ: {response.text}")
+
+            return response
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Ошибка при выполнении запроса: {e}")
+            # Переменная response может быть не определена в случае ошибки DNS/соединения
+            if 'response' in locals() and response is not None:
+                print(f"Статус код ошибки: {response.status_code}")
+                print(f"Ответ сервера: {response.text}")
+            return None
+
     def delete_exam_by_id(self, exam_id: str) -> requests.Response:
         """Удаляет экзамен по его ID."""
         # Полный URL для удаления экзамена
