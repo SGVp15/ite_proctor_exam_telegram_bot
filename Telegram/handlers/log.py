@@ -84,9 +84,15 @@ async def show_exam_now(callback_query: types.callback_query):
         contacts = load_contacts_from_log_file(date_start=datetime.datetime.now())
         c: Contact
         rows = []
+
         for i, c in enumerate(contacts):
-            rows.append(
-                f'{i + 1}. {c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+            if c.date_exam.date() == datetime.datetime.date():
+                rows.append(
+                    f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+
+        if rows:
+            rows = [f'{i + 1} {v}' for i, v in enumerate(sorted(rows))]
+
         text = '\n'.join(rows)
         await bot.send_message(chat_id=callback_query.from_user.id, text=f'Экзамены сегодня:\n{text}',
                                reply_markup=inline_kb_main)
