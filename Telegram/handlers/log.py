@@ -114,8 +114,13 @@ async def show_all_exams(callback_query: types.callback_query):
         c: Contact
         rows = []
         for c in contacts:
+            if c.proctor:
+                online = 'online'
+            else:
+                online = 'offline'
             rows.append(
-                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus}')
+                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus} {c.proctor
+                } {online}')
 
         if rows:
             rows = [f'{i + 1}. {v}' for i, v in enumerate(sorted(rows))]
