@@ -5,7 +5,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 if script_dir not in sys.path:
     sys.path.insert(0, script_dir)
 
-from cert_exam.main_cert_exam import sheduler_main_create_exam_cert
+from Cert_Exam.main_cert_exam import sheduler_main_create_exam_cert
 
 import asyncio
 import datetime

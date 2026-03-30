@@ -10,9 +10,9 @@ TEMPLATE_FOLDER = BASE_PATH / 'template_cert_png'
 DIR_CERTS.mkdir(parents=True, exist_ok=True)
 TEMPLATE_FOLDER.mkdir(parents=True, exist_ok=True)
 
-LOG_FILE = Path('./log.txt')
-PICKLE_USERS = Path('./users.pk')
-PICKLE_FILE_MODIFY = Path('./time_file_modify.pk')
+LOG_FILE = Path('./log.txt').resolve()
+PICKLE_USERS = Path('./users.pk').resolve()
+PICKLE_FILE_MODIFY = Path('./time_file_modify.pk').resolve()
 
 SLEEP_SECONDS = 60
 
