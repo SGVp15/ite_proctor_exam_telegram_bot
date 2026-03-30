@@ -14,3 +14,7 @@ pyperclip>=1.11.0
 PyJWT>=2.10.1
 selectolax>=0.4.6
 PyAutoGUI>=0.9.54
+python-dotenv
+Pillow
+dateparser
+openpyxl

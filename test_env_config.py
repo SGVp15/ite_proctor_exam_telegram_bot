@@ -8,7 +8,7 @@ sys.path.insert(0, BASE_DIR)
 
 def find_config_modules(root_path):
     """
-    Ищет все файлы config.py и возвращает их в виде имен модулей для импорта.
+    Ищет все файлы config_cert_exam.py и возвращает их в виде имен модулей для импорта.
     """
     config_modules = []
 
@@ -18,10 +18,10 @@ def find_config_modules(root_path):
             continue
 
         for file in files:
-            if file == 'config.py' or file == 'root_config.py':
+            if file == 'config_cert_exam.py' or file == 'root_config.py':
                 # Вычисляем относительный путь от корня проекта
                 rel_path = os.path.relpath(os.path.join(root, file), root_path)
-                # Превращаем путь в формат модуля: folder/config.py -> folder.config
+                # Превращаем путь в формат модуля: folder/config_cert_exam.py -> folder.config
                 module_name = rel_path.replace(os.sep, '.').replace('.py', '')
                 config_modules.append(module_name)
 

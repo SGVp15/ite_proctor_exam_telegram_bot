@@ -13,6 +13,7 @@ from Telegram.main import start_bot
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log
+from cert_exam.main import sheduler_main_create_exam_cert
 
 
 async def main():
@@ -40,6 +41,13 @@ async def main():
         CronTrigger(hour='1', minute='30'),
         id='create_all_report',
         next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=3),  # Проверить сразу при старте
+    )
+
+    # Запуск Создание сертификатов
+    scheduler.add_job(
+        sheduler_main_create_exam_cert,
+        CronTrigger(minute='0'),
+        id='sheduler_main_create_exam_cert'
     )
 
     # Запуск создание отчетов
