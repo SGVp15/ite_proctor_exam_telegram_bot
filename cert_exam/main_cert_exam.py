@@ -1,10 +1,10 @@
 import datetime
 import pickle
 
-from UTILS.log import log
-from XLSX.excel import get_contact_from_cert_excel
-from config_cert_exam import PICKLE_USERS, DIR_CERTS
-from create_png import create_png
+from Utils.log import log
+from .XLSX.excel import get_contact_from_cert_excel
+from .config_cert_exam import PICKLE_USERS, DIR_CERTS
+from .create_png import create_png
 
 time_file_modify = 0
 
@@ -60,5 +60,4 @@ def sheduler_main_create_exam_cert():
 
 
 if __name__ == '__main__':
-    while True:
-        sheduler_main_create_exam_cert()
+    sheduler_main_create_exam_cert()

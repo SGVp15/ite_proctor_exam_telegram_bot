@@ -4,8 +4,9 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-import CertContact
-from config_cert_exam import TEMPLATE_FOLDER
+from .CertContact import CertContact
+
+from .config_cert_exam import TEMPLATE_FOLDER
 
 
 def create_png(cert_contact: CertContact):

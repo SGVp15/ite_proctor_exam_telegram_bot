@@ -1,7 +1,7 @@
 import datetime
 from pathlib import Path
 
-from config_cert_exam import DIR_CERTS, TEMPLATE_FOLDER
+from .config_cert_exam import DIR_CERTS, TEMPLATE_FOLDER
 
 
 class CertContact:

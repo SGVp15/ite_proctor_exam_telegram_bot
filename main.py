@@ -13,7 +13,7 @@ from Telegram.main import start_bot
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log
-from cert_exam.main import sheduler_main_create_exam_cert
+from cert_exam.main_cert_exam import sheduler_main_create_exam_cert
 
 
 async def main():
