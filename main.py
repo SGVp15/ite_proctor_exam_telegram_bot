@@ -1,11 +1,9 @@
-import sys
-import os
+# import sys
+# import os
+# script_dir = os.path.dirname(os.path.abspath(__file__))
+# if script_dir not in sys.path:
+#     sys.path.insert(0, script_dir)
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-if script_dir not in sys.path:
-    sys.path.insert(0, script_dir)
-
-from Cert_Exam.main_cert_exam import sheduler_main_create_exam_cert
 
 import asyncio
 import datetime
@@ -14,6 +12,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
+from Cert_Exam.main_cert_exam import sheduler_main_create_exam_cert
 from Itexpert.check_log_send_email import check_log_and_send_email
 from Itexpert.ite_api import sent_report_and_cert_lk
 from Moodle.main import download_reports_moodle
