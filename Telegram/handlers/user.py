@@ -11,6 +11,7 @@ from Moodle.parser_html import create_all_report
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main
 from Telegram.main import bot, dp
+from Utils.log import log
 from main_registration import registration, send_new_link_proctoredu
 from parser import get_contact_from_excel
 from root_config import USERS_ID, ADMIN_ID, PATH_DOWNLOAD_FILE, LOG_FILE
@@ -30,6 +31,7 @@ async def download_document_handle(message: message):
     # Read the contents of the file
     await bot.download_file(file_path, destination=path)
     await message.answer('Добавил файл', reply_markup=inline_kb_main)
+    log.info(f'ADD FILE {path} {message.message_id=} {message.chat=}')
 
     contacts_from_file = get_contact_from_excel(path)
     contacts_from_log = load_contacts_from_log_file(LOG_FILE)
