@@ -20,22 +20,20 @@ def button_return_main_menu():
 
 
 inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='📅 Какие экзамены сегодня?', callback_data=CallBackData.SHOW_EXAM_TODAY)],
-    [InlineKeyboardButton(text='📅 Все будущие экзамены', callback_data=CallBackData.SHOW_ALL_EXAMS)],
+    [InlineKeyboardButton(text='📅 Покажи экзамены сегодня?', callback_data=CallBackData.SHOW_EXAM_TODAY)],
+    [InlineKeyboardButton(text='📅 Покажи Все Экзамены', callback_data=CallBackData.SHOW_ALL_EXAMS)],
+    [InlineKeyboardButton(text='📊 Скачать Шаблон Excel', callback_data=CallBackData.GET_TEMPLATE_FILE_XLSX)],
     [InlineKeyboardButton(text='📑 Скачать Логи 📑', callback_data=CallBackData.GET_LOG)],
-    [InlineKeyboardButton(text='📊 Скачать Шаблон 📊', callback_data=CallBackData.GET_TEMPLATE_FILE_XLSX)],
-    [InlineKeyboardButton(text='📩 Выслать новую ссылку proctorEdu',
-                          callback_data=CallBackData.SEND_NEW_LINK_PROCTOREDU)],
-    [InlineKeyboardButton(text='📂 Показать входящие файлы 📂', callback_data=CallBackData.SHOW_LIST_FILE)],
-    [InlineKeyboardButton(text='🚀 Отправить в ЛК отчеты и сертификаты 🎓',
-                          callback_data=CallBackData.SENT_REPORT_AND_CERT_LK)],
-    [InlineKeyboardButton(text='! Загрузить отчеты', callback_data=CallBackData.DOWNLOAD_REPORT_MOODLE_AND_CREATE_FOR_LK)],
-    [InlineKeyboardButton(text='? VERSION ?', callback_data=CallBackData.SHOW_VERSION)],
+    [InlineKeyboardButton(text='📩 Вышли новую ссылку proctorEdu',callback_data=CallBackData.SEND_NEW_LINK_PROCTOREDU)],
+    [InlineKeyboardButton(text='📂 Покажи входящие файлы 📂', callback_data=CallBackData.SHOW_LIST_FILE)],
+    [InlineKeyboardButton(text='🚀 Отправить в ЛК отчеты и сертификаты 🎓',callback_data=CallBackData.SENT_REPORT_AND_CERT_LK)],
     [InlineKeyboardButton(text='⚙️ Admin Menu ⚙️', callback_data=CallBackData.ADMIN_MENU)],
 ])
 
 k_admin_menu = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='? Версия бота?', callback_data=CallBackData.SHOW_VERSION)],
     [InlineKeyboardButton(text='📄 Скачать Логи Программные 📄', callback_data=CallBackData.GET_LOG_PROGRAM), ],
+    [InlineKeyboardButton(text='! Скачай отчеты на сервер', callback_data=CallBackData.DOWNLOAD_REPORT_MOODLE_AND_CREATE_FOR_LK)],
     button_return_main_menu(),
 ])
 

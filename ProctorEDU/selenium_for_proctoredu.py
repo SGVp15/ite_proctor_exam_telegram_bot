@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium_stealth import stealth
 
-from ProctorEDU.config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
+from .config import LOGIN_PROCTOREDU, PASSWORD_PROCTOREDU, SESSIONS_CSV_FILE, USERS_CSV_FILE
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.log import log
 

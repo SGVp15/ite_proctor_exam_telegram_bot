@@ -12,9 +12,6 @@ TEMPLATE_FOLDER.mkdir(parents=True, exist_ok=True)
 
 LOG_FILE = Path('./log.txt').resolve()
 PICKLE_USERS = Path('./users.pk').resolve()
-PICKLE_FILE_MODIFY = Path('./time_file_modify.pk').resolve()
-
-SLEEP_SECONDS = 60
 
 # --- Excel --- Excel --- Excel --- Excel --- Excel --- Excel --- Excel ---
 SHEETNAME: str = 'Экзамены'

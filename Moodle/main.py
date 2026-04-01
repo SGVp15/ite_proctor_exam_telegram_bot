@@ -2,8 +2,8 @@ import asyncio
 import re
 from asyncio import sleep
 
-from Moodle.config import DIR_HTML_DOWNLOAD
-from Moodle.moodleSelenium.moodle_selenium import MoodleSelenium
+from .config import DIR_HTML_DOWNLOAD
+from .moodleSelenium.moodle_selenium import MoodleSelenium
 from Utils.log import log
 
 
