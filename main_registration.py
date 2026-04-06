@@ -34,8 +34,10 @@ async def registration(contacts: [Contact]) -> str:
             return 'Проверьте курс'
 
     contacts_from_log_file = load_contacts_from_log_file(date_start=datetime.datetime.now())
-    new_contacts = [c for c in contacts if c not in contacts_from_log_file]
-
+    c: Contact
+    new_contacts = [c for c in contacts if c not in contacts_from_log_file and c.date_exam >= datetime.datetime.now()]
+    if not new_contacts:
+        return 'Проверьте файл'
     # -------------- Moodle --------------
     moodle_api = MoodleApi()
     for contact in new_contacts:
