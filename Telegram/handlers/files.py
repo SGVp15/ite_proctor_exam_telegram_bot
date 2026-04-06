@@ -33,7 +33,7 @@ async def background_worker(user_id: int, status_msg: types.Message):
         await bot.send_message(
             chat_id=user_id,
             text='✅ Сертификаты созданы и готовы к выдаче!',
-            reply_markup=get_list_files_keyboard()  # Ваша клавиатура
+            reply_markup=inline_kb_main()
         )
 
         # Удаляем временное сообщение "⏳ Создаю..."
