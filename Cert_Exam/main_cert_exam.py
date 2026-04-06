@@ -53,10 +53,10 @@ def main_create_exam_cert():
 
 
 def sheduler_main_create_exam_cert():
-    # try:
-    main_create_exam_cert()
-    # except Exception as e:
-    #     log.error(e)
+    try:
+        main_create_exam_cert()
+    except Exception as e:
+        log.error(e)
 
 
 if __name__ == '__main__':

@@ -9,7 +9,8 @@ from Moodle.API.moodleapi import MoodleApi
 from My_jinja.my_jinja import MyJinja
 from ProctorEDU.gen_link import generate_proctoring_link
 from Utils.log import log
-from root_config import LOG_FILE, ALLOWED_EXAMS
+from parser import get_contact_from_excel
+from root_config import LOG_FILE, ALLOWED_EXAMS, TEMPLATE_SERVER_FILE_XLSX
 
 
 def generate_new_proctoring_link_by_contact(contact):
@@ -18,6 +19,11 @@ def generate_new_proctoring_link_by_contact(contact):
                                    username=contact.username)
     contact.url_proctor = url
     return url
+
+
+async def sheduler_registration_server_file():
+    contacts = get_contact_from_excel(filename=TEMPLATE_SERVER_FILE_XLSX)
+    await registration(contacts)
 
 
 async def registration(contacts: [Contact]) -> str:

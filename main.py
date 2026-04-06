@@ -14,6 +14,7 @@ from Telegram.main import start_bot
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log
+from main_registration import sheduler_registration_server_file
 
 
 async def main():
@@ -56,6 +57,15 @@ async def main():
         CronTrigger(hour='2'),
         id='sent_report_and_cert_lk',
     )
+
+    # Запуск файла на сервере для регистрации на экзамен
+    scheduler.add_job(
+        sheduler_registration_server_file,
+        IntervalTrigger(seconds=120),
+        id='sheduler_registration_server_file',
+        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
+    )
+
 
     # Запуск проверки обновлений Git каждые 60 секунд
     scheduler.add_job(
