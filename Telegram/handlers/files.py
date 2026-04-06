@@ -3,6 +3,7 @@ from pathlib import Path
 from aiogram import types, F
 from aiogram.types import FSInputFile
 
+from Cert_Exam.main_cert_exam import main_create_exam_cert
 from Telegram.Call_Back_Data import CallBackData
 from Telegram.keybords.inline import inline_kb_main, get_list_files_keyboard
 from Telegram.main import dp, bot
@@ -28,6 +29,38 @@ async def download_file(callback_query: types.callback_query):
     else:
         await bot.send_message(chat_id=callback_query.from_user.id, text='Файла не существует',
                                reply_markup=get_list_files_keyboard())
+
+
+import asyncio
+
+
+@dp.callback_query(
+    F.data.startswith(CallBackData.CREATE_CERT) & F.from_user.id.in_({*ADMIN_ID,})
+)
+async def create_cert(callback_query: types.CallbackQuery):
+    # 1. Сразу отвечаем на callback, чтобы кнопка не «висела»
+    await callback_query.answer("Запуск генерации сертификатов...")
+
+    # 2. Отправляем промежуточное сообщение
+    status_msg = await callback_query.message.answer(
+        "⏳ Начинаю создание сертификатов, это может занять некоторое время...")
+
+    # 3. Запускаем тяжелую задачу в фоновом режиме
+    asyncio.create_task(run_background_cert_creation(callback_query.from_user.id, status_msg))
+
+
+async def run_background_cert_creation(user_id: int, status_msg: types.Message):
+    try:
+
+        await main_create_exam_cert()
+
+        # 4. Уведомляем об успехе
+        await status_msg.edit_text(
+            text='✅ Все сертификаты созданы!',
+        )
+    except Exception as e:
+        await status_msg.edit_text(f"❌ Произошла ошибка при создании: {e}")
+
 
 
 @dp.callback_query(

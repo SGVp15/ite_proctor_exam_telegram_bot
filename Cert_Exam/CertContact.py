@@ -13,7 +13,8 @@ class CertContact:
                  last_name_eng: str = '',
                  first_name_eng: str = '',
                  date_exam: datetime.datetime | None = None,
-                 exam_ru: str = '', exam_eng: str = '', file_out_png: Path = '',
+                 exam_ru: str = '', exam_eng: str = '',
+                 file_out_png: Path = '',
                  template: str = ''):
 
         self.can_create_cert = 0
