@@ -21,7 +21,7 @@ def generate_new_proctoring_link_by_contact(contact):
     return url
 
 
-async def sheduler_registration_server_file():
+async def scheduler_registration_server_file():
     contacts = get_contact_from_excel(filename=TEMPLATE_SERVER_FILE_XLSX)
     await registration(contacts)
 

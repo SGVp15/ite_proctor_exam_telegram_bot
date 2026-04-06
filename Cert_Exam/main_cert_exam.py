@@ -52,7 +52,7 @@ def main_create_exam_cert():
         log.info('[Create PICKLE_USERS]')
 
 
-def sheduler_main_create_exam_cert():
+def scheduler_main_create_exam_cert():
     try:
         main_create_exam_cert()
     except Exception as e:
@@ -60,4 +60,4 @@ def sheduler_main_create_exam_cert():
 
 
 if __name__ == '__main__':
-    sheduler_main_create_exam_cert()
+    scheduler_main_create_exam_cert()

@@ -5,7 +5,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
-from Cert_Exam.main_cert_exam import sheduler_main_create_exam_cert
+from Cert_Exam.main_cert_exam import scheduler_main_create_exam_cert
 from Itexpert.check_log_send_email import check_log_and_send_email
 from Itexpert.ite_api import sent_report_and_cert_lk
 from Moodle.main import download_reports_moodle
@@ -14,7 +14,7 @@ from Telegram.main import start_bot
 from Utils.chromedriver_autoupdate import ChromedriverAutoupdate
 from Utils.git_update import git_update
 from Utils.log import log
-from main_registration import sheduler_registration_server_file
+from main_registration import scheduler_registration_server_file
 
 
 async def main():
@@ -46,9 +46,9 @@ async def main():
 
     # Запуск Создание сертификатов
     scheduler.add_job(
-        sheduler_main_create_exam_cert,
+        scheduler_main_create_exam_cert,
         CronTrigger(minute='0'),
-        id='sheduler_main_create_exam_cert'
+        id='scheduler_main_create_exam_cert'
     )
 
     # Запуск создание отчетов
@@ -60,9 +60,9 @@ async def main():
 
     # Запуск файла на сервере для регистрации на экзамен
     scheduler.add_job(
-        sheduler_registration_server_file,
+        scheduler_registration_server_file,
         IntervalTrigger(seconds=120),
-        id='sheduler_registration_server_file',
+        id='scheduler_registration_server_file',
         next_run_time=datetime.datetime.now()  # Проверить сразу при старте
     )
 
