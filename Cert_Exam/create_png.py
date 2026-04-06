@@ -21,11 +21,12 @@ def create_png(cert_contact: CertContact):
 
     Rubik_115 = ImageFont.truetype(Path('./data/fonts/Rubik/Rubik-Regular.ttf'), 115, )
     image_draw.text((round(0.59 * img.width), 1550),
-                    f'{cert_contact.name_rus}', font=Rubik_115, fill=(16, 21, 84),
+                    f'{cert_contact.ru_last_name} {cert_contact.ru_first_name}', font=Rubik_115, fill=(16, 21, 84),
                     anchor='mm')
 
     Rubik_70 = ImageFont.truetype('./data/fonts/Rubik/Rubik-Regular.ttf', 70)
     image_draw.text((round(0.59 * img.width), 1700),
-                    f'{cert_contact.name_eng}', font=Rubik_70, fill=(16, 21, 84), anchor='mm')
+                    f'{cert_contact.eng_last_name} {cert_contact.eng_first_name}', font=Rubik_70, fill=(16, 21, 84),
+                    anchor='mm')
 
     img.save(cert_contact.file_out_png)

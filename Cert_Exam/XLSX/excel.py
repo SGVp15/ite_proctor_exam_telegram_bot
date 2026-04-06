@@ -8,42 +8,55 @@ from ..config_cert_exam import FILE_XLSX, SHEETNAME
 
 
 def get_contact_from_cert_excel(filename=FILE_XLSX) -> list[CertContact]:
-    rows = read_excel_file(filename).get(SHEETNAME)
+    data = read_excel_file(filename)
+    rows = data.get(SHEETNAME, [])
+
     cert_contacts = []
+    date_settings = {'DATE_ORDER': 'DMY'}
+
     for row in rows:
-        cert_contact = CertContact()
-        # "№ сертификата	Дата экзамена	Курс	ФИО слушателя на русском	ФИО слушателя на латинице	email	Полное название	Английское название"
+        if not row or len(row) < 9:
+            continue
+        clean_row = [clean_export_excel(str(item)) for item in row]
+
         try:
-            cert_contact.number = int(clean_export_excel(row[0]))
-            settings = {'DATE_ORDER': 'DMY'}
-            cert_contact.date_exam = dateparser.parse(clean_export_excel(row[1]), settings=settings)
+            cert_contact = CertContact()
+
+            (num, date, abr_exam, ru_last_name, ru_first_name, eng_last_name, eng_first_name, email,
+             exam_ru) = clean_row[:9]
+
+            cert_contact.number = int(num)
+            cert_contact.date_exam = dateparser.parse(date, settings=date_settings)
+
             if not cert_contact.date_exam:
                 continue
-            cert_contact.abr_exam = clean_export_excel(row[2])
-            cert_contact.name_rus = clean_export_excel(row[3])
-            cert_contact.name_eng = clean_export_excel(row[4])
-            cert_contact.email = clean_export_excel(row[5])
-            cert_contact.exam_rus = clean_export_excel(row[6])
-        except (ValueError, IndexError):
-            continue
 
-        try:
-            cert_contact.can_create_cert = clean_export_excel(row[10])
-            '''"Создать сертификат? 
-                1 - создать,
-                [пусто] - автоматически создается после 2 дней, 
-                9 - не создавать"
-            '''
-        except (ValueError, IndexError):
-            cert_contact.can_create_cert = 0
+            cert_contact.abr_exam = abr_exam
+            cert_contact.ru_last_name = ru_last_name
+            cert_contact.ru_first_name = ru_first_name
+            cert_contact.eng_last_name = eng_last_name
+            cert_contact.eng_first_name = eng_first_name
+            cert_contact.email = email
+            cert_contact.exam_ru = exam_ru
 
-        try:
+            # Безопасное получение статуса создания (столбец K / индекс 10)
+            try:
+                cert_contact.can_create_cert = clean_row[10] if len(clean_row) > 10 else 0
+            except (ValueError, IndexError):
+                cert_contact.can_create_cert = 0
+
+            # Логика путей и файлов
             cert_contact.create_path_file()
-        except (FileNotFoundError,):
-            log.error(f'No template file {cert_contact.template}')
+
+            cert_contacts.append(cert_contact)
+
+        except (ValueError, IndexError) as e:
+            log.debug(f"Skip row due to error: {e}")
+            continue
+        except FileNotFoundError:
+            log.error(f'No template file {getattr(cert_contact, "template", "unknown")}')
             continue
 
-        cert_contacts.append(cert_contact)
     return cert_contacts
 
 

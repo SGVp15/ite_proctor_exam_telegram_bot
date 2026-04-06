@@ -85,7 +85,7 @@ async def registration(contacts: [Contact]) -> str:
 
     # OUT STRING
     for contact in contacts:
-        out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
+        out_str += (f'{contact.ru_last_name} {contact.ru_first_name} '
                     f'{contact.email} {contact.exam} {contact.date_exam}\n')
     return out_str
 
@@ -148,6 +148,6 @@ async def send_new_link_proctoredu(contacts: [Contact] = []) -> str:
     # OUT STRING
     out_str = "  Новые ссылки:\n"
     for contact in contacts:
-        out_str += (f'{contact.last_name_rus} {contact.first_name_rus} '
+        out_str += (f'{contact.ru_last_name} {contact.ru_first_name} '
                     f'{contact.email} {contact.exam} {contact.date_exam}\n')
     return out_str

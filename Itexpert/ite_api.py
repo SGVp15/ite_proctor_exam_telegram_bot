@@ -1,21 +1,20 @@
 import asyncio
 import datetime
-import time
 import json
 import re
+import time
 from pathlib import Path
 from pprint import pprint
 from typing import Optional
 
-import dateparser
 import requests
 from requests.structures import CaseInsensitiveDict
 
 from Contact import Contact, load_contacts_from_log_file
-from Itexpert.config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
 from Moodle.config import DIR_REPORTS, DIR_CERTS
 from Utils.log import log
 from Utils.utils import file_to_base64
+from .config import ITEXPERT_URL, ITEXPERT_API_SECRET_KEY
 
 EXAM_ENDPOINT = '/rus/tools/api/exam/'
 
@@ -256,7 +255,7 @@ class ITEXPERT_API:
         url = self._get_full_url(EXAM_ENDPOINT)
         data = {
             'id': id,
-            'exam_in':exam_in,
+            'exam_in': exam_in,
         }
 
         print(f"Выполняется POST-запрос: {url=}")
@@ -346,8 +345,8 @@ async def sent_report_and_cert_lk(date: datetime.datetime | None = None) -> str:
     for contact in contacts:
         date_exam_file = contact.date_exam.strftime('_%Y.%m.%d_')
 
-        report_files = [f for f in all_report_files if contact.last_name_rus.lower() in f.name.lower()]
-        report_files = [f for f in report_files if contact.first_name_rus.lower() in f.name.lower()]
+        report_files = [f for f in all_report_files if contact.ru_last_name.lower() in f.name.lower()]
+        report_files = [f for f in report_files if contact.ru_first_name.lower() in f.name.lower()]
         report_files = [f for f in report_files if contact.exam.lower() in f.name.lower()]
         report_files = [f for f in report_files if date_exam_file.lower() in f.name.lower()]
 
@@ -428,8 +427,8 @@ def update_cert_lk(contacts: [Contact]) -> str:
         date_exam_file = c.date_exam.strftime('_%Y.%m.%d_')
 
         report_files = [f for f in all_report_files
-                        if c.last_name_rus.lower() in f.name.lower()
-                        and c.first_name_rus.lower() in f.name.lower()
+                        if c.ru_last_name.lower() in f.name.lower()
+                        and c.ru_first_name.lower() in f.name.lower()
                         and c.exam.lower() in f.name.lower()
                         and date_exam_file.lower() in f.name.lower()]
         pprint(all_cert_files)
