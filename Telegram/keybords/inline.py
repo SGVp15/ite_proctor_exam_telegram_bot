@@ -27,13 +27,13 @@ inline_kb_main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='📩 Вышли новую ссылку proctorEdu',callback_data=CallBackData.SEND_NEW_LINK_PROCTOREDU)],
     [InlineKeyboardButton(text='📂 Покажи входящие файлы 📂', callback_data=CallBackData.SHOW_LIST_FILE)],
     [InlineKeyboardButton(text='🚀 Отправить в ЛК отчеты и сертификаты 🎓',callback_data=CallBackData.SENT_REPORT_AND_CERT_LK)],
-    [InlineKeyboardButton(text='⚙️ Admin Menu ⚙️', callback_data=CallBackData.ADMIN_MENU)],
+    [InlineKeyboardButton(text='⚙️ Admin Menu >>', callback_data=CallBackData.ADMIN_MENU)],
 ])
 
 k_admin_menu = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='? Версия бота?', callback_data=CallBackData.SHOW_VERSION)],
     [InlineKeyboardButton(text='📄 Скачать Логи Программные 📄', callback_data=CallBackData.GET_LOG_PROGRAM), ],
-    [InlineKeyboardButton(text='📄 Создай сертификаты 📄', callback_data=CallBackData.CREATE_CERT), ],
+    [InlineKeyboardButton(text='🆕 Создай сертификаты 🆕', callback_data=CallBackData.CREATE_CERT), ],
     [InlineKeyboardButton(text='! Скачай отчеты на сервер', callback_data=CallBackData.DOWNLOAD_REPORT_MOODLE_AND_CREATE_FOR_LK)],
     button_return_main_menu(),
 ])
