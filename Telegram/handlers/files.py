@@ -33,7 +33,7 @@ async def background_worker(user_id: int, status_msg: types.Message):
         await bot.send_message(
             chat_id=user_id,
             text='✅ Сертификаты созданы и готовы к выдаче!',
-            reply_markup=inline_kb_main()
+            reply_markup=inline_kb_main,
         )
 
         # Удаляем временное сообщение "⏳ Создаю..."
@@ -69,7 +69,8 @@ async def create_cert(callback_query: types.CallbackQuery):
     # 2. Отправляем уведомление, что процесс пошел
     status_msg = await callback_query.message.answer(
         "⏳ Запущена генерация сертификатов...\n"
-        "Вы можете пользоваться другими функциями бота, я напишу по готовности."
+        "Вы можете пользоваться другими функциями бота, я напишу по готовности. \n"
+        "/help"
     )
 
     # 3. Самое важное: Запускаем задачу "в воздух" через create_task.
