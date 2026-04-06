@@ -26,6 +26,8 @@ DIR_template.mkdir(parents=True, exist_ok=True)
 TEMPLATE_FILE_XLSX = DIR_template / 'template.xlsx'
 PAGE_NAME: str = 'Экзамены'
 
+TEMPLATE_SERVER_FILE_XLSX = "\\192.168.20.100\Administrative server\РАБОТА АДМИНИСТРАТОРА\ОРГАНИЗАЦИЯ IT ЭКЗАМЕНОВ\ЭКЗАМЕНЫ ЦИФРОВОЙ ПУТЬ\Регистрация_На_Экзамен.xlsx"
+
 LastName_column: str = 'A'
 FirstName_column: str = 'B'
 LastNameEng_column: str = 'C'

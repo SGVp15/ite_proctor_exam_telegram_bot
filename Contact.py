@@ -182,16 +182,11 @@ def load_contacts_from_log_file(
     contacts = []
     s = ''
 
-    # Попытка прочитать файл (10 попыток)
-    for _ in range(10):
-        try:
-            with open(file, 'r', encoding='utf-8') as f:
-                s = f.read()
-                break
-        except Exception as e:
-            print(f"Ошибка чтения: {e}")
-            time.sleep(0.5)
-            # log.error(e) # Убедитесь, что объект log инициализирован
+    try:
+        with open(file, 'r', encoding='utf-8') as f:
+            s = f.read()
+    except Exception as e:
+        log.error(e)
 
     if not s:
         return contacts
