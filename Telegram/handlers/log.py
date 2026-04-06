@@ -94,7 +94,7 @@ async def show_exam_now(callback_query: types.callback_query):
                 offline = 'offline'
 
             rows.append(
-                f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus} {offline}')
+                f'{c.date_exam.strftime("%H:%M")} {c.exam} {c.email} {c.ru_last_name} {c.ru_first_name} {offline}')
 
         if rows:
             rows = [f'{i + 1}. {v}' for i, v in enumerate(sorted(rows))]
@@ -123,7 +123,7 @@ async def show_all_exams(callback_query: types.callback_query):
             if c.proctor in (0, '0', False, None):
                 offline = 'offline'
             rows.append(
-                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.last_name_rus} {c.first_name_rus} {offline}')
+                f'{c.date_exam.strftime("%Y.%m.%d %H:%M")} {c.exam} {c.email} {c.ru_last_name} {c.ru_first_name} {offline}')
 
         if rows:
             rows = [f'{i + 1}. {v}' for i, v in enumerate(sorted(rows))]

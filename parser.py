@@ -56,10 +56,10 @@ def get_contact_from_array(data_list) -> list[Contact]:
 
         if not data[0]:
             continue
-        contact.last_name_rus = data[0]
-        contact.first_name_rus = data[1]
-        contact.last_name_eng = data[2]
-        contact.first_name_eng = data[3]
+        contact.ru_last_name = data[0]
+        contact.ru_first_name = data[1]
+        contact.eng_last_name = data[2]
+        contact.eng_first_name = data[3]
 
         contact.email = data[4]
         if '@' not in contact.email:

@@ -14,10 +14,10 @@ from root_config import LOG_FILE
 class Contact:
     def __init__(self):
         self.name_eng: str | None = None
-        self.last_name_rus: str | None = None
-        self.first_name_rus: str | None = None
-        self.last_name_eng: str | None = None
-        self.first_name_eng: str | None = None
+        self.ru_last_name: str | None = None
+        self.ru_first_name: str | None = None
+        self.eng_last_name: str | None = None
+        self.eng_first_name: str | None = None
         self.email: str | None = None
         self.email_cc: list = []
         self.username: str | None = None
@@ -88,24 +88,24 @@ class Contact:
         return contact
 
     def normalize(self) -> bool:
-        self.first_name_rus = clean_string(self.first_name_rus).capitalize()
-        self.last_name_eng = clean_string(self.last_name_eng).capitalize()
-        self.first_name_eng = clean_string(self.first_name_eng).capitalize()
+        self.ru_first_name = clean_string(self.ru_first_name).capitalize()
+        self.eng_last_name = clean_string(self.eng_last_name).capitalize()
+        self.eng_first_name = clean_string(self.eng_first_name).capitalize()
         self.email = replace_ru_char_to_eng_char(clean_string(self.email).lower())
 
-        if not self.first_name_eng:
-            self.first_name_eng = transliterate(f'{self.first_name_rus}').capitalize()
+        if not self.eng_first_name:
+            self.eng_first_name = transliterate(f'{self.ru_first_name}').capitalize()
         else:
-            self.first_name_eng = replace_ru_char_to_eng_char(self.first_name_eng)
+            self.eng_first_name = replace_ru_char_to_eng_char(self.eng_first_name)
 
-        if not self.last_name_eng:
-            self.last_name_eng = transliterate(f'{self.last_name_rus}').capitalize()
+        if not self.eng_last_name:
+            self.eng_last_name = transliterate(f'{self.ru_last_name}').capitalize()
         else:
-            self.last_name_eng = replace_ru_char_to_eng_char(self.last_name_eng)
+            self.eng_last_name = replace_ru_char_to_eng_char(self.eng_last_name)
 
         self.email = replace_ru_char_to_eng_char(self.email.strip())
 
-        self.name_eng = f'{self.first_name_eng} {self.last_name_eng}'
+        self.name_eng = f'{self.eng_first_name} {self.eng_last_name}'
 
         if not self.date_exam_connect:
             self.date_exam_connect = self.date_exam + datetime.timedelta(minutes=-5)
@@ -140,10 +140,10 @@ class Contact:
             f"timestamp={datetime.datetime.now().strftime("%Y-%m-%d T%H:%M:%S")}\t"
             f"subject={self.subject}\t"
             f"name_eng={self.name_eng}\t"
-            f"last_name_rus={self.last_name_rus}\t"
-            f"first_name_rus={self.first_name_rus}\t"
-            f"last_name_eng={self.last_name_eng}\t"
-            f"first_name_eng={self.first_name_eng}\t"
+            f"last_name_rus={self.ru_last_name}\t"
+            f"first_name_rus={self.ru_first_name}\t"
+            f"last_name_eng={self.eng_last_name}\t"
+            f"first_name_eng={self.eng_first_name}\t"
             f"email={self.email}\t"
             f"username={self.username}\t"
             f"password={self.password}\t"

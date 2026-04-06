@@ -58,7 +58,7 @@ async def check_log_and_send_email():
             text += (
                 f'{c.date_exam.strftime(c.pattern_time)}\n'
                 f'{c.exam}\n'
-                f'{c.last_name_rus} {c.first_name_rus} {c.email}\n'
+                f'{c.ru_last_name} {c.ru_first_name} {c.email}\n'
                 f'Логин={c.username}\n'
                 f'Пароль={c.password}\n'
                 f'url={c.url_proctor}\n'
