@@ -1,4 +1,4 @@
-Уважаемый {{ user.last_name_rus }} {{ user.first_name_rus }},
+Уважаемый {{ user.ru_last_name }} {{ user.ru_first_name }},
 Поздравляем, Вы успешно сдали экзамен {{ user.exam }}!
 
 

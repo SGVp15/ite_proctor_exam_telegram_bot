@@ -1,4 +1,4 @@
-Добрый день, {{ user.last_name_rus }} {{ user.first_name_rus }}!
+Добрый день, {{ user.ru_last_name }} {{ user.ru_first_name }}!
 Вы зарегистрированы на экзамен {{ user.exam }}, который пройдет онлайн {{ user.date_exam }} мск.
 Для подготовки к проведению экзамена просьба подключиться {{ user.date_exam_connect }} мск.
 
