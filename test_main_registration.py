@@ -1,9 +1,9 @@
 import asyncio
 
-from main_registration import scheduler_registration_server_file
+from main_registration import server_file_registration
 
 
 def test_sheduler_registration_server_file():
-    asyncio.run(scheduler_registration_server_file())
+    asyncio.run(server_file_registration())
     # assert False
 
