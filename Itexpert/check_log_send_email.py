@@ -23,7 +23,7 @@ def get_contacts_from_logs() -> [Contact]:
     return contacts
 
 
-async def check_log_and_send_email():
+async def check_log_and_send_email_to_manager():
     contact_for_email_ = []
     contacts = get_contacts_from_logs()
     for c in contacts:
@@ -71,7 +71,6 @@ async def check_log_and_send_email():
             text=text, html='', smtp_server=SMTP_SERVER, smtp_port=SMTP_PORT,
             login=EMAIL_LOGIN, password=EMAIL_PASSWORD, manager=None)
         email.send_email()
-        await sleep(61)
 
 
 if __name__ == '__main__':

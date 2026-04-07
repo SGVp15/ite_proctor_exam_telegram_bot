@@ -9,6 +9,8 @@ PASSWORD_MOODLE = config.get('PASSWORD_MOODLE')
 MOODLE_TOKEN = config.get('MOODLE_TOKEN')
 MOODLE_URL = config.get('MOODLE_URL')
 
+BASE_URL = 'https://exam.itexpert.ru'
+
 DIR_BASE = Path(
     '//192.168.20.100/Administrative server/РАБОТА АДМИНИСТРАТОРА/ОРГАНИЗАЦИЯ IT ЭКЗАМЕНОВ/ЭКЗАМЕНЫ ЦИФРОВОЙ ПУТЬ')
 DIR_CERTS = DIR_BASE / 'сертификат'

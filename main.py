@@ -6,7 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from Cert_Exam.main_cert_exam import scheduler_main_create_exam_cert
-from Itexpert.check_log_send_email import check_log_and_send_email
+from Itexpert.check_log_send_email import check_log_and_send_email_to_manager
 from Itexpert.ite_api import sent_report_and_cert_lk
 from Moodle.main import download_reports_moodle
 from Moodle.parser_html import create_all_report
@@ -23,9 +23,9 @@ async def main():
 
     # Запуск проверки логов и отправки писем
     scheduler.add_job(
-        check_log_and_send_email,
+        check_log_and_send_email_to_manager,
         CronTrigger(minute='0,30'),
-        id='check_log_and_send_email'
+        id='check_log_and_send_email_to_manager'
     )
 
     # Запуск скачивание страницы отчета из moodle в 00 минут
@@ -51,7 +51,7 @@ async def main():
         id='scheduler_main_create_exam_cert'
     )
 
-    # Запуск создание отчетов
+    # Запуск Отправка отчетов и сертификатов
     scheduler.add_job(
         sent_report_and_cert_lk,
         CronTrigger(hour='2'),
