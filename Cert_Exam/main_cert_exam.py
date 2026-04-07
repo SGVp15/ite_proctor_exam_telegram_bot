@@ -7,7 +7,7 @@ from Email.template import template_email_exam_result_passed
 from My_jinja import MyJinja
 from Utils.log import log
 from .XLSX.excel import get_contact_from_cert_excel
-from .config_cert_exam import PICKLE_USERS, DIR_CERTS
+from .config_cert_exam import PICKLE_USERS, DIR_CERTS, DELTA_DAYS
 from .create_png import create_png
 
 time_file_modify = 0
@@ -32,7 +32,7 @@ def main_create_exam_cert():
     new_users = [user for user in users_from_cer_excel if user not in old_users]
 
     new_users = [u for u in new_users
-                 if (datetime.datetime.now() >= u.date_exam + datetime.timedelta(days=2)
+                 if (datetime.datetime.now() >= u.date_exam + datetime.timedelta(days=DELTA_DAYS)
                      or u.can_create_cert in (1, '1'))]
     new_users = [u for u in new_users if u.file_out_png not in certs_files]
 
