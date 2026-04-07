@@ -44,6 +44,7 @@ def main_create_exam_cert():
     successful_users = []
     for i, contact in enumerate(new_users):
         try:
+
             create_png(contact)
 
             EmailSending(
@@ -70,7 +71,3 @@ def create_exam_cert():
         main_create_exam_cert()
     except Exception as e:
         log.error(e)
-
-
-if __name__ == '__main__':
-    create_exam_cert()
