@@ -15,7 +15,6 @@ if not EMAIL_LOGIN:
 SMTP_SERVER = 'smtp.yandex.ru'
 SMTP_PORT = 465
 EMAIL_BCC = ['exam@itexpert.ru', ]
-EMAIL_BCC_course = ['exam@itexpert.ru', ]
 email_login_password = {}
 
 TEMPLATE_FOLDER = Path('./Email', 'template_email')

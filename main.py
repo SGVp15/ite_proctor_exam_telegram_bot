@@ -5,7 +5,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
-from Cert_Exam.main_cert_exam import scheduler_main_create_exam_cert
+from Cert_Exam.main_cert_exam import create_exam_cert
 from Itexpert.check_log_send_email import check_log_and_send_email_to_manager
 from Itexpert.ite_api import sent_report_and_cert_lk
 from Moodle.main import download_reports_moodle
@@ -18,10 +18,9 @@ from main_registration import server_file_registration
 
 
 async def main():
-    # Инициализируем планировщик
     scheduler = AsyncIOScheduler()
 
-    # Запуск проверки логов и отправки писем
+    # Запуск проверки логов и отправки писем менеджерам
     scheduler.add_job(
         check_log_and_send_email_to_manager,
         CronTrigger(minute='0,30'),
@@ -43,11 +42,12 @@ async def main():
         CronTrigger(minute='10'),
         id='create_all_report',
         next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=10),  # при старте
+        replace_existing=True,
     )
 
     # Запуск Создание сертификатов
     scheduler.add_job(
-        scheduler_main_create_exam_cert,
+        create_exam_cert,
         CronTrigger(minute='0'),
         id='scheduler_main_create_exam_cert'
     )
@@ -64,7 +64,8 @@ async def main():
         server_file_registration,
         IntervalTrigger(seconds=120),
         id='server_file_registration',
-        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
+        next_run_time=datetime.datetime.now(),  # Проверить сразу при старте
+        replace_existing=True,
     )
 
     # Запуск проверки обновлений Git каждые 60 секунд
@@ -72,7 +73,8 @@ async def main():
         git_update,
         IntervalTrigger(seconds=60),
         id='git_check',
-        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
+        next_run_time=datetime.datetime.now(),  # Проверить сразу при старте
+        replace_existing=True,
     )
 
     scheduler.start()

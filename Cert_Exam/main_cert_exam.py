@@ -1,6 +1,10 @@
 import datetime
 import pickle
 
+from Email import EmailSending
+from Email.config import EMAIL_BCC
+from Email.template import template_email_exam_result_passed
+from My_jinja import MyJinja
 from Utils.log import log
 from .XLSX.excel import get_contact_from_cert_excel
 from .config_cert_exam import PICKLE_USERS, DIR_CERTS
@@ -41,18 +45,27 @@ def main_create_exam_cert():
     for i, contact in enumerate(new_users):
         try:
             create_png(contact)
+
+            EmailSending(
+                to=[contact.email, ],
+                bcc=EMAIL_BCC,
+                subject='Поздравляем с успешной сдачей экзамена!',
+                # text='text',
+                html=MyJinja(template_file=template_email_exam_result_passed).render_document(user=contact)
+            ).send_email()
+
             log.info(f'[{i + 1}/{len(new_users)}]\t{contact.file_out_png}')
             successful_users.append(contact)
         except FileNotFoundError as e:
             log.error(f'{e} [{i + 1}/{len(new_users)}]\t{contact.file_out_png}')
 
-    if len(successful_users) > 0:
+    if successful_users:
         all_users = [*successful_users, *old_users]
         pickle.dump(all_users, open(PICKLE_USERS, 'wb'))
         log.info('[Create PICKLE_USERS]')
 
 
-def scheduler_main_create_exam_cert():
+def create_exam_cert():
     try:
         main_create_exam_cert()
     except Exception as e:
@@ -60,4 +73,4 @@ def scheduler_main_create_exam_cert():
 
 
 if __name__ == '__main__':
-    scheduler_main_create_exam_cert()
+    create_exam_cert()

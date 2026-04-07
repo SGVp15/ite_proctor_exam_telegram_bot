@@ -12,13 +12,15 @@ class TestEmailSending(TestCase):
     @staticmethod
     def test_send_email():
         # 2026-01-30
-        contacts = load_contacts_from_log_file(date_start=datetime.datetime(2026, 1, 30))
+        contacts = load_contacts_from_log_file(date_start=datetime.datetime(2026, 3, 24),
+                                               date_end=datetime.datetime(2026, 3, 25))
+        # contacts = load_contacts_from_log_file(date_start=datetime.datetime(2026, 1, 30))
         print(contacts)
         for contact in contacts:
             templates = [
-                # template_email_registration_exam_offline,
-                # template_email_registration_exam_online,
-                # template_email_exam_result_passed,
+                template_email_registration_exam_offline,
+                template_email_registration_exam_online,
+                template_email_exam_result_passed,
                 template_email_exam_result_failed,
             ]
             for template in templates:
