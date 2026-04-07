@@ -367,7 +367,7 @@ def generate_report(filename: Path, all_questions):
     create_html_page_report(test_info, all_category, answer_category, filename=report_filename)
 
 
-def create_all_report(only_new_report=True):
+def create_all_report(is_only_new_report=True):
     dir_path = DIR_HTML_DOWNLOAD
     dir_report_path = DIR_REPORTS
     all_file = []
@@ -379,7 +379,7 @@ def create_all_report(only_new_report=True):
     for filename_path in dir_report_path.glob('*.html'):
         all_report_names.append(filename_path.name)
 
-    if only_new_report:
+    if is_only_new_report:
         all_file_filtered = [f for f in all_file if f'r_{f.name}' not in all_report_names]
     else:
         all_file_filtered = [f for f in all_file if f'r_{f.name}']
@@ -390,4 +390,4 @@ def create_all_report(only_new_report=True):
 
 
 if __name__ == '__main__':
-    create_all_report(only_new_report=True)
+    create_all_report(is_only_new_report=True)

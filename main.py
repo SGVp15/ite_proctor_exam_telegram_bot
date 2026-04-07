@@ -31,17 +31,18 @@ async def main():
     # Запуск скачивание страницы отчета из moodle в 00 минут
     scheduler.add_job(
         download_reports_moodle,
-        CronTrigger(hour='1'),
+        CronTrigger(minute='0'),
         id='download_reports_moodle',
-        next_run_time=datetime.datetime.now()  # Проверить сразу при старте
+        next_run_time=datetime.datetime.now(),  # при старте
+        replace_existing=True,
     )
 
     # Запуск создание отчетов
     scheduler.add_job(
         create_all_report,
-        CronTrigger(hour='1', minute='30'),
+        CronTrigger(minute='10'),
         id='create_all_report',
-        next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=3),  # Проверить сразу при старте
+        next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=10),  # при старте
     )
 
     # Запуск Создание сертификатов
