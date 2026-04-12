@@ -1,7 +1,6 @@
 import datetime
 import random
 import re
-import time
 
 import dateparser
 
