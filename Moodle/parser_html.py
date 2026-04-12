@@ -105,14 +105,19 @@ def parse_quiz_review(html_content: str) -> dict:
 
 def parse_data_questions_html(filename):
     try:
+        email = ''
         with open(filename, 'r', encoding='utf-8') as f:
             html_content = f.read()
-
+        if html_content:
+            if html_content[0]:
+                email_match = re.findall(r'[\w\.-]+@[\w\.-]+\.\w+', html_content[0])
+                email = re.sub(r'.*=', '', html_content[0])
+            html_content = html_content[1:]
         parsed_data = parse_quiz_review(html_content)
 
         a = json.dumps(parsed_data, indent=4, ensure_ascii=False)
         python_object = json.loads(a)
-        return python_object
+        return email, python_object
     except FileNotFoundError:
         print("Ошибка: Файл не найден.")
     except Exception as e:
@@ -315,11 +320,13 @@ def get_all_questions_from_xlsx():
 
 
 def generate_report(filename: Path, all_questions):
-    data = parse_data_questions_html(filename=filename)
+    email, data = parse_data_questions_html(filename=filename)
     if not data:
         return
     q_my = data['questions']
     test_info = data['test_info']
+    if email:
+        test_info['email'] = email
     quests = []
     for i, q in enumerate(q_my):
         c = Question(
